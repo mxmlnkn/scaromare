@@ -13,8 +13,9 @@ import org.trifort.rootbeer.runtime.Rootbeer;
  **/
 public class MonteCarloPi
 {
-    private long calcRandomSeed( int riKernel, int rnKernels )
+    private long calcRandomSeed( int rnKernels, int riKernel )
     {
+        assert( riKernel < rnKernels );
         return 17138123l + (long)( (double)Long.MAX_VALUE/rnKernels * riKernel );
     }
 
