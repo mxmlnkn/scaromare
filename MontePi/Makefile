@@ -7,19 +7,19 @@ ROOTBEER_ROOT := ../../rootbeer1/
 all: *.class
 	$(MAKE) -C gpu
 
-	# copy and unpack dependencies (Rootbeer,Scala)
-	mkdir -p swtge878t1
-	cd swtge878t1                               && \
-		cp /usr/share/java/scala-library.jar .  && \
-		cp ../gpu/MontePiGPU.jar .              && \
-		cp ../manifest.txt ../*.class .         && \
-		jar xf scala-library.jar                && \
-		jar xf MontePiGPU.jar                   && \
-		jar cfm MontePi.jar manifest.txt *      && \
-		./MontePi.jar
+	# merge dependencies (Rootbeer,Scala) into a fat jar
+	# Note that the rightmost jar overwrites all to the left, this is
+	# important for the manifest, because we want to use the manifest
+	# of TestMonteCarloPi.jar
+	zipmerge MontePi.jar gpu/MontePiGPU.jar /usr/share/java/scala-library.jar TestMonteCarloPi.jar
+	java -jar MontePi.jar
 
 clean:
+	$(MAKE) -C gpu clean
 	rm -f *.class *.jar
 
-%.class: %.scala
+TestMonteCarloPi.jar: TestMonteCarloPi.class
+	jar cfm TestMonteCarloPi.jar manifest.txt *.class
+
+TestMonteCarloPi.class: TestMonteCarloPi.scala
 	scalac -classpath gpu/MontePiGPU.jar:. $< -deprecation
