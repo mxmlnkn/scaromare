@@ -1,0 +1,7 @@
+Compile with
+
+    mvn package
+
+Run with
+
+    $SPARK_HOME/bin/spark-submit --class JavaSparkPi build/JavaSparkPi-1.0.jar
