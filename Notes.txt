@@ -1,0 +1,175 @@
+
+Compiling https://github.com/pcpratts/rootbeer1 on my home Linux:
+    sudo apt-get install -t stretch openjdk-8-jdk
+    export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+    cd "/media/d/Studium/9TH SEMESTER/Hauptseminar CUDA on Sparc/rootbeer1"
+    ant jar && ./pack-rootbeer
+    # ant is a java base make tool
+    $JAVA_HOME/bin/java -jar Rootbeer.jar -norecursion -nodoubles -runeasytests
+        caching package names for: /media/d/Studium/9TH SEMESTER/Hauptseminar CUDA on Sparc/rootbeer1/Rootbeer.jar
+        caching package names for: /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar
+        cpool == null
+        java.lang.NullPointerException
+            at soot.rbclassload.RootbeerClassLoader.loadHierarchySootClasses(RootbeerClassLoader.java:963)
+            at soot.rbclassload.RootbeerClassLoader.loadNecessaryClasses(RootbeerClassLoader.java:294)
+            at org.trifort.rootbeer.entry.RootbeerCompiler.setupSoot(RootbeerCompiler.java:198)
+            at org.trifort.rootbeer.entry.RootbeerCompiler.compile(RootbeerCompiler.java:219)
+            at org.trifort.rootbeer.entry.RootbeerCompiler.compile(RootbeerCompiler.java:213)
+            at org.trifort.rootbeer.entry.Main.run(Main.java:208)
+            at org.trifort.rootbeer.entry.Main.main(Main.java:244)
+        caching package names for: dist/ScalarAddApp.jar
+        remapping class: java.util.concurrent.atomic.AtomicLong
+        java.lang.NullPointerException
+            at soot.rbclassload.RootbeerClassLoader.remapClasses(RootbeerClassLoader.java:998)
+            at soot.rbclassload.RootbeerClassLoader.loadNecessaryClasses(RootbeerClassLoader.java:295)
+            at org.trifort.rootbeer.entry.RootbeerCompiler.setupSoot(RootbeerCompiler.java:198)
+            at org.trifort.rootbeer.entry.RootbeerCompiler.compile(RootbeerCompiler.java:219)
+            at org.trifort.rootbeer.entry.RootbeerCompiler.compile(RootbeerCompiler.java:213)
+            at org.trifort.rootbeer.entry.Main.run(Main.java:208)
+            at org.trifort.rootbeer.entry.Main.main(Main.java:244)
+    cd examples/ScalarAddApp/
+    ant jar
+    $JAVA_HOME/bin/java -jar ../../Rootbeer.jar dist/ScalarAddApp.jar dist/ScalarAddApp-GPU.jar -64bit
+        https://github.com/pcpratts/rootbeer1/issues/175
+      => only works fully with Java 6 -.-.... Java 7 may also work -> trying with 7, because 6 is not in repository
+
+    sudo apt-get install -t stretch openjdk-7-jdk
+    export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+    ant clean && ant jar && ./pack-rootbeer && cd examples/ScalarAddApp/ && ant jar
+    java -jar ../../Rootbeer.jar dist/ScalarAddApp.jar dist/ScalarAddApp-GPU.jar -64bit
+        warning: sm_12 and sm_11 not supported with recursion. use -norecursion to enable.
+        warning: sm_12 and sm_11 not supported with doubles. use -nodoubles to enable.
+        [...]
+        compiling CUDA code for 64bit only...
+        In file included from /usr/local/cuda/include/cuda_runtime.h:62:0,
+                         from <command-line>:0:
+        /usr/local/cuda/include/host_config.h:105:2: error: #error -- unsupported GNU version! gcc 4.10 and up are not supported!
+         #error -- unsupported GNU version! gcc 4.10 and up are not supported!
+          ^
+    http://lektiondestages.blogspot.de/2013/05/installing-and-switching-gccg-versions.html
+        update-alternatives --display gcc
+        update-alternatives --display g++
+            update-alternatives: error: no alternatives for gcc
+            update-alternatives: error: no alternatives for g++
+
+        # --install <link> <name> <path> <priority> [--slave <link> <name> <path>] ...
+        # when the master is changed, any associated slaves are changed too.  A master link and its associated slaves make up a link group.
+
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5   60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 40 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9
+            update-alternatives: using /usr/bin/gcc-5 to provide /usr/bin/gcc (gcc) in auto mode
+
+        sudo update-alternatives --config gcc
+
+    java -jar ../../Rootbeer.jar -norecursion -nodoubles dist/ScalarAddApp.jar dist/ScalarAddApp-GPU.jar -64bit
+        nvcc fatal   : Unsupported gpu architecture 'compute_12'
+    /opt/cuda-7.0/samples/1_Utilities/deviceQuery/deviceQuery
+        /opt/cuda-7.0/samples/1_Utilities/deviceQuery/deviceQuery Starting...
+
+         CUDA Device Query (Runtime API) version (CUDART static linking)
+
+        Detected 1 CUDA Capable device(s)
+
+        Device 0: "GeForce GTX 760"
+          CUDA Driver Version / Runtime Version          7.5 / 7.0
+          CUDA Capability Major/Minor version number:    3.0
+          Total amount of global memory:                 2040 MBytes (2138861568 bytes)
+          ( 6) Multiprocessors, (192) CUDA Cores/MP:     1152 CUDA Cores
+          GPU Max Clock rate:                            1150 MHz (1.15 GHz)
+          Memory Clock rate:                             3004 Mhz
+          Memory Bus Width:                              256-bit
+          L2 Cache Size:                                 524288 bytes
+          Maximum Texture Dimension Size (x,y,z)         1D=(65536), 2D=(65536, 65536), 3D=(4096, 4096, 4096)
+          Maximum Layered 1D Texture Size, (num) layers  1D=(16384), 2048 layers
+          Maximum Layered 2D Texture Size, (num) layers  2D=(16384, 16384), 2048 layers
+          Total amount of constant memory:               65536 bytes
+          Total amount of shared memory per block:       49152 bytes
+          Total number of registers available per block: 65536
+          Warp size:                                     32
+          Maximum number of threads per multiprocessor:  2048
+          Maximum number of threads per block:           1024
+          Max dimension size of a thread block (x,y,z): (1024, 1024, 64)
+          Max dimension size of a grid size    (x,y,z): (2147483647, 65535, 65535)
+          Maximum memory pitch:                          2147483647 bytes
+          Texture alignment:                             512 bytes
+          Concurrent copy and kernel execution:          Yes with 1 copy engine(s)
+          Run time limit on kernels:                     Yes
+          Integrated GPU sharing Host Memory:            No
+          Support host page-locked memory mapping:       Yes
+          Alignment requirement for Surfaces:            Yes
+          Device has ECC support:                        Disabled
+          Device supports Unified Addressing (UVA):      Yes
+          Device PCI Domain ID / Bus ID / location ID:   0 / 1 / 0
+          Compute Mode:
+             < Default (multiple host threads can use ::cudaSetDevice() with device simultaneously) >
+
+        deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = 7.5, CUDA Runtime Version = 7.0, NumDevs = 1, Device0 = GeForce GTX 760
+        Result = PASS
+
+        java -jar ../../Rootbeer.jar dist/ScalarAddApp.jar dist/ScalarAddApp-GPU.jar -64bit -computecapability=sm_30
+        ./dist/ScalarAddApp-GPU.jar
+
+Compile MergeSort:
+    cd MergeSort
+    rm *.class; javac *.java && java TestMergeSort
+    jar -cf TestMergeSort.jar *.class
+    ./TestMergeSort
+        no main manifest attribute, in TestMergeSort.jar
+    jar -tf TestMergeSort.jar META-INF/MANIFEST.MF
+    echo 'Main-Class: TestMergeSort' > META-INF/MANIFEST.MF
+    jar -cf TestMergeSort.jar META-INF/MANIFEST.MF *.class
+
+    rm *.class; javac *.java && jar -cvfm TestMergeSort.jar manifest.txt MergeSort.class TestMergeSort.class && java -jar ./TestMergeSort.jar
+        => works (no package line specified in java files!)
+
+Compile MergeSort with Rootbeer:
+    cd MergeSortGPU
+    rm *.class; javac *.java && jar -cvfm TestMergeSort.jar manifest.txt MergeSort.class TestMergeSort.class
+
+
+Problem with MonteCarloPi with 1e8 rolls (watchdog?):
+    ./TestMontePiGPU.jar
+    Run tasks with length 1024
+
+    Exception in thread "main" org.trifort.rootbeer.runtime.CudaErrorException: ERROR STATUS:702 : Error in cuCtxSynchronize
+        at org.trifort.rootbeer.runtime.CUDAContext.cudaRun(Native Method)
+        at org.trifort.rootbeer.runtime.CUDAContext.runGpu(CUDAContext.java:388)
+        at org.trifort.rootbeer.runtime.CUDAContext.access$1300(CUDAContext.java:17)
+        at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:331)
+        at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:308)
+        at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:128)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+        at java.lang.Thread.run(Thread.java:745)
+
+when trying to write everything in scala:
+    java.lang.RuntimeException: cannot get resident body for phantom class : <MonteCarloPi$$anonfun$calc$2: java.lang.Object apply(java.lang.Object)>; maybe you want to call c.setApplicationClass() on this class!
+	at soot.SootMethod.retrieveActiveBody(SootMethod.java:316)
+	at soot.rbclassload.RootbeerClassLoader.loadScene(RootbeerClassLoader.java:857)
+	at soot.rbclassload.RootbeerClassLoader.loadNecessaryClasses(RootbeerClassLoader.java:320)
+	at org.trifort.rootbeer.entry.RootbeerCompiler.setupSoot(RootbeerCompiler.java:198)
+	at org.trifort.rootbeer.entry.RootbeerCompiler.compile(RootbeerCompiler.java:219)
+	at org.trifort.rootbeer.entry.RootbeerCompiler.compile(RootbeerCompiler.java:213)
+	at org.trifort.rootbeer.entry.Main.run(Main.java:208)
+	at org.trifort.rootbeer.entry.Main.main(Main.java:244)
+
+
+Install and use spark:
+    wget ...
+    tar -xf spark-1.5.2.tgz
+    cd spark-1.5.2
+    build/mvn -DskipTests clean package
+    /opt/spark-1.5.2/bin/spark-shell --master local[2]
+    # quelch some warnings with:
+    export SPARK_LOCAL_IP=127.0.0.1
+
+Scala GPU:
+  - ScalaCL ( "ScalaCL is not production-ready!" )
+  - BIDMach
+  - Firepile
+  - Rootbeer
+
+
+Run on Taurus:
+    salloc -p gpu-interactive --nodes=2 --gres=gpu:2 --time=1:30:00
+
