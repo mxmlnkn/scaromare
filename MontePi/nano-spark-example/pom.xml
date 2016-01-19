@@ -1,0 +1,34 @@
+<project>
+  <!-- pom.xml version. only "4.0.0" supported currently (2016) -->
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- these three properties act only as a unique identity for maven,
+  although they also affect the default compiled jar name -->
+  <groupId>scaromare</groupId>
+  <artifactId>learning-spark-mini-example</artifactId>
+  <version>1.0</version>
+
+  <packaging>jar</packaging>
+
+  <dependencies>
+    <dependency> <!-- Spark dependency -->
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-core_2.10</artifactId>
+      <version>1.5.2</version>
+    </dependency>
+  </dependencies>
+
+  <!-- in this section we can define user variables which we can access with
+  ${variable} where needed -->
+  <properties>
+    <java.version>1.6</java.version>
+  </properties>
+
+  <build>
+    <!-- set folder where all .java files to compile reside in -->
+    <sourceDirectory>${basedir}</sourceDirectory>
+    <!-- set output folder containing the compiled classes and jars -->
+    <directory>${basedir}/build</directory>
+  </build>
+
+</project>

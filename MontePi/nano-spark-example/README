@@ -1,0 +1,13 @@
+Compile with
+
+    mvn package
+
+Run with
+
+    $SPARK_HOME/bin/spark-submit \
+    --class com.oreilly.learningsparkexamples.mini.java.WordCount \
+    ./build/learning-spark-mini-example-1.0.jar \
+    ./WordCount.java ./wordcounts
+
+Here `WordCount.java` is the file on which we want to count the words and
+`./wordocunts` is the output path for the wordcounts.
