@@ -29,13 +29,13 @@ public final class JavaSparkPi
         final int nRollsPerSlice = ( args.length == 1 ) ? Integer.parseInt( args[0] ) : 100000;
         final int nSlices        = ( args.length == 2 ) ? Integer.parseInt( args[1] ) : 2;
 
-        List< ArrayList<Integer> > sliceParams = new ArrayList< ArrayList<Integer> >( nSlices );
+        List< ArrayList<Integer> > sliceParams = new ArrayList< ArrayList<Integer> >();
         for ( int i = 0; i < nSlices; i++ )
         {
-            ArrayList<Integer> tmp = new ArrayList<Integer>(2);
-            tmp.set(0, nSlices       );  // number of processes
-            tmp.set(1, i             );  // rank
-            tmp.set(2, nRollsPerSlice);  // how many to do
+            ArrayList<Integer> tmp = new ArrayList<Integer>();
+            tmp.add( nSlices       );  // number of processes
+            tmp.add( i             );  // rank
+            tmp.add( nRollsPerSlice);  // how many to do
             sliceParams.add( tmp );
         }
 
@@ -53,11 +53,11 @@ public final class JavaSparkPi
                     Random uniRand = new Random( seed );
 
                     int nHits = 0;
-                    for ( int i = 0; i < nHits; ++i )
+                    for ( int i = 0; i < nRolls; ++i )
                     {
                         final double x = uniRand.nextDouble();
                         final double y = uniRand.nextDouble();
-                        nHits += ( x*x + y*y < 1 ) ? 1 : 0;
+                        nHits += ( x*x + y*y < 1.0 ) ? 1 : 0;
                     }
                     return nHits;
                 }
@@ -69,7 +69,8 @@ public final class JavaSparkPi
                 }
             } );
 
-        System.out.println( "Pi is roughly " + 4.0 * count / nSlices );
+        System.out.println( "\ncount = " + count );
+        System.out.println( "Pi is roughly " + 4.0 * count / ( nSlices * nRollsPerSlice ) + "\n" );
 
         sc.stop();
     }
