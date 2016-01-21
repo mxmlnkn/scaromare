@@ -1,2 +1,0 @@
-Main-Class: TestMonteCarloPi_SparkRootbeer
-Class-Path: .
