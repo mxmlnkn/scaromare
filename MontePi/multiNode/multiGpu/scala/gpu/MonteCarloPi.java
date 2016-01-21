@@ -13,16 +13,16 @@ import org.trifort.rootbeer.runtime.Rootbeer;
  **/
 public class MonteCarloPi
 {
-    private long calcRandomSeed( int rnKernels, int riKernel )
+    private long calcRandomSeed( int rnKernels, int riKernel, long rSeed0, long rSeed1 )
     {
         assert( riKernel < rnKernels );
-        return 17138123l + (long)( (double)Long.MAX_VALUE/rnKernels * riKernel );
+        return rSeed0 + (long)( (double)(rSeed1-rSeed0)/rnKernels * riKernel );
     }
 
     /**
      * prepares Rootbeer kernels and starts them
      **/
-    public double calc(long nDiceRolls, int nKernels )
+    public double calc( long nDiceRolls, int nKernels, long rSeed0, long rSeed1 )
     {
         long nRollsPerThreads = nDiceRolls / (long) nKernels;
         int  nRollsRemainder  = (int)( nDiceRolls % (long) nKernels );
@@ -34,16 +34,16 @@ public class MonteCarloPi
         List<Kernel> tasks = new ArrayList<Kernel>();
         for (int i = 0; i < nRollsRemainder; ++i )
         {
-            final long seed = calcRandomSeed(nKernels,i);
-            tasks.add( new MonteCarloPiKernel(nHits,i, seed,nRollsPerThreads+1) );
+            final long seed = calcRandomSeed( nKernels, i, rSeed0, rSeed1 );
+            tasks.add( new MonteCarloPiKernel( nHits, i, seed, nRollsPerThreads+1 ) );
         }
         for (int i = nRollsRemainder; i < nKernels; ++i )
         {
-            final long seed = calcRandomSeed(nKernels,i);
-            tasks.add( new MonteCarloPiKernel(nHits,i, seed,nRollsPerThreads ) );
+            final long seed = calcRandomSeed( nKernels, i, rSeed0, rSeed1 );
+            tasks.add( new MonteCarloPiKernel( nHits, i, seed, nRollsPerThreads ) );
         }
 
-        System.out.println( "Run tasks with length "+tasks.size() );
+        System.out.println( "Run tasks with length " + tasks.size() );
         Rootbeer rootbeer = new Rootbeer();
         rootbeer.run(tasks); // kernel in order out-of-order ?
 
@@ -51,7 +51,7 @@ public class MonteCarloPi
          * number of rolls first and work with double then. This evades
          * integer overflows by maybe being less exact */
         double quarterPi = 0;
-        for ( int i=0; i<nKernels; ++i )
+        for ( int i = 0; i < nKernels; ++i )
             quarterPi += (double) nHits[i] / (double) nDiceRolls;
 
         return 4.0*quarterPi;

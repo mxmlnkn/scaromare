@@ -1,8 +1,3 @@
-/*
-javac -cp /opt/spark-1.5.2/core/target/spark-core_2.10-1.5.2.jar:. JavaSparkPi.java
-java -cp /opt/spark-1.5.2/core/target/spark-core_2.10-1.5.2.jar:. JavaSparkPi
-*/
-
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;

@@ -1,6 +1,6 @@
 JAVA_FILES    := $(wildcard *.java)
 CLASS_FILES   := $(JAVA_FILES:.java=.class)
-ROOTBEER_ROOT := ../../rootbeer1
+ROOTBEER_ROOT := ../../../../../rootbeer1
 
 .phony: clean all MontePiGPU.jar $(CLASS_FILES)
 

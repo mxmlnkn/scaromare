@@ -163,6 +163,11 @@ Install and use spark:
     # quelch some warnings with:
     export SPARK_LOCAL_IP=127.0.0.1
 
+    Scala compiles, but throws error with spark-submit ... -.-
+        Exception in thread "main" java.lang.NoSuchMethodError: scala.runtime.ObjectRef.create(Ljava/lang/Object;)Lscala/runtime/ObjectRef;
+      -> install scala 2.10 http://www.scala-lang.org/download/install.html
+         because only 2.9 and 2.11 seem to be in the debian repositories
+
 Scala GPU:
   - ScalaCL ( "ScalaCL is not production-ready!" )
   - BIDMach
@@ -173,3 +178,9 @@ Scala GPU:
 Run on Taurus:
     salloc -p gpu-interactive --nodes=2 --gres=gpu:2 --time=1:30:00
 
+Compile Spark on Taurus gives:
+    "Failed to execute goal net.alchim31.maven:scala-maven-plugin:3.2.2:testCompile (scala-test-compile-first) on project spark-core_2.10: Execution scala-test-compile-first of goal net.alchim31.maven:scala-maven-plugin:3.2.2:testCompile failed. CompileFailed"
+    http://stackoverflow.com/questions/31844848/building-spark-with-maven-error-finding-javac-but-path-is-correct
+        Uncommenting
+            <!--<useZincServer>true</useZincServer>-->
+        works.
