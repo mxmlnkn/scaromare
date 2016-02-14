@@ -4,7 +4,7 @@ ROOTBEER_ROOT := ../../../../rootbeer1
 
 all: MontePiGPU.jar run
 run: MontePiGPU.jar
-	scala MontePiGPU.jar 268435456
+	scala MontePiGPU.jar 2684354560
 clean:
 	rm -f *.class *.jar
 

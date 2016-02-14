@@ -1,10 +1,10 @@
 .phony: clean all
 
-all: TestMonteCarloPi.exe run
+all: TestMonteCarloPiV2.exe run
 run:
-	./TestMonteCarloPi.exe 268435456
+	./TestMonteCarloPiV2.exe 268435456
 clean:
 	rm -f *.exe *.log *.o
 
-TestMonteCarloPi.exe: TestMonteCarloPi.cpp
-	nvcc -x cu $< -o $@ -std=c++11
+TestMonteCarloPiV2.exe: TestMonteCarloPiV2.cpp
+	nvcc -arch=sm_30 -x cu $< -o $@ -std=c++11

@@ -33,19 +33,28 @@ public class MonteCarloPiKernel implements Kernel
      **/
     public void gpuMethod()
     {
-        // why 0x7F... instead 0xFF ??? ... I mean it is unsigned, not signed ...
-        final long randMax   = 0x7FFFFFFFl;
-        final long randMagic = 950706376l;
+        /* why 0x7F... instead 0xFF ??? ... I mean it is unsigned, not signed
+         * ... I strongly think this algorithm was used for signed integers,
+         * that's why */
+        final int randMax = 0x7FFFFFFF;
+        final long randMagic = 950706376;
         /* copy parameter to gpu. Without this the program takes 4.65s instead
          * of 2.25s! */
-        long dRandomSeed = mRandomSeed;
-        final long dnDiceRolls = mnDiceRolls;
+        int dRandomSeed = (int) mRandomSeed;
+        assert( mnDiceRolls <= Integer.MAX_VALUE );
+        final int dnDiceRolls = (int) mnDiceRolls;
         /* using nHits += 1 instead of mnHits[ miLinearThreadId ] += 1
          * reduces 2.25s down to 0.58s ! */
+        /* using int instead of long reduces 0.52s down to 0.5s. This is
+         * because 64-bit integer arithmetic is not supported natively on
+         * most GPUs. The speedup was quite a bit higher in the C++ version
+         * though*/
+        //if ( miLinearThreadId == 8192 )
+        //    System.out.println( "[i="+miLinearThreadId+"] mnDiceRolls = "+mnDiceRolls+", seed="+dRandomSeed );
         long nHits = 0;
 
         //Random uniRand = new Random( mRandomSeed );
-        for ( long i = 0; i < dnDiceRolls; ++i )
+        for ( int i = 0; i < dnDiceRolls; ++i )
         {
             /* create random 2D vector with coordinates ranging from 0 to 1,  *
              * meaning the length ranges from 0 to sqrt(2)                    */
@@ -62,7 +71,14 @@ public class MonteCarloPiKernel implements Kernel
             /* if random vector inside circle, then increase hits */
             if ( x*x + y*y < 1.0 )
                 nHits += 1;
+            /*
+            if ( i % 10000 == 0 )
+            {
+                System.out.println( "  seed="+dRandomSeed+", x="+x+", y="+y );
+            }*/
         }
+        /*if ( miLinearThreadId == 0 )
+            System.out.println( "[i=0] nHits = "+nHits);*/
         mnHits[ miLinearThreadId ] = nHits;
     }
 }

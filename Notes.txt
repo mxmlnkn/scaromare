@@ -176,11 +176,82 @@ Scala GPU:
 
 
 Run on Taurus:
-    salloc -p gpu-interactive --nodes=2 --gres=gpu:2 --time=1:30:00
+    module load java/jdk1.7.0_25 scala/2.10.4 cuda/7.0.28
+
+    salloc -p gpu-interactive --nodes=1 --gres=gpu:2 --time=1:30:00
+    Taurus doesn't have anything -.-.... maven, ant, spark ... need to do everything manually:
+    ant:
+        tar -xf apache-ant-1.9.6-src.tar.bz2
+        cd apache-ant-1.9.6
+        sh build.sh -Ddist.dir=$HOME/programs/ dist
+    rootbeer1:
+        ant jar
+        ./pack-rootbeer
+    zipmerge
+        wget http://www.nih.at/libzip/libzip-1.0.1.tar.xz
+        tar -xf libzip-1.0.1.tar.xz
+        cd libzip-1.0.1
+        ./configure --prefix=$HOME/programs/ && make install
+
+    export PATH="$PATH:$HOME/spark-1.5.2-bin-hadoop2.6/bin/:$HOME/spark-1.5.2-bin-hadoop2.6/sbin/"
+
+    single GPU on Taurus:
+        cd $HOME/scaromare/MontePi/singleNode/singleGpu/scala
+        make SPARK_ROOT=~/spark-1.5.2-bin-hadoop2.6 SPARKCORE_JAR=~/spark-1.5.2-bin-hadoop2.6/lib/spark-assembly-1.5.2-hadoop2.6.0.jar SCALA_ROOT=$(dirname $(which scala))/../lib MontePiGPU.jar
+        srun -n1 scala MontePiGPU.jar 268435456
+
+    multicore spark on Taurus:
+        salloc -p gpu-interactive --nodes=1 --ntasks-per-node=4 --cpus-per-task=1 --gres=gpu:2 --time=1:30:00
+        cd $HOME/scaromare/MontePi/multiNode/multiCore
+        make SPARK_ROOT=~/spark-1.5.2-bin-hadoop2.6 SPARKCORE_JAR=~/spark-1.5.2-bin-hadoop2.6/lib/spark-assembly-1.5.2-hadoop2.6.0.jar SCALA_ROOT=$(dirname $(which scala))/../lib MontePi.jar
+        spark-submit --total-executor-cores 4 --class TestMonteCarloPi MontePi.jar 268435456 4
+
+    a cleaner version:
+        salloc --time 00:30:00 --mem=512 --ntasks=1 --cpus-per-task=1 $HOME/spark-1.5.2-bin-hadoop2.6/sbin/start-master.sh
+        cat $HOME/spark-1.5.2-bin-hadoop2.6/logs/spark-$USER-org.apache.spark.deploy.master.Master-1-tauruslogin4.out
+        salloc --time 00:30:00 --nodes=4 --ntasks=1 --cpus-per-task=1 --gres=gpu:1 $HOME/spark-1.5.2-bin-hadoop2.6/sbin/start-slave.sh spark://taurusi2108:7077
+        # when the above is run with srun instead the following error occurs:
+            failed to launch org.apache.spark.deploy.master.Master:
+            full log in $HOME/spark-1.5.2-bin-hadoop2.6/sbin/../logs/spark-$USER-org.apache.spark.deploy.master.Master-1-tauruslogin4.out
+
+        srun --time 00:30:00 --mem=1024 --ntasks=1 --cpus-per-task=1 start-master.sh
+        spark-submit --total-executor-cores 1 --class TestMonteCarloPi MontePi.jar 268435456 1
+        srun --time 00:30:00 --mem=1024 --ntasks=1 --cpus-per-task=1
+
+
+    ==========
+    sbatch --time 00:30:00 --mem=512 --ntasks=1 --cpus-per-task=1 <<EOF
+#!/bin/bash
+start-master
+EOF
+
+    ==========
+    salloc -p gpu-interactive --nodes=2 --ntasks-per-node=1 --cpus-per-task=1 --gres=gpu:1 --time=00:30:00
+    start-master.sh
+    srun start-slave.sh spark://tauruslogin4:7077 &
+
+
+    multi GPU:
+        cd ~/scaromare/MontePi/multiNode/multiGpu/scala
+        make SPARK_ROOT=~/spark-1.5.2-bin-hadoop2.6 SPARKCORE_JAR=~/spark-1.5.2-bin-hadoop2.6/lib/spark-assembly-1.5.2-hadoop2.6.0.jar SCALA_ROOT=$(dirname $(which scala))/../lib
+
+
+
 
 Compile Spark on Taurus gives:
     "Failed to execute goal net.alchim31.maven:scala-maven-plugin:3.2.2:testCompile (scala-test-compile-first) on project spark-core_2.10: Execution scala-test-compile-first of goal net.alchim31.maven:scala-maven-plugin:3.2.2:testCompile failed. CompileFailed"
     http://stackoverflow.com/questions/31844848/building-spark-with-maven-error-finding-javac-but-path-is-correct
-        Uncommenting
-            <!--<useZincServer>true</useZincServer>-->
-        works.
+      - installed binaries ...
+
+Count most frequent words:
+    /opt/spark-1.5.2/bin/spark-shell --master local[2]
+    sc.hadoopConfiguration.set( "mapreduce.input.fileinputformat.input.dir.recursive", "true" )
+    sc.hadoopConfiguration.get( "mapreduce.input.fileinputformat.input.dir.recursive" )
+    var textFiles = sc.textFile("./*")
+    textFiles.first()
+    textFiles.take(10)
+    textFiles.take(20).drop(10)
+    val wordCounts = textFiles.flatMap( line => line.split(" ") ).map( word => (word, 1) ).reduceByKey( (a, b) => a + b ).sortBy( _._2, false /*descending*/ )
+
+    sc.textFile("./*").flatMap( line => line.split(" ") ).map( word => (word, 1) ).reduceByKey( (a, b) => a + b ).sortBy( _._2, false /*descending*/ ).take(500).foreach( println )
+

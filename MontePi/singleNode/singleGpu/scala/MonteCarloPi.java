@@ -13,10 +13,11 @@ import org.trifort.rootbeer.runtime.Rootbeer;
  **/
 public class MonteCarloPi
 {
-    private long calcRandomSeed( int rnKernels, int riKernel )
+    private int calcRandomSeed( int rnKernels, int riKernel )
     {
         assert( riKernel < rnKernels );
-        return 17138123l + (long)( (double)Long.MAX_VALUE/rnKernels * riKernel );
+        //return  (int)( 17138123l + (long)( (double)Integer.MAX_VALUE/rnKernels * riKernel ) );
+        return  (int)( ( 17138123l * riKernel ) % 0x7FFFFFFF );
     }
 
     /**
@@ -26,6 +27,8 @@ public class MonteCarloPi
     {
         long nRollsPerThreads = nDiceRolls / (long) nKernels;
         int  nRollsRemainder  = (int)( nDiceRolls % (long) nKernels );
+        System.out.println( "remainder="+nRollsRemainder );
+
         /* The first nRollsRemainder threads will work on 1 roll more. The
          * rest of the threads will roll the dice nRollsPerThreads */
         long[] nHits = new long[nKernels];
@@ -36,14 +39,18 @@ public class MonteCarloPi
         {
             final long seed = calcRandomSeed(nKernels,i);
             tasks.add( new MonteCarloPiKernel(nHits,i, seed,nRollsPerThreads+1) );
+            //if ( i % 100 < 2 )
+            //    System.out.println( "i="+i+", seed="+seed+", rolls="+(nRollsPerThreads+1) );
         }
         for (int i = nRollsRemainder; i < nKernels; ++i )
         {
             final long seed = calcRandomSeed(nKernels,i);
             tasks.add( new MonteCarloPiKernel(nHits,i, seed,nRollsPerThreads ) );
+            //if ( i % 100 < 2 )
+            //    System.out.println( "i="+i+", seed="+seed+", rolls="+nRollsPerThreads );
         }
 
-        System.out.println( "Run tasks with length "+tasks.size() );
+        System.out.println( "Run "+tasks.size()+" tasks with length " );
         Rootbeer rootbeer = new Rootbeer();
         rootbeer.run(tasks); // kernel in order out-of-order ?
 
@@ -52,7 +59,11 @@ public class MonteCarloPi
          * integer overflows by maybe being less exact */
         double quarterPi = 0;
         for ( int i=0; i<nKernels; ++i )
+        {
             quarterPi += (double) nHits[i] / (double) nDiceRolls;
+            //if ( i % 100 < 2 )
+            //    System.out.println( "i="+i+", nHits="+nHits[i] );
+        }
 
         return 4.0*quarterPi;
     }
