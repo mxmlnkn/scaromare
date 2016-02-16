@@ -49,11 +49,17 @@ public class MonteCarloPiKernel implements Kernel
          * because 64-bit integer arithmetic is not supported natively on
          * most GPUs. The speedup was quite a bit higher in the C++ version
          * though*/
-        //if ( miLinearThreadId == 8192 )
-        //    System.out.println( "[i="+miLinearThreadId+"] mnDiceRolls = "+mnDiceRolls+", seed="+dRandomSeed );
         long nHits = 0;
 
         //Random uniRand = new Random( mRandomSeed );
+        /* using int here only makes sense, because  one kernel needs to do
+         * e.g. for GTX 760 12288 times less work, than a single core CPU
+         * would need to do. For single core CPU long was needed to get
+         * to a number which makes sense to benchmark on the GPU. Also on CPU
+         * long doesn't has such a large penalty than on GPU. But that penalty
+         * on GPU could be reduced by increasing loop unrolling.
+         * Also if really more dice rolls are needed, just start additional
+         * kernels */
         for ( int i = 0; i < dnDiceRolls; ++i )
         {
             /* create random 2D vector with coordinates ranging from 0 to 1,  *
@@ -71,14 +77,7 @@ public class MonteCarloPiKernel implements Kernel
             /* if random vector inside circle, then increase hits */
             if ( x*x + y*y < 1.0 )
                 nHits += 1;
-            /*
-            if ( i % 10000 == 0 )
-            {
-                System.out.println( "  seed="+dRandomSeed+", x="+x+", y="+y );
-            }*/
         }
-        /*if ( miLinearThreadId == 0 )
-            System.out.println( "[i=0] nHits = "+nHits);*/
         mnHits[ miLinearThreadId ] = nHits;
     }
 }
