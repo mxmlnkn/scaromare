@@ -62,25 +62,65 @@ __global__ void kernelMonteKarloPi( CountType * rnInside, uint32_t nTimes, uint3
 }
 
 
+/**
+ * Usage is:
+ *     program.exe <nTotalRolls> <iGpuDeviceToUse>
+ **/
 int main( int argc, char** argv )
 {
-    // for GTX 760 this is 12288 i.e. 384 real cores
-    int nBlocks           = 96;
-    int nThreadsPerBlock  = 128;
+    /* Debug output */
+    /*
+    std::cout << "Parameters: ";
+    for ( auto i = 0; i < argc; ++i )
+        std::cout << argv[i] << " ";
+    std::cout << std::endl;
+    */
 
-    long nTimesPerThread = 0;
-    assert( argc > 1 );
+    /* interpet command line arguments */
+    long unsigned int nTotalRolls = 0;
+    int iGpuDeviceToUse = 0;
+    assert( argc > 1 ); /* note that argument 0 is the executable name */
     if ( argc > 1 )
     {
-        nTimesPerThread = atol( argv[1] ) / ( nBlocks * nThreadsPerBlock );
-        assert( nTimesPerThread <= UINT_MAX );
+        nTotalRolls = atol( argv[1] );
+    }
+    if ( argc > 2 )
+    {
+        iGpuDeviceToUse = atoi( argv[2] );
     }
 
-    cudaEvent_t start, stop;
-    cudaEventCreate(&start);
-    cudaEventCreate(&stop);
+    /* set current device and get device infos */
+    int nDevices;
+    CUDA_ERROR( cudaGetDeviceCount( &nDevices ) );
+    assert( iGpuDeviceToUse < nDevices );
+    CUDA_ERROR( cudaSetDevice( iGpuDeviceToUse ) );
 
-        cudaEventRecord( start );
+    // for GTX 760 this is 12288 threads per device and 384 real cores
+    cudaDeviceProp deviceProperties;
+    CUDA_ERROR( cudaGetDeviceProperties( &deviceProperties, iGpuDeviceToUse) );
+    int const nThreadsPerBlock  = 256;
+    int const nBlocks           = deviceProperties.maxThreadsPerMultiProcessor
+                                / nThreadsPerBlock
+                                * deviceProperties.multiProcessorCount;
+
+    /* Caclulate rolls per thread */
+    long unsigned int nTimesPerThread = nTotalRolls / ( nBlocks * nThreadsPerBlock );
+    assert( nTimesPerThread <= UINT_MAX );
+
+    /* Debug output of configuration */
+    int currentDevice;
+    CUDA_ERROR( cudaGetDevice( &currentDevice ) );
+    std::cout << "Launch " << nBlocks << " blocks with " << nThreadsPerBlock
+              << " threads each on GPU device " << currentDevice
+              << " (parameter: " << iGpuDeviceToUse << ") each doing "
+              << nTimesPerThread << " dice rolls each" << std::endl;
+
+    /* initialize timer */
+    cudaEvent_t start, stop;
+    CUDA_ERROR( cudaEventCreate(&start) );
+    CUDA_ERROR( cudaEventCreate(&stop) );
+
+        CUDA_ERROR( cudaEventRecord( start ) );
 
     /* allocate and initialize needed memory */
     double pi = 1.0;
@@ -89,18 +129,18 @@ int main( int argc, char** argv )
 
     CUDA_ERROR( cudaMalloc( (void**) &dpnInside,    sizeof(CountType) ) );
     CUDA_ERROR( cudaMemset( (void*)   dpnInside, 0, sizeof(CountType) ) );
-    cudaMemcpy( &nInside, dpnInside, sizeof(CountType), cudaMemcpyDeviceToHost );
+    CUDA_ERROR( cudaMemcpy( &nInside, dpnInside, sizeof(CountType), cudaMemcpyDeviceToHost ) );
 
     kernelMonteKarloPi<<<nBlocks,nThreadsPerBlock>>>(dpnInside, nTimesPerThread /*nRepeat*/, 237890291 /*seed*/);
     /* as both kernel and memcpy are sent to standardstream, they are executed
      * sequentially on the deviec */
-    cudaMemcpy( &nInside, dpnInside, sizeof(CountType), cudaMemcpyDeviceToHost );
-    cudaDeviceSynchronize();
+    CUDA_ERROR( cudaMemcpy( &nInside, dpnInside, sizeof(CountType), cudaMemcpyDeviceToHost ) );
+    CUDA_ERROR( cudaDeviceSynchronize() );
     pi = 4.0 * double(nInside) / ( (double)nBlocks*nThreadsPerBlock*nTimesPerThread );
 
-        cudaEventRecord( stop );
+        CUDA_ERROR( cudaEventRecord( stop ) );
 
-    cudaEventSynchronize( stop );
+    CUDA_ERROR( cudaEventSynchronize( stop ) );
     float milliseconds;
     cudaEventElapsedTime( &milliseconds, start, stop );
 
