@@ -27,7 +27,7 @@ public class MonteCarloPiKernel
     {
         mnHits[miLinearThreadId] = 0;
         Random uniRand = new Random( mRandomSeed );
-        for ( int i=0; i<mnDiceRolls; ++i )
+        for ( long i = 0; i < mnDiceRolls; ++i )
         {
             /* create random 2D vector with coordinates ranging from 0 to 1,  *
              * meaning the length ranges from 0 to sqrt(2)                    */
