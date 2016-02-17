@@ -15,8 +15,11 @@ class MonteCarloPiKernel
     def gpuMethod() =
     {
         var uniRand = new Random( mRandomSeed )
-        for ( i <- 0l to mnDiceRolls )
+        // -.- http://stackoverflow.com/questions/17965448/a-bigger-loop-in-scala
+        var i = 0l
+        while ( i < mnDiceRolls )
         {
+            i += 1
             /* create random 2D vector with coordinates ranging from 0 to 1,  *
              * meaning the length ranges from 0 to sqrt(2)                    */
             val x = uniRand.nextDouble()
