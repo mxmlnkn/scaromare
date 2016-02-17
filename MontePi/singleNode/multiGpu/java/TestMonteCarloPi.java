@@ -18,7 +18,7 @@ public class TestMonteCarloPi
 
         /* execute and time pi calculation */
         long t0 = System.nanoTime();
-            double pi = piCalculator.calc( nDiceRolls, 384 /*1049*/ /*3313*//*9192*/ /* threads per device */ );
+            double pi = piCalculator.calc( nDiceRolls, -1 /* threads per device. -1: auto */ );
         long t1 = System.nanoTime();
         double duration = (double) (t1-t0) / 1e9;
 

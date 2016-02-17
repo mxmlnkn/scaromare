@@ -19,11 +19,15 @@ public class MonteCarloPi
 {
     private Rootbeer mRootbeerContext;
     private int miGpuDeviceToUse;
+    private GpuDevice mDevice;
 
     MonteCarloPi( int riGpuDeviceToUse )
     {
         mRootbeerContext = new Rootbeer();
         miGpuDeviceToUse = riGpuDeviceToUse;
+        List<GpuDevice> devices = mRootbeerContext.getDevices();
+        assert( miGpuDeviceToUse < devices.size() );
+        mDevice = devices.get( miGpuDeviceToUse );
     }
 
     private long calcRandomSeed( int rnKernels, int riKernel )
@@ -76,10 +80,22 @@ public class MonteCarloPi
         /* this is more or less copy-past from Rootbeer.run because an easy
          * API for multi-GPU seems to be missing */
         //Context context = createDefaultContext();
-        System.out.println( "Try to find grid config for " + work.size() + " threads" );
-        ThreadConfig thread_config = rRootbeerContext.getThreadConfig( work, context.getDevice() );
         /* Debug output */
+        /* Do our own configuration, because BlockShaper has some serious
+         * flaws, at least performance-wise */
+        final int threadsPerBlock = 256;
+        ThreadConfig thread_config = new ThreadConfig(
+                                threadsPerBlock, /* threadCountX */
+                                1, /* threadCountY */
+                                1, /* threadCountZ */
+                                ( work.size() + threadsPerBlock - 1 ) / threadsPerBlock, /* blockCountX */
+                                1, /* blockCountY */
+                                work.size() /* numThreads */
+                             );
+        assert( thread_config.getThreadCountX() * thread_config.getBlockCountX() >= work.size() );
+
         System.out.println( "Run a total of " + thread_config.getNumThreads() + " threads in (" + thread_config.getBlockCountX() + "," + thread_config.getBlockCountY() + ",1) blocks with each (" + thread_config.getThreadCountX() + "," + thread_config.getThreadCountY() + "," + thread_config.getThreadCountZ() + ") threads on GPU device " + context.getDevice().getDeviceId() );
+
         try
         {
             context.setThreadConfig( thread_config );
@@ -99,6 +115,16 @@ public class MonteCarloPi
      **/
     public double calc( long nDiceRolls, int nKernels )
     {
+        if ( nKernels <= 0 )
+        {
+            /* start as many threads as possible. (More are possible, but
+             * they wouldn't be hardware multithreaded anymore, but
+             * they would be executed in serial after the first maxThreads
+             * batch finished */
+            nKernels = mDevice.getMultiProcessorCount()
+                     * mDevice.getMaxThreadsPerMultiprocessor();
+        }
+
         long nRollsPerThreads = nDiceRolls / (long) nKernels;
         int  nRollsRemainder  = (int)( nDiceRolls % (long) nKernels );
         /* The first nRollsRemainder threads will work on 1 roll more. The
