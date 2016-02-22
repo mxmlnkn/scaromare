@@ -3,8 +3,13 @@ object TestMonteCarloPi
 {
     def main( args : Array[String] ) =
     {
+        /* args[0] is not the path as can be shwon with the code below.
+         * This behavior is different from C++ */
+        //for ( i <- 0 until args.length )
+        //    println( "args["+i+"] = "+args(i).toString );
         val nDiceRolls = if ( args.length > 0 ) args(0).toLong else 0l
-        var piCalculator = new MonteCarloPi( 0 )
+        val iGpuToUse  = if ( args.length > 1 ) args(1).toInt else 0
+        var piCalculator = new MonteCarloPi( iGpuToUse )
 
         /* execute and time pi calculation */
         val t0 = System.nanoTime()

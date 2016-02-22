@@ -10,6 +10,10 @@ public class TestMonteCarloPi
 
     public static void main ( String[] args )
     {
+        /* args[0] is not the path as can be shwon with the code below.
+         * This behavior is different from C++ */
+        //for ( int i = 0; i < args.length; ++i )
+        //    System.out.println( "args["+i+"] = "+args[i] );
         long nDiceRolls     = args.length < 1 ? 0l : Long.parseLong  ( args[0], 10 /* decimal system */ );
         int iGpuDeviceToUse = args.length < 2 ? 0  : Integer.parseInt( args[1], 10 /* decimal system */ );
 
