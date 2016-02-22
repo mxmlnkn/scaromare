@@ -255,3 +255,102 @@ Count most frequent words:
 
     sc.textFile("./*").flatMap( line => line.split(" ") ).map( word => (word, 1) ).reduceByKey( (a, b) => a + b ).sortBy( _._2, false /*descending*/ ).take(500).foreach( println )
 
+
+Getting Multi-GPU to work:
+    grep -r 'setThreadConfig' ../../scaromare/rootbeer1/
+
+
+Bugfixing Rootbeer 8192 error:
+    BlockShaper.java:
+        int max_blocks = getMaxThreads(num_processors);
+        // ... bitch pleeeeeaaasse
+
+Fixing Multi-GPU in Rootbeer -.-
+
+    public void run(List<Kernel> work)
+    {
+        Context context = createDefaultContext();
+        ThreadConfig thread_config = getThreadConfig(work, context.getDevice());
+        try
+        {
+            context.setThreadConfig(thread_config);
+            context.setKernel(work.get(0));
+            context.setUsingHandles(true);
+            context.buildState();
+            context.run(work);
+        }
+        finally
+        {
+            context.close();
+        }
+    }
+
+    public Context createDefaultContext()
+    {
+        List<GpuDevice> devices = getDevices();
+        GpuDevice best = null;
+        for(GpuDevice device : devices)
+        {
+            if( best == null or device.getMultiProcessorCount() > best.getMultiProcessorCount() )
+                best = device;
+        }
+        if(best == null)
+            return null;
+        else
+          return best.createContext();
+    }
+
+
+    3.) Rootbeer constructor
+    3.1.) CUDALoader constructor
+    3.2.) CUDALoader.load
+          Load shared libraries with fixed absolute paths mostly ...
+              m_libCudas.add("/usr/lib64/libcuda.so");
+              m_libCudas.add("/usr/lib/x86_64-linux-gnu/libcudart.so.5.0");
+              m_rootbeerRuntimes.add(RootbeerPaths.v().getRootbeerHome()+"rootbeer_x64.so.1");
+              m_rootbeerCudas.add(RootbeerPaths.v().getRootbeerHome()+"rootbeer_cuda_x64.so.1");
+    4.) Rootbeer.getDevices
+          Class c = Class.forName("org.trifort.rootbeer.runtime.CUDARuntime");
+          Constructor<IRuntime> ctor = c.getConstructor();
+          m_cudaRuntime = ctor.newInstance();
+          m_cards.addAll( m_cudaRuntime.getGpuDevices() );
+    4.1.) CUDA_Runtime.c
+            status = cuDeviceGet(&device, i);
+            cuDeviceGetAttribute(...)
+            [...]
+    5.) GPUDevice.createContext -> CUDAContext -> native initializeDriver
+            https://de.wikipedia.org/wiki/Java_Native_Interface
+        ./csrc/org/trifort/rootbeer/runtime/CUDAContext.c:JNIEXPORT void JNICALL Java_org_trifort_rootbeer_runtime_CUDAContext_initializeDriver
+            only saves function pointers to context.java
+    6.) Rootber.run
+    6.1.) Context context = createDefaultContext(); // skipped for multi-GPU
+    6.2.) context.setThreadConfig(thread_config);
+    6.3.) context.setKernel(work.get(0));
+    6.4.) context.setUsingHandles(true);
+    6.5.) context.buildState();
+            gpuEvent.setValue(GpuEventCommand.NATIVE_BUILD_STATE);
+                GpuEventHandler.onEvent
+                    nativeBuildState( ..., gpuDevice.getDeviceId(), ... )
+                        Java_org_trifort_rootbeer_runtime_CUDAContext_nativeBuildState in CUDAContext.c
+    6.6.) context.run(work)
+            context.runAsync(work)
+                gpuEvent.setValue(GpuEventCommand.NATIVE_RUN_LIST);
+                    GpuEventHandler.onEvent
+                        writeBlocksTemplate();
+                        runGpu();
+                            cudaRun(nativeContext, objectMemory, b2i(!usingHandles), stats);
+                        readBlocksTemplate();
+          private native void cudaRun(long nativeContext, Memory objectMem, int usingKernelTemplates, StatsRow stats);
+
+
+
+    Make change in CUDAContext.c
+    /rootbeer1/csrc$ ./compile_linux_x64
+    rootbeer1$ ant jar && ./pack-rootbeer
+
+Using nvvp:
+    srun -p gpu-interactive --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --gres=gpu:2 --time=1:30:00 --mem-per-cpu=6000 --x11=first nvvp
+    Executable: /sw/global/tools/java/jdk1.7.0_25/bin/java
+    Working Directory: ...
+    Arguments: -jar ./MontePi.jar 2684354560
+       -> works :3

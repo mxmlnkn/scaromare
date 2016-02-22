@@ -23,11 +23,17 @@ public class MonteCarloPi
 
     MonteCarloPi( int riGpuDeviceToUse )
     {
+        long t0, t1;
+        t0 = System.nanoTime();
+
         mRootbeerContext = new Rootbeer();
         miGpuDeviceToUse = riGpuDeviceToUse;
         List<GpuDevice> devices = mRootbeerContext.getDevices();
         assert( miGpuDeviceToUse < devices.size() );
         mDevice = devices.get( miGpuDeviceToUse );
+
+        t1 = System.nanoTime();
+        System.out.println( "MonteCarloPi constructor took " + ((t1-t0)/1e9) + " seconds" );
     }
 
     private long calcRandomSeed( int rnKernels, int riKernel )
@@ -38,7 +44,13 @@ public class MonteCarloPi
 
     static public void gpuDeviceInfo( int riDevice )
     {
+        long t0, t1;
+        t0 = System.nanoTime();
         Rootbeer rootbeerContext = new Rootbeer();
+        t1 = System.nanoTime();
+        System.out.println( "Creating Rootbeer context took " + ((t1-t0)/1e9) + " seconds" );
+
+        t0 = System.nanoTime();
         List<GpuDevice> devices = rootbeerContext.getDevices();
         GpuDevice device = devices.get( riDevice );
 
@@ -64,6 +76,8 @@ public class MonteCarloPi
         System.out.println( "| Memory Pitch             : " + device.getMaxPitch() );
         System.out.println( "| Device is Integrated     : " + device.getIntegrated() );
         System.out.println( "=====================================================" );
+        t1 = System.nanoTime();
+        System.out.println( "Getting GPU devince information took " + ((t1-t0)/1e9) + " seconds" );
     }
 
     static public void runOnDevice
@@ -102,7 +116,12 @@ public class MonteCarloPi
             context.setKernel( work.get(0) );
             context.setUsingHandles( true );
             context.buildState();
+
+            long t0, t1;
+            t0 = System.nanoTime();
             context.run( work );
+            t1 = System.nanoTime();
+            System.out.println( "context.run( work ) took " + ((t1-t0)/1e9) + " seconds" );
         }
         finally
         {
@@ -124,6 +143,9 @@ public class MonteCarloPi
             nKernels = mDevice.getMultiProcessorCount()
                      * mDevice.getMaxThreadsPerMultiprocessor();
         }
+
+        long t0, t1;
+        t0 = System.nanoTime();
 
         long nRollsPerThreads = nDiceRolls / (long) nKernels;
         int  nRollsRemainder  = (int)( nDiceRolls % (long) nKernels );
@@ -148,15 +170,22 @@ public class MonteCarloPi
             //System.out.println( "Kernel " + i + " has seed: " + seed );
         }
 
+        t1 = System.nanoTime();
+        System.out.println( "Adding work to Kernel List took " + ((t1-t0)/1e9) + " seconds" );
+
         System.out.println( "Do " + (nRollsPerThreads+1) + " dice rolls in " + nRollsRemainder + " threads and " + nRollsPerThreads + " dice rolls in " + (nKernels-nRollsRemainder) + " threads" );
+
+        t0 = System.nanoTime();
         //mRootbeerContext.run( tasks ); // kernel in order out-of-order ?
         runOnDevice( mRootbeerContext, miGpuDeviceToUse, tasks ); // kernel in order out-of-order ?
+        t1 = System.nanoTime();
+        System.out.println( "runOnDevice took " + ((t1-t0)/1e9) + " seconds" );
 
         /* Cumulate all the hits from the kernels. Divide each hit count by
          * number of rolls first and work with double then. This evades
          * integer overflows by maybe being less exact */
         double quarterPi = 0;
-        for ( int i=0; i<nKernels; ++i )
+        for ( int i = 0; i < nKernels; ++i )
             quarterPi += (double) nHits[i] / (double) nDiceRolls;
 
         return 4.0*quarterPi;

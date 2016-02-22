@@ -37,18 +37,18 @@ public class MonteCarloPi
         {
             nHits[i] = 0;
             final long seed = calcRandomSeed( nKernels,i );
-            tasks.add( new MonteCarloPiKernel( nHits,i, seed, nRollsPerThreads+1 ) );
+            tasks.add( new MonteCarloPiKernel( nHits, i, seed, nRollsPerThreads+1 ) );
             //System.out.println( "Kernel " + i + " has seed: " + seed );
         }
         for (int i = nRollsRemainder; i < nKernels; ++i )
         {
             nHits[i] = 0;
             final long seed = calcRandomSeed(nKernels,i);
-            tasks.add( new MonteCarloPiKernel( nHits,i, seed, nRollsPerThreads ) );
+            tasks.add( new MonteCarloPiKernel( nHits, i, seed, nRollsPerThreads ) );
             //System.out.println( "Kernel " + i + " has seed: " + seed );
         }
 
-        System.out.println( "Run tasks with length "+tasks.size() );
+        System.out.println( "Run tasks with length " + tasks.size() );
         Rootbeer rootbeer = new Rootbeer();
         rootbeer.run(tasks); // kernel in order out-of-order ?
 
@@ -56,7 +56,7 @@ public class MonteCarloPi
          * number of rolls first and work with double then. This evades
          * integer overflows by maybe being less exact */
         double quarterPi = 0;
-        for ( int i=0; i<nKernels; ++i )
+        for ( int i = 0; i < nKernels; ++i )
             quarterPi += (double) nHits[i] / (double) nDiceRolls;
 
         return 4.0*quarterPi;

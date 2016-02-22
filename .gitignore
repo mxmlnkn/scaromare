@@ -3,6 +3,9 @@
 *.tmp
 *.exe
 *.out
+*.log
+*.pdf
+*~
 rootbeer1
 KNOWLEDGE
 build
