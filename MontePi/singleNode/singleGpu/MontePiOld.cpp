@@ -1,5 +1,9 @@
 /*
-file=TestMonteCarloPiV2; rm $file.exe; nvcc -arch=sm_30 -x cu $file.cpp -o $file.exe -std=c++11; ./$file.exe 268435456
+file=MontePi; nvcc -arch=sm_30 -x cu $file.cpp -o $file.exe -std=c++11 -DNDEBUG -O3 && ./$file.exe 2684354560
+
+In contrast to TestMonteCarloPiV2, this version includes basically a loop over
+the number of rolls by calculating a cumulative sum, which makes the timings
+worthless but gives back faster an output for the error scaling!
 */
 
 #include <iostream>
@@ -12,7 +16,7 @@ file=TestMonteCarloPiV2; rm $file.exe; nvcc -arch=sm_30 -x cu $file.cpp -o $file
 #include <cassert>
 
 
-typedef unsigned long long int uint64;
+typedef unsigned long long int CountType;
 typedef float SampleType;
 
 
@@ -27,12 +31,12 @@ void checkCudaError(const cudaError_t rValue, const char * file, int line )
 
 
 /* forgetting the const-specifier here leads to a 4 times slower code !!!!! */
-__device__ static uint64 const DEVICE_RAND_MAX = 0x7FFFFFFFlu;
+__device__ static CountType const DEVICE_RAND_MAX = 0x7FFFFFFFlu;
 
-__device__ inline uint64 rand( uint64 rSeed )
+__device__ inline CountType rand( CountType rSeed )
 {
     // why 0x7F... instead 0xFF ??? ... I mean it is unsigned, not signed ...
-    return ((uint64)950706376*rSeed) % DEVICE_RAND_MAX;
+    return ((CountType)950706376*rSeed) % DEVICE_RAND_MAX;
 }
 
 
@@ -43,14 +47,13 @@ __device__ inline uint64 rand( uint64 rSeed )
  * @param[in]  rSeed    Seed which will additionally used to the linear ID
  *                      to make two kernel runs independent from each other
  **/
-__global__ void kernelMonteKarloPi( uint64 * rnInside, uint32_t nTimes, uint32_t rSeed )
+__global__ void kernelMonteKarloPi( CountType * rnInside, uint32_t nTimes, uint32_t rSeed )
 {
-    static_assert( sizeof(uint64) == sizeof(uint64_t), "" );
+    static_assert( sizeof(CountType) == sizeof(uint64_t), "" );
 
-    int const linId = blockIdx.x * blockDim.x + threadIdx.x;
-    int nInsideCircle = 0;  // local variable
+    uint64_t const linId = blockIdx.x * blockDim.x + threadIdx.x;
 
-    uint64 seed = ( (uint64) rSeed * linId ) % DEVICE_RAND_MAX;
+    CountType seed = ( (CountType) rSeed * linId ) % DEVICE_RAND_MAX;
 
     #pragma unroll 32  // 0.128823s -> 0.112251s, higher e.g. 64 unrolling brings no notable speedup
     for ( int i = nTimes; i >= 0; --i )
@@ -61,11 +64,8 @@ __global__ void kernelMonteKarloPi( uint64 * rnInside, uint32_t nTimes, uint32_t
         seed = rand( seed );
         SampleType y = SampleType(seed) / SampleType(DEVICE_RAND_MAX);
         if ( x*x + y*y < 1.0 )
-            nInsideCircle++; // no atomic needed, because local variable
+            atomicAdd( &rnInside[i], 1 );
     }
-
-    uint64 nInsideConverted = nInsideCircle;
-    atomicAdd( rnInside, nInsideConverted );  // shfl_down brings no speedup
 }
 
 
@@ -122,20 +122,24 @@ int main( int argc, char** argv )
         CUDA_ERROR( cudaEventRecord( start ) );
 
     /* allocate and initialize needed memory */
-    double pi = 1.0;
-    uint64 nInside = 0;
-    uint64 * dpnInside = NULL;
+    CountType * nInside = NULL;
+    CountType * dpnInside = NULL;
 
-    CUDA_ERROR( cudaMalloc( (void**) &dpnInside,    sizeof(dpnInside[0]) ) );
-    CUDA_ERROR( cudaMemset( (void*)   dpnInside, 0, sizeof(dpnInside[0]) ) );
-    CUDA_ERROR( cudaMemcpy( &nInside, dpnInside,    sizeof(dpnInside[0]), cudaMemcpyDeviceToHost ) );
+    CUDA_ERROR( cudaMallocHost( (void**) &nInside, nTimesPerThread * sizeof(nInside[0]) ) );
+    CUDA_ERROR( cudaMalloc( (void**) &dpnInside, nTimesPerThread * sizeof(dpnInside[0]) ) );
+    CUDA_ERROR( cudaMemset( (void*) dpnInside, 0, nTimesPerThread * sizeof(dpnInside[0]) ) );
 
-    kernelMonteKarloPi<<<nBlocks,nThreadsPerBlock>>>(dpnInside, nTimesPerThread /*nRepeat*/, 237890291 /*seed*/);
-    /* as both kernel and memcpy are sent to standardstream, they are executed
-     * sequentially on the deviec */
-    CUDA_ERROR( cudaMemcpy( &nInside, dpnInside, sizeof(dpnInside[0]), cudaMemcpyDeviceToHost ) );
-    CUDA_ERROR( cudaDeviceSynchronize() );
-    pi = 4.0 * double(nInside) / ( (double)nBlocks*nThreadsPerBlock*nTimesPerThread );
+    kernelMonteKarloPi<<< nBlocks, nThreadsPerBlock >>>
+        ( dpnInside, nTimesPerThread /*nRepeat*/, 237890291 /*seed*/ );
+
+    CUDA_ERROR( cudaMemcpy( (void*) nInside, (void*) dpnInside, nTimesPerThread * sizeof(dpnInside[0]), cudaMemcpyDeviceToHost ) );
+    /* cum sum */
+    uint64_t sum = 0;
+    for ( auto i = 0u; i < nTimesPerThread; ++i )
+    {
+        sum += nInside[i];
+        ((double*) nInside)[i] = 4.0 * sum / ( (double) nBlocks*nThreadsPerBlock*i );
+    }
 
         CUDA_ERROR( cudaEventRecord( stop ) );
 
@@ -143,10 +147,12 @@ int main( int argc, char** argv )
     float milliseconds;
     cudaEventElapsedTime( &milliseconds, start, stop );
 
-    printf( "Rolling the dice %lu times resulted in pi ~ %.15f and took %f seconds\n",
-        nTimesPerThread * nThreadsPerBlock * nBlocks, pi, milliseconds / 1000.0f );
+    printf( "# Run took %.8f seconds\n", milliseconds / 1000.0f );
+    for ( auto i = 1u; i < nTimesPerThread; i+=100 )
+        printf( "%lu   %.15f\n", (uint64_t)nBlocks*nThreadsPerBlock*i, ((double*) nInside)[i] );
 
     /* free all allocated memory */
+    CUDA_ERROR( cudaFreeHost( nInside ) );
     CUDA_ERROR( cudaFree( dpnInside ) );
 
     return 0;

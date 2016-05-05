@@ -179,7 +179,7 @@ Run on Taurus:
     module load java/jdk1.7.0_25 scala/2.10.4 cuda/7.0.28
 
     salloc -p gpu-interactive --nodes=1 --gres=gpu:2 --time=1:30:00
-    Taurus doesn't have anything -.-.... maven, ant, spark ... need to do everything manually:
+    Taurus does not have anything -.-.... maven, ant, spark ... need to do everything manually:
     ant:
         tar -xf apache-ant-1.9.6-src.tar.bz2
         cd apache-ant-1.9.6
@@ -354,3 +354,143 @@ Using nvvp:
     Working Directory: ...
     Arguments: -jar ./MontePi.jar 2684354560
        -> works :3
+
+Rootbeer-Paper:
+        1) serialize state to GPU memory
+        2) define the kernel code that the GPU will execute
+        3) control the kernel
+        4) deserialize state back to CPU memory
+      -> "serialize"?
+      => Rootbeer does these things automatically in contrast to CUDA- and OpenCL- Java language bindings
+      supports:
+        1) single and multi-dimensional arrays of primitive and reference types
+        2) composite objects
+        3) instance and static fields
+        4) dynamic memory allocation
+        5) inner classes
+        6) synchronized methods and monitors
+        7) strings
+        8) exceptions that are thrown or caught on the GPU
+    Introduction
+      - focus on NVidia because of recursion
+      - Without Rootbeer, using Java language bindings, a developer must carefully convert complex graphs of Java objects into arrays of basic types.
+      - Without Rootbeer, a developer must write separate code in another language to specify what the GPU execution will do
+      - Rootbeer also has a native debugging mode where the GPU code is executed on a multi-core CPU inside a C++ debugger.
+    Programming Interface:
+        public interface Kernel {
+            void gpuMethod();
+        }
+      - get data onto GPU by settings private members
+      - byte code from gpuMethod is cross-compiled with CUDA
+        List<Kernel> jobs = new ArrayList<Kernel>();
+        int[] ret = new int[ arrays.size() ];
+        for( int i = 0; i < arrays.size(); ++i )
+        {
+            jobs.add( new ArraySum( arrays.get(i), ret, i ) );
+        }
+        Rootbeer rootbeer = new Rootbeer();
+        rootbeer.runAll(jobs);
+      - compile to jar
+      - run Rootbeer on jar
+        java -jar Rootbeer.jar InputJar.jar OutputJar.jar
+    High Level Processing Overview:
+      - jar -[extract]-> .class
+            -[read with Soot]-> Jimple:
+         . search for Kernel implementations
+         . find all types, methods, fields meant for GPU
+            -[generated CUDA code]-> .cu
+            -[call nvcc]-> .cubin
+         . Generate byte code for serialization
+         . insert compiled interface which serialzes and calls cubin
+           -> convert back to bytecode
+        -[pack into jar]-> jar
+    High Performance (De)Serialization in Java
+        1) Java Native interface (JNI)  247 ms
+        2) Reflection                   173 ms
+        3) Purve Java                     5 ms
+      - "custom Java Bytecode that reads fields and places the results into a Java byte array"
+          -> scheint komplett zerstreut im Speicher zu liegen ...
+       -> JNI call cudaMemcpy
+    Representing Java Objects on the GPU
+      - static + instance memory
+         |              |
+         + simple C-Array with differing offsets (must be primitive type)
+                        +
+            set of object with 16B header:
+                Reserved for Garbage Collector 10 bytes (future work)
+                Derived Type                    1 byte
+                Created on GPU flag             1 byte  (malloc from kernel)
+                Object Monitor State            4 bytes
+    CUDA Code Generation:
+      - Future: better serialization + shared memory
+    Related Work:
+      - jCUDA, jocl, JavaCL -> require serialization of object graphs to primitive arrays
+      - JikesRVM to auto-detect parallelism runtime
+      - Peter Calvert’s annotations like OpenMP -> not well-working for all cases ...
+      Aparapi very similar, but less full-featured
+
+2016-05-01:
+jar -cvf MontePiGPUtmp.jar MonteCarloPi.class
+
+java -jar ../../../../rootbeer1/Rootbeer.jar MontePiGPUtmp.jar MontePiGPU.jar -64bit -computecapability=sm_30
+
+jar -cvfm MontePiGPU.jar.tmp manifest.txt DummyEntry.class MonteCarloPiKernel.class MonteCarloPi.class TestMonteCarloPi.class 'TestMonteCarloPi$.class' &&
+zipinfo MontePiGPU.jar.tmp &&
+#zipmerge MontePiGPU.jar.merged /usr/share/java/scala-library.jar MontePiGPU.jar.tmp &&
+java -jar "$ROOTBEER_ROOT"/Rootbeer.jar MontePiGPU.jar.tmp MontePiGPU.jar -64bit -computecapability=sm_30
+
+#Warning: the following soot-classpath entry is not a supported archive file (must be .zip, .jar or .apk): MontePiGPU.jar.tmp
+
+
+	jar -cfm rest.jar manifest.txt TestMonteCarloPi*.class MonteCarloPi.class
+	zipmerge merged.jar "$SCALA_JAR" MontePiGPU.jar rest.jar
+	java -jar merged.jar
+
+
+# (1) Gives error, because of Soot clashing with scala?
+jar -cfm tmp.jar manifest.txt MonteCarloPiKernel.class MonteCarloPi*.class TestMonteCarloPi*.class &&
+zipmerge merged.jar "$SCALA_JAR" tmp.jar &&
+java -jar "$ROOTBEER_ROOT"/Rootbeer.jar merged.jar MontePi.jar -64bit -computecapability=sm_30 &&
+java -jar MontePi.jar
+# (2) this instead works fine:
+jar -cf tmp.jar MonteCarloPiKernel.class &&
+java -jar "$ROOTBEER_ROOT"/Rootbeer.jar tmp.jar gpu.jar -64bit -computecapability=sm_30 &&
+jar -cfm nongpu.jar manifest.txt TestMonteCarloPi*.class MonteCarloPi.class &&
+zipmerge MontePi.jar "$SCALA_JAR" gpu.jar nongpu.jar &&
+java -jar MontePi.jar
+# (3) but again this doesn't -.-
+jar -cfm tmp.jar manifest.txt MonteCarloPiKernel.class MonteCarloPi*.class &&
+java -jar "$ROOTBEER_ROOT"/Rootbeer.jar tmp.jar gpu.jar -64bit -computecapability=sm_30 &&
+zipmerge MontePi.jar "$SCALA_JAR" gpu.jar &&
+zip -u MontePi.jar TestMonteCarloPi*.class &&
+java -jar MontePi.jar
+# (1) Exception in thread "main" java.lang.NullPointerException
+# 	at scala.io.StdIn$class.readLine(Jasmin)
+# 	at scala.io.StdIn$.readLine(Jasmin)
+# 	at scala.io.StdIn$class.readInt(Jasmin)
+# 	at scala.io.StdIn$.readInt(Jasmin)
+# 	at TestMonteCarloPi$.main(Jasmin)
+# 	at TestMonteCarloPi.main(Jasmin)
+
+# (4) this also works fine:
+jar -cfm tmp.jar manifest.txt MonteCarloPiKernel.class MonteCarloPi.class &&
+java -jar "$ROOTBEER_ROOT"/Rootbeer.jar tmp.jar gpu.jar -64bit -computecapability=sm_30 &&
+jar -cf nongpu.jar TestMonteCarloPi*.class &&
+zipmerge MontePi.jar "$SCALA_JAR" gpu.jar nongpu.jar &&
+java -jar MontePi.jar
+
+# (5)
+# Exception in thread "main" java.lang.ClassCastException: MonteCarloPiKernel cannot be cast to org.trifort.rootbeer.runtime.CompiledKernel
+# 	at org.trifort.rootbeer.runtime.CUDAContext.setKernel(CUDAContext.java:119)
+# 	at MonteCarloPi.runOnDevice(MonteCarloPi.java:116)
+# 	at MonteCarloPi.calc(MonteCarloPi.java:180)
+# 	at TestMonteCarloPi$.main(TestMonteCarloPi.scala:75)
+# 	at TestMonteCarloPi.main(TestMonteCarloPi.scala)
+jar -cf tmp.jar MonteCarloPiKernel.class &&
+java -jar "$ROOTBEER_ROOT"/Rootbeer.jar tmp.jar gpu.jar -64bit -computecapability=sm_30 &&
+jar -cfm nongpu.jar manifest.txt TestMonteCarloPi*.class MonteCarloPi.class &&
+zipmerge MontePi.jar "$SCALA_JAR" gpu.jar nongpu.jar &&
+java -jar MontePi.jar
+
+what was -deprecation flag for?
+pdfs Nico

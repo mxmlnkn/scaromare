@@ -7,4 +7,4 @@ clean:
 	rm -f *.exe *.log *.o
 
 TestMonteCarloPiV2.exe: TestMonteCarloPiV2.cpp
-	nvcc -arch=sm_30 -x cu $< -o $@ -std=c++11
+	nvcc -arch=sm_30 -x cu $< -o $@ -std=c++11 -DNDEBUG -O3

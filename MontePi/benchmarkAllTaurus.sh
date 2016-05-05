@@ -11,7 +11,7 @@ imax=0 #26843545600
 
 allDiceRolls=( )
 timesSingleCoreJava=( 0)
-timesSingleCoreScala=(0 )
+timesSingleCoreScala=( 0 )
 timesSingleGpuCpp=( )
 timesSingleGpuJava=( )
 timesSingleGpuScala=( )
@@ -21,7 +21,7 @@ timesSingleGpuScala=( )
 #make -C singleNode/singleCore/scala/
 make -C singleNode/singleGpu/cpp/
 make -C singleNode/multiGpu/java/
-make -C singleNode/multiGpu/scala/
+make -C singleNode/multiGpu/scala/ SCALA_ROOT=/sw/global/compilers/scala/2.10.4/lib/
 
 getTime() {
     minutes=$(sed -nr 's/real[[:space:]]*([0-9.]+)m([0-9.]+)s.*/\1/p' $1)
@@ -31,7 +31,7 @@ getTime() {
 
 benchmarksFile="benchmarks-$(date +%Y-%m-%d_%H-%M-%S)"
 resultsFile="results-$(date +%Y-%m-%d_%H-%M-%S).log"
-printf "nDiceRolls  |  1 Core (java)  |  1 Core (scala)  | 1 GPU (C++)  | 1 GPU (Java)  | 1 GPU (Scala)\n" | tee $resultsFile
+printf "#nDiceRolls  |  1 Core (java)  |  1 Core (scala)  | 1 GPU (C++)  | 1 GPU (Java)  | 1 GPU (Scala)\n" | tee $resultsFile
 
 # benchmark scaling with different work loads
 for (( i=i0; i<imax; i=3*i/2  )); do
@@ -93,12 +93,16 @@ done
 #    mv results.log results-$(date +%Y-%m-%d_%H-%M-%S).log
 #fi
 
+benchmarksFile="benchmarks-gpu-scaling-$(date +%Y-%m-%d_%H-%M-%S)"
+resultsFile="results-gpu-scaling-$(date +%Y-%m-%d_%H-%M-%S).log"
+printf "#nDiceRolls  |  n GPUs (C++)  | n GPUs (Java)  | n GPUs (Scala)\n" | tee $resultsFile
+
+timesSingleGpuCpp=( )
+timesSingleGpuJava=( )
+timesSingleGpuScala=( )
 
 # benchmark scaling with GPU numbers without spark
-for (( i=0; i<32; i=i+1  )); do
-    nDiceRolls=$((i-i%256))
-    allDiceRolls+=( $nDiceRolls )
-
+for (( i=$SLURM_NPROCS; i>0; i-=1  )); do
     # single Gpu C++
     cat > tmp.slurm <<"EOF"
 #!/bin/bash
@@ -106,10 +110,10 @@ nGpusPerNode=4
 iGpuToUse=$((SLURM_PROCID % nGpusPerNode ))
 echo $(hostname) Process ID: $SLURM_PROCID
 echo GPU device to use: $iGpuToUse
-time singleNode/singleGpu/cpp/TestMonteCarloPiV2.exe 2684354560000 $iGpuToUse
+time singleNode/singleGpu/cpp/TestMonteCarloPiV2.exe 2684354560 $iGpuToUse
 EOF
     chmod u+x tmp.slurm
-    srun -ntasks=$i tmp.slurm > tmp.log 2>&1
+    srun --ntasks=$i tmp.slurm > tmp.log 2>&1
     cat tmp.log >> "$benchmarksFile-singleNode-singleGpu-Cpp.log"
     #timesSingleGpuCpp+=( $(getTime tmp.log) )
     timesSingleGpuCpp+=( $(sed -nr 's/Rolling the dice.*and took (.*) seconds.*/\1/p' tmp.log) )
@@ -121,9 +125,9 @@ nGpusPerNode=4
 iGpuToUse=$((SLURM_PROCID % nGpusPerNode ))
 echo $(hostname) Process ID: $SLURM_PROCID
 echo GPU device to use: $iGpuToUse
-java -jar singleNode/multiGpu/java/MontePi.jar 2684354560000 $iGpuToUse
+java -jar singleNode/multiGpu/java/MontePi.jar 2684354560 $iGpuToUse
 EOF
-    srun -ntasks=$i tmp.slurm > tmp.log 2>&1
+    srun --ntasks=$i tmp.slurm > tmp.log 2>&1
     cat tmp.log >> "$benchmarksFile-singleNode-singleGpu-java.log"
     #timesSingleGpuJava+=( $(getTime tmp.log) )
     timesSingleGpuJava+=( $(sed -nr 's/Rolling the dice.*and took (.*) seconds.*/\1/p' tmp.log) )
@@ -135,17 +139,16 @@ nGpusPerNode=4
 iGpuToUse=$((SLURM_PROCID % nGpusPerNode ))
 echo $(hostname) Process ID: $SLURM_PROCID
 echo GPU device to use: $iGpuToUse
-scala singleNode/multiGpu/scala/MontePiGPU.jar 2684354560000 $iGpuToUse
+cd singleNode/multiGpu/scala/
+scala MontePiGPU.jar 2684354560 $iGpuToUse
 EOF
-    srun -ntasks=$i tmp.slurm > tmp.log 2>&1
+    srun --ntasks=$i tmp.slurm > tmp.log 2>&1
     cat tmp.log >> "$benchmarksFile-singleNode-singleGpu-scala.log"
     #timesSingleGpuScala+=( $(getTime tmp.log) )
     timesSingleGpuScala+=( $(sed -nr 's/Rolling the dice.*and took (.*) seconds.*/\1/p' tmp.log) )
 
-    printf "%15i%10.5f%10.5f%10.5f%10.5f%10.5f\n" \
-    ${allDiceRolls[         ${#allDiceRolls[*]}        -1 ]} \
-    ${timesSingleCoreJava[  ${#timesSingleCoreJava[*]} -1 ]} \
-    ${timesSingleCoreScala[ ${#timesSingleCoreScala[*]}-1 ]} \
+    printf "%4i%10.5f%10.5f%10.5f\n" \
+    $i \
     ${timesSingleGpuCpp[    ${#timesSingleGpuCpp[*]}   -1 ]} \
     ${timesSingleGpuJava[   ${#timesSingleGpuJava[*]}  -1 ]} \
     ${timesSingleGpuScala[  ${#timesSingleGpuScala[*]} -1 ]} | tee -a $resultsFile

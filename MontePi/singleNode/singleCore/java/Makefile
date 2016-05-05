@@ -9,7 +9,7 @@ clean:
 	rm -f *.class *.jar
 
 MontePi.jar: TestMonteCarloPi.class MonteCarloPi.class MonteCarloPiKernel.class
-	jar cfm $@ manifest.txt $*
+	jar cfm $@ manifest.txt $^
 
 %.class: %.java
 	javac -classpath . $<

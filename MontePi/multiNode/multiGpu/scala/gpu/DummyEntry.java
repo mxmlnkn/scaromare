@@ -7,8 +7,7 @@ public class DummyEntry
 {
     public static void main ( String[] args)
     {
-        MonteCarloPi piCalculator = new MonteCarloPi();
+        MonteCarloPi piCalculator = new MonteCarloPi(0);
         piCalculator.calc(0,0,0,0);
     }
 }
-
