@@ -1,0 +1,11 @@
+Was ist Rootbeer?
+Wie funktioniert es?
+Wie nutze ich es? Was sind Voraussetzungen?
+Was waren Probleme mit Rootbeer?
+Was ist Monte-Carlo Pi?
+Fehlerskalierung theoretisch und praktisch?
+Implementierung:
+    Was ist bei GPUs zu beachten ( Seeds, 64-Bit )
+    Was ist bei Rootbeer zu beachten?
+      - private Variablen werden wirklich immer per memcpy hin und her transportiert.
+      - muss nicht auf ungerade Kernel-Zahl achten, werden automatisch aussortiert 

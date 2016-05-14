@@ -11,7 +11,8 @@ import argparse
 parser = argparse.ArgumentParser()
 #parser.add_argument("rundir", help="Directory which contains 'simOutput'")
 parser.add_argument("-e", "--error-log", dest="errorlog", help="File with data from error scaling", type=str, nargs="*" )
-parser.add_argument("-w", "--workload-log", dest="workloadlog", help="File with data from error scaling", type=str, nargs=1 )
+parser.add_argument("-w", "--workload-log", dest="workloadlog", help="File with data from benchmark", type=str, nargs=1 )
+parser.add_argument("-c", "--workload-cluster", dest="workloadcluster", help="File with data from benchmark", type=str, nargs=1 )
 args = parser.parse_args()
 
 def finishPlot( fig, ax, fname ):
@@ -96,7 +97,7 @@ if args.errorlog:
             data = genfromtxt( file );
 
         label = file
-        if not os.path.exists( args.errorlog[iArg+1] ):
+        if len( args.errorlog ) < iArg+1 and not os.path.exists( args.errorlog[iArg+1] ):
             label = args.errorlog[iArg+1]
             print "When trying to plot",file,"the next argument encountered was found to not be a valid file, therefore interpret '"+label+"'as the label to use!"
         ax.yaxis.label.set_size(18)
@@ -117,42 +118,43 @@ if args.errorlog:
 
     ax.set_xlim( [ xmin, xmax ] )
 
-plt.show()
-exit()
 
 ########################### workload scaling ###########################
 
-data = genfromtxt( sys.argv[1] );
+if args.workloadcluster != None:
+    data = genfromtxt( args.workloadcluster[0] )
+    print args.workloadcluster
+    print data.shape
+    print data[0,0]
 
-# No.  | singleCore | singleCore | singleGPU | singleGPU | singleGPU |    Spark    |             |  Spark    |    Spark     |    Spark
-# res. |  (Java)    |  (Scala)   |   (CPP)   |   (Java)  |   (Scala) |   (local)   | Spark + GPU | (network) |  (network)   |  (network)
-#      |            |            |           |           |           |             |             |           | 10x workload | 100x workload
+    # No.  | singleCore | singleCore | singleGPU | singleGPU | singleGPU |    Spark    |             |  Spark    |    Spark     |    Spark
+    # res. |  (Java)    |  (Scala)   |   (CPP)   |   (Java)  |   (Scala) |   (local)   | Spark + GPU | (network) |  (network)   |  (network)
+    #      |            |            |           |           |           |             |             |           | 10x workload | 100x workload
 
-fig = pltfigure( figsize=(8,5) )
-ax = fig.add_subplot( 111,
-    xlabel = "Number of threads/cores/GPUs",
-    ylabel = "Speedup",
-    xscale = "log",
-    yscale = "log"
-)
+    fig = plt.figure( figsize=(8,5) )
+    ax = fig.add_subplot( 111,
+        xlabel = "Number of threads/cores/GPUs",
+        ylabel = "Speedup",
+        xscale = "log",
+        yscale = "log"
+    )
 
-x = linspace( 1, 8, 100 )
-ax.plot( x, x, '--', color='gray', label="ideal speedup" )
-ax.plot( data[:,0], data[0,1] / data[:,1], 'o-', label="single core (Java)" )
-ax.plot( data[:,0], data[0,2] / data[:,2], 'o-', label="single core (Scala)" )
-ax.plot( data[:,0], data[0,3] / data[:,3], 'o-', label="single GPU (C++)" )
-ax.plot( data[:,0], data[0,4] / data[:,4], 'o-', label="single GPU (Java)" )
-ax.plot( data[:,0], data[0,5] / data[:,5], 'o-', label="single GPU (Scala)" )
-#ax.plot( data[:,0], data[0,6] / data[:,6], 'o-', label="Spark local" )
-#ax.plot( data[:,0], data[0,7] / data[:,7], 'o-', label="Spark + GPUs" )
-#ax.plot( data[:,0], data[0,8] / data[:,8], 'o-', label="Spark 2 nodes" )
-#ax.plot( data[:,0], data[0,9] / data[:,9], 'o-', label="Spark 2 nodes 10x workload" )
-#ax.plot( data[:,0], data[0,10] / data[:,10], 'o-', label="Spark 2 nodes 100x workload" )
+    x = linspace( 1, 8, 100 )
+    ax.plot( x, x, '--', color='gray', label="ideal speedup" )
+    ax.plot( data[:,0], data[0,1] / data[:,1], 'o-', label="single core (Java)" )
+    ax.plot( data[:,0], data[0,2] / data[:,2], 'o-', label="single core (Scala)" )
+    ax.plot( data[:,0], data[0,3] / data[:,3], 'o-', label="single GPU (C++)" )
+    ax.plot( data[:,0], data[0,4] / data[:,4], 'o-', label="single GPU (Java)" )
+    ax.plot( data[:,0], data[0,5] / data[:,5], 'o-', label="single GPU (Scala)" )
+    ax.plot( data[:,0], data[0,6] / data[:,6], 'o-', label="Spark local" )
+    ax.plot( data[:,0], data[0,7] / data[:,7], 'o-', label="Spark + GPUs" )
+    ax.plot( data[:,0], data[0,8] / data[:,8], 'o-', label="Spark 2 nodes" )
+    ax.plot( data[:,0], data[0,9] / data[:,9], 'o-', label="Spark 2 nodes 10x workload" )
+    ax.plot( data[:,0], data[0,10] / data[:,10], 'o-', label="Spark 2 nodes 100x workload" )
 
-legend( loc='best', fontsize=10 )
-tight_layout()
-savefig( "benchmarks-scaling.pdf" )
+    finishPlot( fig, ax, "benchmarks-scaling-cluster" )
 
 
 
 plt.show()
+exit()
