@@ -119,41 +119,92 @@ if args.errorlog:
     ax.set_xlim( [ xmin, xmax ] )
 
 
-########################### workload scaling ###########################
+########################### workload cluster ###########################
 
 if args.workloadcluster != None:
-    data = genfromtxt( args.workloadcluster[0] )
-    print args.workloadcluster
-    print data.shape
-    print data[0,0]
-
-    # No.  | singleCore | singleCore | singleGPU | singleGPU | singleGPU |    Spark    |             |  Spark    |    Spark     |    Spark
-    # res. |  (Java)    |  (Scala)   |   (CPP)   |   (Java)  |   (Scala) |   (local)   | Spark + GPU | (network) |  (network)   |  (network)
-    #      |            |            |           |           |           |             |             |           | 10x workload | 100x workload
-
+    ####### Strong Scaling ( work per slice constant -> slices, work ^ ) #######
     fig = plt.figure( figsize=(8,5) )
     ax = fig.add_subplot( 111,
-        xlabel = "Number of threads/cores/GPUs",
-        ylabel = "Speedup",
+        xlabel = "Parallelisierung",
+        ylabel = "Laufzeit / s",
         xscale = "log",
         yscale = "log"
     )
 
-    x = linspace( 1, 8, 100 )
-    ax.plot( x, x, '--', color='gray', label="ideal speedup" )
-    ax.plot( data[:,0], data[0,1] / data[:,1], 'o-', label="single core (Java)" )
-    ax.plot( data[:,0], data[0,2] / data[:,2], 'o-', label="single core (Scala)" )
-    ax.plot( data[:,0], data[0,3] / data[:,3], 'o-', label="single GPU (C++)" )
-    ax.plot( data[:,0], data[0,4] / data[:,4], 'o-', label="single GPU (Java)" )
-    ax.plot( data[:,0], data[0,5] / data[:,5], 'o-', label="single GPU (Scala)" )
-    ax.plot( data[:,0], data[0,6] / data[:,6], 'o-', label="Spark local" )
-    ax.plot( data[:,0], data[0,7] / data[:,7], 'o-', label="Spark + GPUs" )
-    ax.plot( data[:,0], data[0,8] / data[:,8], 'o-', label="Spark 2 nodes" )
-    ax.plot( data[:,0], data[0,9] / data[:,9], 'o-', label="Spark 2 nodes 10x workload" )
-    ax.plot( data[:,0], data[0,10] / data[:,10], 'o-', label="Spark 2 nodes 100x workload" )
+    # Total Elements   Elements Per Thread    Slices   Nodes   Time / s
+    iTime=-1
+    iPerSlice=1
+    iSlices=2
 
-    finishPlot( fig, ax, "benchmarks-scaling-cluster" )
+    ###### CPU ######
+    data = genfromtxt( args.workloadcluster[0]+"-cpu.dat" )
+    #x = linspace( 1, 8, 100 )
+    #ax.plot( x, x, '--', color='gray', label="ideal speedup" )
+    nPerSlice = unique( data[:,iPerSlice] )
+    colors = linspace( 0,1, len(nPerSlice) )
+    iC = 0
+    for perSlice in nPerSlice:
+        iHits = logical_and( data[:,iPerSlice] == perSlice, data[:,iSlices] != 0 )
+        ax.plot( data[iHits,iSlices] , data[iHits,iTime], '.-', label=r"CPU, $2^{"+str(int( log(perSlice)/log(2) ))+"}$ pro slice", color=plt.get_cmap("copper")(colors[iC]) )
+        iC += 1
 
+    ###### GPU ######
+    data = genfromtxt( args.workloadcluster[0]+"-gpu.dat" )
+    #x = linspace( 1, 8, 100 )
+    #ax.plot( x, x, '--', color='gray', label="ideal speedup" )
+    nPerSlice = unique( data[:,iPerSlice] )
+    colors = linspace( 0,1, len(nPerSlice) )
+    iC = 0
+    for perSlice in nPerSlice:
+        iHits = logical_and( data[:,iPerSlice] == perSlice, data[:,iSlices] != 0 )
+        ax.plot( data[iHits,iSlices] , data[iHits,iTime], 'x--', label=r"GPU, $2^{"+str(int( log(perSlice)/log(2) ))+"}$ pro slice", color=plt.get_cmap("cool")(colors[iC]) )
+        iC += 1
+
+    finishPlot( fig, ax, "cluster-strong-scaling" )
+
+    ########## Weak Scaling ( work constant -> slices ^ ) ##########
+
+    fig = plt.figure( figsize=(8,5) )
+    ax = fig.add_subplot( 111,
+        xlabel = "Parallelisierung",
+        ylabel = "Laufzeit / s",
+        xscale = "log",
+        yscale = "log"
+    )
+    # Total Elements   Elements Per Thread    Slices   Nodes   Time / s
+    iTime=-1
+    iWork=0
+    iPerSlice=1
+    iSlices=2
+
+    ###### CPU ######
+    data = genfromtxt( args.workloadcluster[0]+"-cpu.dat" )
+    #x = linspace( 1, 8, 100 )
+    #ax.plot( x, x, '--', color='gray', label="ideal speedup" )
+    nWork = unique( data[:,iWork] )
+    colors = linspace( 0,1, len(nWork) )
+    iC = 0
+    for work in nWork:
+        if work == 0:
+            continue
+        print data[iHits,iTime]
+        iHits = logical_and( data[:,iWork] == work, data[:,iSlices] != 0 )
+        ax.plot( data[iHits,iSlices] , data[iHits,iTime], '.-', label=r"CPU, "+str(work)+" Iterationen", color=plt.get_cmap("copper")(colors[iC]) )
+        iC += 1
+
+    ###### GPU ######
+    #data = genfromtxt( args.workloadcluster[0]+"-gpu.dat" )
+    ##x = linspace( 1, 8, 100 )
+    ##ax.plot( x, x, '--', color='gray', label="ideal speedup" )
+    #nPerSlice = unique( data[:,iPerSlice] )
+    #colors = linspace( 0.5  , len(nPerSlice) )
+    #iC = 0
+    #for perSlice in nPerSlice:
+    #    iHits = logical_and( data[:,iPerSlice] == perSlice, data[:,iSlices] != 0 )
+    #    ax.plot( data[iHits,iSlices] , data[iHits,iTime], 'x--', label=r"GPU, $2^{"+str(int( log(perSlice)/log(2) ))+"}$ pro slice", color=plt.get_cmap("cool")(colors[iC]) )
+    #    iC += 1
+    #
+    finishPlot( fig, ax, "cluster-weak-scaling" )
 
 
 plt.show()

@@ -25,10 +25,14 @@ public class MonteCarloPi
         long t0, t1;
         t0 = System.nanoTime();
 
+        System.out.print( "Creating Rootbeer Context..." );
         mRootbeerContext = new Rootbeer();
+        System.out.println( "OK" );
         miGpuDeviceToUse = riGpuDeviceToUse;
+        System.out.println( "Get Device List" );
         List<GpuDevice> devices = mRootbeerContext.getDevices();
         assert( miGpuDeviceToUse < devices.size() );
+        System.out.println( "Get device "+miGpuDeviceToUse+" from list of length "+devices.size() );
         mDevice = devices.get( miGpuDeviceToUse );
 
         t1 = System.nanoTime();

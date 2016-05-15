@@ -1,2 +1,2 @@
-Main-Class: DummyEntry
+Main-Class: TestMonteCarloPi
 Class-Path: .

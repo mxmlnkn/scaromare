@@ -1,22 +1,8 @@
 #!/bin/bash
 
-# E.g. use it like this to run MontePi.jar with 8 slices (slice count is
-# specified in the program itself, but it was written to accept arguments):
-#   jobid=$(sbatch ./start_spark_slurm.sh) &&
-#   jobid=${jobid##Submitted batch job } &&
-#   MASTER_WEB_UI='' &&
-#   # looks like: 16/05/13 20:44:59 INFO MasterWebUI: Started MasterWebUI at http://172.24.36.19:8080
-#   while [ -z "$MASTER_WEB_UI" ]; do MASTER_WEB_UI=$(sed -nE 's|.*Started MasterWebUI at (http://[0-9.:]*)|\1|p' $HOME/spark/logs/start-spark-slurm_$jobid.err); sleep 1s; done &&
-#   cat ~/spark/logs/start-spark-slurm_$jobid.* &&
-#   MASTER_ADDRESS=$(cat ~/spark/logs/${jobid}_spark_master) &&
-#   ~/spark-1.5.2-bin-hadoop2.6/bin/spark-submit --master $MASTER_ADDRESS \
-#       ~/scaromare/MontePi/multiNode/multiCore/MontePi.jar 1234567890 8 2>/dev/null
-# Output could be:
-#   Rolling the dice 1234567890 times resulted in pi ~ 3.1416070527180278 and took 7.370468868 seconds
-# and when running with only 1 slice( ontePi.jar 1234567890 1 ):
-#   Rolling the dice 1234567890 times resulted in pi ~ 3.141646073428979 and took 27.902197481 seconds
-
-#SBATCH --account=p_scads
+# These settings can be overwritten setting by setting by specifying
+# 'fresH' command line parameters to sbatch
+#SBATCH --account=p_zih-hops
 #SBATCH --partition=gpu1
 #SBATCH --nodes=3
 # ntasks per node MUST be one, because multiple slaves per work does not work with slurm + spark in this script
@@ -24,14 +10,50 @@
 # CPUs per Task must be equal to gres:gpu or else too few or too much GPUs will
 # be used. Partition 'gpu1' on taurus has 2 K20x GPUs per node and 'gpu2' has
 # 4 K80 GPUs per node
-#SBATCH --cpus-per-task=4
-#SBATCH --gres=gpu:1
-#SBATCH --mem-per-cpu=500
+#SBATCH --cpus-per-task=2
+#SBATCH --gres=gpu:2
+#SBATCH --mem-per-cpu=1000
 # Beware! $HOME will not be expanded and invalid output-URIs will result
-# slum jobs hanging indefinitely.
-#SBATCH --output="/home/s3495379/spark/logs/start-spark-slurm_%j.out"
-#SBATCH --error="/home/s3495379/spark/logs/start-spark-slurm_%j.err"
+# Slurm jobs hanging indefinitely.
+#SBATCH --output="/home/s3495379/spark/logs/%j.out"
+#SBATCH --error="/home/s3495379/spark/logs/%j.err"
 #SBATCH --time=01:00:00
+
+# E.g. use it like this to run MontePi.jar with 8 slices (slice count is
+# specified in the program itself, but it was written to accept arguments):
+function startSpark() {
+    export SPARK_LOGS=$HOME/spark/logs
+    mkdir -p "$SPARK_LOGS"
+    if [ ! -d "$SPARK_LOGS" ]; then return 1; fi
+    jobid=$(sbatch "$@" --output="$SPARK_LOGS/%j.out" --error="$SPARK_LOGS/%j.err" $HOME/scaromare/start_spark_slurm.sh)
+    jobid=${jobid##Submitted batch job }
+    echo "Job ID : $jobid"
+    # looks like: 16/05/13 20:44:59 INFO MasterWebUI: Started MasterWebUI at http://172.24.36.19:8080
+    echo -n "Waiting for Job to run and Spark to start.."
+    MASTER_WEBUI=''
+    while [ -z "$MASTER_WEBUI" ]; do
+        echo -n "."
+        sleep 1s
+        if [ -f $HOME/spark/logs/$jobid.err ]; then
+            MASTER_WEBUI=$(sed -nE 's|.*Started MasterWebUI at (http://[0-9.:]*)|\1|p' $HOME/spark/logs/$jobid.err)
+        fi
+    done
+    echo "OK"
+    export MASTER_WEBUI
+    export MASTER_ADDRESS=$(cat ~/spark/logs/${jobid}_spark_master)
+    function sparkSubmit() {
+        ~/spark-1.5.2-bin-hadoop2.6/bin/spark-submit --master $MASTER_ADDRESS $@
+    }
+    cat "$SPARK_LOGS"/$jobid.*
+    echo "MASTER_WEBUI   : $MASTER_WEBUI"
+    echo "MASTER_ADDRESS : $MASTER_ADDRESS"
+}
+#   startSpark
+#    sparkSubmit ~/scaromare/MontePi/multiNode/multiCore/MontePi.jar 1234567890 8 2>/dev/null
+# Output could be:
+#   Rolling the dice 1234567890 times resulted in pi ~ 3.1416070527180278 and took 7.370468868 seconds
+# and when running with only 1 slice( ontePi.jar 1234567890 1 ):
+#   Rolling the dice 1234567890 times resulted in pi ~ 3.141646073428979 and took 27.902197481 seconds
 
 realpath() { echo "$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"; }
 
@@ -71,8 +93,6 @@ if [ "$1" != 'sran:D' ]; then
     echo "[Father] Working directory  : '$(pwd)'"
     echo "[Father] Path of this script: '$this'"
 
-    module load scala/2.10.4 java/jdk1.7.0_25 cuda/7.0.28
-
     export sparkLogs=$HOME/spark/logs
     export sparkTmp=$HOME/spark/tmp
     mkdir -p "$sparkLogs" "$sparkTmp"
@@ -96,6 +116,10 @@ if [ "$1" != 'sran:D' ]; then
 # If run by srun, then decide by $SLURM_PROCID whether we are master or worker
 else
     #echo "SLURM_PROCID = $SLURM_PROCID"
+
+    module load scala/2.10.4 java/jdk1.7.0_25 cuda/7.0.28
+    nvidia-smi
+
     if [ -z "$SLURM_PROCID" ]; then
         echo "[Process $SLURM_PROCID] [Error] $SLURM_PROCID is not set, maybe srun failed somehow?"
         exit 1

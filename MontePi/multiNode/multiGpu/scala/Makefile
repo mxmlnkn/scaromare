@@ -9,7 +9,7 @@ HADOOP_JAR    = $(SPARK_ROOT)/assembly/target/scala-2.10/spark-assembly-1.5.2-ha
 
 .phony: clean all *.jar *.class
 
-all: MontePi.jar run
+all: MontePi.jar
 run: MontePi.jar
 	$(SPARK_ROOT)/bin/spark-submit --master local[4] --class TestMonteCarloPi $< 268435456 1
 clean:
