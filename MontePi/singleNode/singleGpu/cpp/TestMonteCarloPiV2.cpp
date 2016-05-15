@@ -11,6 +11,7 @@ file=TestMonteCarloPiV2; rm $file.exe; nvcc -arch=sm_30 -x cu $file.cpp -o $file
 #include <climits>   // UINT_MAX
 #include <cassert>
 
+using CalcType = float;
 
 typedef unsigned long long int uint64;
 typedef float SampleType;

@@ -138,7 +138,7 @@ int main( int argc, char** argv )
     float milliseconds;
     cudaEventElapsedTime( &milliseconds, start, stop );
 
-    printf( "Rolling the dice %lu times resulted in pi ~ %f and took %f seconds\n",
+    printf( "Rolling the dice %lu times resulted in pi ~ %.15e and took %f seconds\n",
         nTimesPerThread * nThreadsPerBlock * nBlocks, pi, milliseconds / 1000.0f );
 
     /* free all allocated memory */
