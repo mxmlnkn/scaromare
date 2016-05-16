@@ -131,10 +131,18 @@ if args.workloadcluster != None:
         yscale = "log"
     )
 
-    # Total Elements   Elements Per Thread    Slices   Nodes   Time / s
-    iTime=-1
+    def plotData( cgpu ):
+        if ! ( cgpu == "cpu" or cgpu == "gpu" ):
+            return
+
+        data = genfromtxt( args.workloadcluster[0]+"-"+cgpu+".dat" )
+        # Total Elements   Elements Per Thread    Slices   Nodes   Time / s
+        assert data.shapey
+        data = { }
+
     iPerSlice=1
     iSlices=2
+    iTime=-1
 
     ###### CPU ######
     data = genfromtxt( args.workloadcluster[0]+"-cpu.dat" )
