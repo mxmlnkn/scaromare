@@ -78,6 +78,5 @@ object TestMonteCarloPi
 
         println( "Rolling the dice " + nDiceRolls + " times " +
             "resulted in pi ~ " + pi + " and took " + duration + " seconds" );
-
     }
 }

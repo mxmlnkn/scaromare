@@ -47,7 +47,7 @@ public final class TestMonteCarloPi_SparkRootbeer
                     MonteCarloPi piCalculator = new MonteCarloPi();
                     /* 1152 threads: value for GTX 760, used 1024, because X-Server is
                      * is running */
-                    double pi = piCalculator.calc( nRolls, 1024 /*threads*/ );
+                    double pi = piCalculator.calc( nRolls, -1 /*threads*/ );
 
                     //final long seed = (long)( (double) Long.MAX_VALUE / (double) nRanks * (double) iRank );
                     //Random uniRand = new Random( seed );

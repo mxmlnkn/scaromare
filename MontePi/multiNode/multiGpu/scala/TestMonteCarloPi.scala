@@ -51,7 +51,7 @@ object TestMonteCarloPi
                  * Because of oversubscription even though we have no
                  * memory latency only 12288 / 32 (warp size) = 384 are
                  * actually running */
-                piCalculator.calc( nRolls, 384 /* threads per device */, seed0, seed1 )
+                piCalculator.calc( nRolls, -1, seed0, seed1 )
             } ).reduce( _+_ );
         val pi = piSum / nSlices
         val t1 = System.nanoTime()
