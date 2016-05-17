@@ -33,7 +33,10 @@ nongpu.jar: MonteCarloPi.class TestMonteCarloPi.class
 	# Either do: MonteCarloPi.class MonteCarloPi$*.class or
 	# take care that gpu.jar is behind nongpu.jar which means it will override nongpu.jar
 
-MontePi.jar: nongpu.jar gpu.jar
+MontePi.jar: gpu.jar nongpu.jar
+	# note that the order of gpu.jar before nongpu.jar is important, because
+	# gpu.jar contains a manifest with no content which must be overwritten
+	# by the manifest in nongpu.jar!
 	zipmerge $@ $(SCALA_ROOT)/scala-library.jar $^
 
 # jar -cf tmp.jar MonteCarloPiKernel.class &&
