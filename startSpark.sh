@@ -27,3 +27,4 @@ function startSpark() {
     echo "MASTER_WEBUI   : $MASTER_WEBUI"
     echo "MASTER_ADDRESS : $MASTER_ADDRESS"
 }
+export -f startSpark

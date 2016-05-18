@@ -8,7 +8,7 @@ echo '' > $fname-gpu.log
 printf "# Total Elements   Elements Per Thread    Slices   Nodes   Time / s\n" > "$fname-cpu.dat"
 printf "# Total Elements   Elements Per Thread    Slices   Nodes   Time / s\n" > "$fname-gpu.dat"
 for nodes in 1 2 4 8 16 24 32; do   # 32 nodes equals 128 GPUs
-    gpusPerNode=4
+    gpusPerNode=1
     startSpark --time=04:00:00 --nodes=$((nodes+1)) --partition=gpu2 --gres=gpu:$gpusPerNode --cpus-per-task=$gpusPerNode
     for (( nPerSlice=2147483648/16; nPerSlice<=2147483648*4; nPerSlice*=2 )); do
         for (( nSlices = (nodes-1)*gpusPerNode; nSlices <= nodes*gpusPerNode+2; nSlices++ )); do
