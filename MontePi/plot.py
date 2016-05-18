@@ -29,7 +29,8 @@ def finishPlot( fig, ax, fname ):
 ########################### workload scaling ###########################
 
 if args.workloadlog != None:
-    data = genfromtxt( args.workloadlog );
+    data = genfromtxt( args.workloadlog[0] );
+    print "data (from "+args.workloadlog[0]+") = ",data
 
     fig = plt.figure( figsize=(6,4) )
     ax = fig.add_subplot( 111,
@@ -154,13 +155,14 @@ if args.workloadcluster != None:
         colors = linspace( 0,1, len( params ) )
         xmax = 0
         xmin = 1e9
+        gpusPerNode=1 # 4
         for i in range( len(params) ):
             filter = all( [
                         data["nPerSlice"] == params[i],
                         data["nSlices"] != 0,
                         data["t"] != 0,
-                        data["nSlices"] >= 4*(data["nodes"]-1),
-                        data["nSlices"] <= 4*data["nodes"]
+                        data["nSlices"] >= gpusPerNode*(data["nodes"]-1),
+                        data["nSlices"] <= gpusPerNode*data["nodes"]
                      ], axis=0 )
             ax.plot( data["nSlices"][filter], data["t"][filter], lineStyle,
                      label=labelGenerator( params[i] ),
@@ -173,9 +175,9 @@ if args.workloadcluster != None:
         finishPlot( fig, ax, "cluster-strong-scaling-"+cgpu )
 
 
-    plotData( "cpu", "nPerSlice", "copper", ".-", [1,150],
+    plotData( "cpu", "nPerSlice", "copper", ".-", [1,200],
               lambda p : r"$2^{"+str(int( log(p)/log(2) ))+"}$ pro slice" )
-    plotData( "gpu", "nPerSlice", "cool_r", ".-", [1,150],
+    plotData( "gpu", "nPerSlice", "cool_r", ".-", [1,200],
               lambda p : r"$2^{"+str(int( log(p)/log(2) ))+"}$ pro slice" )
 
     iTime=-1

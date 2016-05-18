@@ -29,7 +29,7 @@ trap "rm tmp.log" EXIT
 
 # Make all if changed
 #make -C singleNode/singleCore/java/
-#make -C singleNode/singleCore/scala/s
+#make -C singleNode/singleCore/scala/
 #make -C singleNode/singleGpu/cpp/
 #make -C singleNode/multiGpu/java/
 #make -C singleNode/multiGpu/scala/
