@@ -1,5 +1,5 @@
 /*
-file=MontePi; nvcc -arch=sm_30 -x cu $file.cpp -o $file.exe -std=c++11 -DNDEBUG -O3 && ./$file.exe 2684354560
+file=MontePiError; nvcc -arch=sm_30 -x cu $file.cpp -o $file.exe -std=c++11 -DNDEBUG -O3 && ./$file.exe 2684354560
 
 In contrast to TestMonteCarloPiV2, this version includes basically a loop over
 the number of rolls by calculating a cumulative sum, which makes the timings
@@ -14,20 +14,10 @@ worthless but gives back faster an output for the error scaling!
 #include <cstdlib>   // atoi, atol
 #include <climits>   // UINT_MAX
 #include <cassert>
-
+#include "../../../cudacommon.cpp"
 
 typedef unsigned long long int CountType;
 typedef float SampleType;
-
-
-void checkCudaError(const cudaError_t rValue, const char * file, int line )
-{
-    if ( (rValue) != cudaSuccess )
-    std::cout << "CUDA error in " << file
-              << " line:" << line << " : "
-              << cudaGetErrorString(rValue) << "\n";
-}
-#define CUDA_ERROR(X) checkCudaError(X,__FILE__,__LINE__);
 
 
 /* forgetting the const-specifier here leads to a 4 times slower code !!!!! */
@@ -58,7 +48,7 @@ __global__ void kernelMonteKarloPi( CountType * rnInside, uint64_t nTimes, uint3
     //CountType seed = ( (CountType) rSeed * (linId+1) ) % DEVICE_RAND_MAX;
     CountType seed = ( (CountType) rSeed + linId * DEVICE_RAND_MAX / nThreads ) % DEVICE_RAND_MAX;
 
-    #pragma unroll 32  // 0.128823s -> 0.112251s, higher e.g. 64 unrolling brings no notable speedup
+    #pragma unroll 128  // 0.128823s -> 0.112251s, higher e.g. 64 unrolling brings no notable speedup
     for ( int i = 0; i < nTimes; ++i )
     {
         // not that double can hold integers up to 2**53 exactly, while rSeed of uint32_t only goes to 2**32-1, so no precision is lost in this conversion
@@ -71,71 +61,6 @@ __global__ void kernelMonteKarloPi( CountType * rnInside, uint64_t nTimes, uint3
     }
 }
 
-template< typename T, typename S >
-inline T ceilDiv( T a, S b ) { return (a+b-1)/b; }
-
-/**
- * Chooses an optimal configuration for number of blocks and number of threads
- * Note that every kernel may have to calculate on a different amount of
- * elements, so this needs to be calculated inside the kernel with:
- *    for ( i = linid; i < nElements; i += nBlocks * nThreads )
- * which yields the following number of iterations:
- *    nIterations = (nElements-1 - linid) / ( nBlocks * nThreads ) + 1
- * derivation:
- *    search for highest n which satisfies i + n*s <= m-1
- *    note that we used <= m-1 instead of < m to work with floor later on
- *    <=> search highest n: n <= (m-1-i)/s
- *    which is n = floor[ (m-1-i)/s ]. Note that floor wouldn't be possible
- *    for < m, because it wouldn't account for the edge case for (m-1-i)/s == n
- *    the highest n means the for loop will iterate with i, i+s, i+2*s, i+...n*s
- *    => nIterations = n+1 = floor[ (m-1-i)/s ] + 1
- */
-void calcKernelConfig( int iDevice, uint64_t n, int * nBlocks, int * nThreads )
-{
-    int const nMaxThreads  = 256;
-    int const nMinElements = 32; /* The assumption: one kernel with nMinElements work won't be much slower than nMinElements kernels with each 1 work element. Of course this is workload / kernel dependent, so the fixed value may not be the best idea */
-
-    /* set current device and get device infos */
-    int nDevices;
-    CUDA_ERROR( cudaGetDeviceCount( &nDevices ) );
-    assert( iDevice < nDevices );
-    CUDA_ERROR( cudaSetDevice( iDevice ) );
-
-    // for GTX 760 this is 12288 threads per device and 384 real cores
-    cudaDeviceProp deviceProperties;
-    CUDA_ERROR( cudaGetDeviceProperties( &deviceProperties, iDevice) );
-
-    int const nMaxThreadsGpu = deviceProperties.maxThreadsPerMultiProcessor
-                             * deviceProperties.multiProcessorCount;
-    if ( n < (uint64_t) nMaxThreadsGpu * nMinElements )
-    {
-        auto nThreadsNeeded = ceilDiv( n, nMinElements );
-        *nBlocks  = ceilDiv( nThreadsNeeded, nMaxThreads );
-        *nThreads = nMaxThreads;
-        if ( *nBlocks == 1 )
-        {
-            assert( nThreadsNeeded <= nMaxThreads );
-            *nThreads = nThreadsNeeded;
-        }
-    }
-    else
-    {
-        *nBlocks  = nMaxThreadsGpu / nMaxThreads;
-        *nThreads = nMaxThreads;
-    }
-    assert( *nBlocks > 0 );
-    assert( *nThreads > 0 );
-    uint64_t nIterations = 0;
-    for ( uint64_t linid = 0; linid < (uint64_t) *nBlocks * *nThreads; ++linid )
-    {
-        /* note that this only works if linid < n */
-        assert( linid < n );
-        nIterations += (n-linid-1) / ( *nBlocks * *nThreads ) + 1;
-        //printf( "[thread %i] %i elements\n", linid, (n-linid) / ( *nBlocks * *nThreads ) );
-    }
-    //printf( "Total %i elements out of %i wanted\n", nIterations, n );
-    assert( nIterations == n );
-}
 
 #include "../../../getLogSamples.tpp"
 #include <chrono>

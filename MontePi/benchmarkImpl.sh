@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # E.g. use this in
-# salloc -p gpu2-interactive --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --gres=gpu:1 --time=1:00:00
+#   salloc -p gpu2-interactive --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --gres=gpu:1 --time=1:00:00
+# or
+#   sbatch -p gpu2 --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --gres=gpu:1 --time=01:00:00 ./benchmarkAll.sh 1
 taurus=$1
 if [ -z "$taurus" ]; then
     taurus=0
@@ -16,7 +18,7 @@ if [ "$taurus" -eq 1 ]; then RUN="srun $RUN"; fi
 i0=256
 imax=268435456000
 tmaxCpu=100 # seconds
-tmaxGpu=10
+tmaxGpu=7
 
 allDiceRolls=( )
 timesSingleCoreJava=( )
@@ -44,7 +46,7 @@ getTime() {
     sed -nr 's/real[[:space:]]*([0-9.]+).*/\1/p' $1
 }
 
-logFolder="./raw-logs/benchmarks-$(date +%Y-%m-%d_%H-%M-%S)"
+logFolder="./raw-logs/benchmarks-impl-$HOSTNAME-$(date +%Y-%m-%d_%H-%M-%S)"
 mkdir -p "$logFolder"
 resultsFile="$logFolder/results.log"
 echo "You can find the output in '$resultsFile'"
@@ -95,17 +97,18 @@ for (( i=i0; i<imax; i=3*i/2  )); do
     function measure() {
         # $1: array name where to append result, also covers as log-name
         # $2: command to run, e.g. 'java -jar ...'
-        # $3: log path
+        # $3: maximum time before stopping benchmark for good
+        # $4: GPU device to use
         lastElem=$(last $1)
         if [ -z $lastElem ] ||
-           ( [ $( echo "$lastElem < $tmaxCpu" | bc ) -eq 1 ] && # 1 means true!
+           ( [ $( echo "$lastElem < $3" | bc ) -eq 1 ] && # 1 means true!
              [ ! $lastElem == -1 ] )
         then
             # without eval instead of the built-in time command /usr/bin/time
             # would be used! -> works bash 4.3, but not in 4.1 -.-
             # Therefore just use 'time' but with -p (posix) which has the
             # same output as bash
-            ( $RUN $2 $nDiceRolls $3 ) > tmp.log 2>&1
+            ( $RUN $2 $nDiceRolls $4 ) > tmp.log 2>&1
             cat tmp.log >> "$logFolder/$1.log"
             append $1 $(getTime tmp.log)
         else
@@ -114,11 +117,11 @@ for (( i=i0; i<imax; i=3*i/2  )); do
     }
 
     #echo "nDiceRolls = $nDiceRolls"
-    measure timesSingleCoreJava  'java -jar singleNode/singleCore/java/MontePi.jar'
-    measure timesSingleCoreScala 'java -jar singleNode/singleCore/scala/MontePi.jar'
-    measure timesSingleGpuCpp    'singleNode/singleGpu/cpp/TestMonteCarloPiV2.exe' 0
-    measure timesSingleGpuJava   'java -jar singleNode/multiGpu/java/MontePi.jar'  0
-    measure timesSingleGpuScala  'java -jar singleNode/multiGpu/scala/MontePi.jar' 0
+    #measure timesSingleCoreJava  'java -jar singleNode/singleCore/java/MontePi.jar'  $tmaxCpu
+    #measure timesSingleCoreScala 'java -jar singleNode/singleCore/scala/MontePi.jar' $tmaxCpu
+    measure timesSingleGpuCpp    'singleNode/singleGpu/cpp/TestMonteCarloPiV2.exe'   $tmaxGpu 0
+    measure timesSingleGpuJava   'java -jar singleNode/multiGpu/java/MontePi.jar'    $tmaxGpu 0
+    measure timesSingleGpuScala  'java -jar singleNode/multiGpu/scala/MontePi.jar'   $tmaxGpu 0
 
     # use last instead of [-1] because latter doesn't work on taurus -.-
     printf "%15i%10.5f%10.5f%10.5f%10.5f%10.5f\n" \

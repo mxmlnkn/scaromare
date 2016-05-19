@@ -13,18 +13,20 @@ import org.trifort.rootbeer.runtime.Kernel;
 public class MonteCarloPiKernel implements Kernel
 {
     private long[] mnHits;
+    private long[] mnIterations;
     private int    miLinearThreadId;
     private long   mRandomSeed;
     private long   mnDiceRolls;
 
     /* Constructor which stores thread arguments: seed, diceRolls */
     public MonteCarloPiKernel
-    ( long[] rnHits, int riLinearThreadId, long rRandomSeed, long rnDiceRolls )
+    ( long[] rnHits, long[] rnIterations, int riLinearThreadId, long rRandomSeed, long rnDiceRolls )
     {
         mnHits           = rnHits;
         miLinearThreadId = riLinearThreadId;
         mRandomSeed      = rRandomSeed;
         mnDiceRolls      = rnDiceRolls;
+        mnIterations     = rnIterations;
     }
 
     /**
@@ -79,5 +81,7 @@ public class MonteCarloPiKernel implements Kernel
                 nHits += 1;
         }
         mnHits[ miLinearThreadId ] = nHits;
+        // no measurable slowdown by this extra check, but could be removed for benchmarking anyway
+        mnIterations[ miLinearThreadId ] = dnDiceRolls;
     }
 }

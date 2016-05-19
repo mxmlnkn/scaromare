@@ -1,3 +1,68 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+*.gpu
+*.cubin
+*.fatbin
+*.stub.c
+
+# TeX
+*.aux
+*.glo
+*.idx
+*.log
+*.toc
+*.ist
+*.acn
+*.acr
+*.alg
+*.bbl
+*.blg
+*.dvi
+*.glg
+*.gls
+*.ilg
+*.ind
+*.lof
+*.lot
+*.maf
+*.mtc
+*.mtc1
+*.out
+*.synctex.gz
+
+Geany
+*.geany
+
+# no need to allow uncompressed images, use png or tiff
+*.bmp
+
+# Java
 *.class
 *.jar
 *.tmp
@@ -6,10 +71,32 @@
 *.log
 *.pdf
 *~
+
+# Archives (git also has compression, so most of the time no need, else use -f)
+*.zip
+*.gz
+*.bz2
+*.tar
+*.rar
+*.gz
+*.7z
+*.tbz2
+*.tgz
+
+# hidden files
+.*
+!/.git*
+.*~
+*~
+*.old
+/build*/
+
+.fuse*
+.nfs*
+
 rootbeer1
 KNOWLEDGE
 build
-.fuse*
 MontePi/nico-spark/
 MontePi/raw-logs/
 rootbeerStats/

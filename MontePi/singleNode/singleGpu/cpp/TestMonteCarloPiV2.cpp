@@ -1,5 +1,5 @@
 /*
-file=TestMonteCarloPiV2; rm $file.exe; nvcc -arch=sm_30 -x cu $file.cpp -o $file.exe -std=c++11; ./$file.exe 268435456
+file=TestMonteCarloPiV2; rm $file.exe; nvcc -arch=sm_30 -x cu $file.cpp -o $file.exe -std=c++11 -DNDEBUG -O3 --keep; ./$file.exe 268435456
 */
 
 #include <iostream>
@@ -10,21 +10,12 @@ file=TestMonteCarloPiV2; rm $file.exe; nvcc -arch=sm_30 -x cu $file.cpp -o $file
 #include <cstdlib>   // atoi, atol
 #include <climits>   // UINT_MAX
 #include <cassert>
+#include "../../../../cudacommon.cpp"
 
 using CalcType = float;
 
 typedef unsigned long long int uint64;
 typedef float SampleType;
-
-
-void checkCudaError(const cudaError_t rValue, const char * file, int line )
-{
-    if ( (rValue) != cudaSuccess )
-    std::cout << "CUDA error in " << file
-              << " line:" << line << " : "
-              << cudaGetErrorString(rValue) << "\n";
-}
-#define CUDA_ERROR(X) checkCudaError(X,__FILE__,__LINE__);
 
 
 /* forgetting the const-specifier here leads to a 4 times slower code !!!!! */
@@ -44,16 +35,25 @@ __device__ inline uint64 rand( uint64 rSeed )
  * @param[in]  rSeed    Seed which will additionally used to the linear ID
  *                      to make two kernel runs independent from each other
  **/
-__global__ void kernelMonteKarloPi( uint64 * rnInside, uint32_t nTimes, uint32_t rSeed )
+__global__ void kernelMonteKarloPi
+(
+    uint64 * const rnInside,
+#ifndef NDEBUG
+    uint64 * const nIterationsDone,
+#endif
+    uint64   const nTimesTotal,
+    uint32_t       rSeed
+)
 {
     static_assert( sizeof(uint64) == sizeof(uint64_t), "" );
 
     int const linId = blockIdx.x * blockDim.x + threadIdx.x;
     int nInsideCircle = 0;  // local variable
+    int nTimes = (nTimesTotal-linId-1) / ( gridDim.x * blockDim.x ) + 1;
 
     uint64 seed = ( (uint64) rSeed * linId ) % DEVICE_RAND_MAX;
 
-    #pragma unroll 32  // 0.128823s -> 0.112251s, higher e.g. 64 unrolling brings no notable speedup
+    //#pragma unroll 16  // 0.128823s -> 0.112251s, higher e.g. 64 unrolling brings no notable speedup
     for ( int i = nTimes; i >= 0; --i )
     {
         // not that double can hold integers up to 2**53 exactly, while rSeed of uint32_t only goes to 2**32-1, so no precision is lost in this conversion
@@ -67,6 +67,9 @@ __global__ void kernelMonteKarloPi( uint64 * rnInside, uint32_t nTimes, uint32_t
 
     uint64 nInsideConverted = nInsideCircle;
     atomicAdd( rnInside, nInsideConverted );  // shfl_down brings no speedup
+#ifndef NDEBUG
+    atomicAdd( nIterationsDone, nTimes );
+#endif
 }
 
 
@@ -89,25 +92,10 @@ int main( int argc, char** argv )
         iGpuDeviceToUse = atoi( argv[2] );
     }
 
-    /* set current device and get device infos */
-    int nDevices;
-    CUDA_ERROR( cudaGetDeviceCount( &nDevices ) );
-    assert( iGpuDeviceToUse < nDevices );
-    CUDA_ERROR( cudaSetDevice( iGpuDeviceToUse ) );
-
-    // for GTX 760 this is 12288 threads per device and 384 real cores
-    cudaDeviceProp deviceProperties;
-    CUDA_ERROR( cudaGetDeviceProperties( &deviceProperties, iGpuDeviceToUse) );
-    int const nThreadsPerBlock  = 256;
-    int const nBlocks           = deviceProperties.maxThreadsPerMultiProcessor
-                                * deviceProperties.multiProcessorCount
-                                / nThreadsPerBlock;
-
-    /* Caclulate rolls per thread */
-    long unsigned int nTimesPerThread = nTotalRolls / ( nBlocks * nThreadsPerBlock );
-    assert( nTimesPerThread <= UINT_MAX );
-
     /* Debug output of configuration */
+    int nBlocks, nThreadsPerBlock;
+    calcKernelConfig( iGpuDeviceToUse, nTotalRolls, &nBlocks, &nThreadsPerBlock ); // this also sets the device!
+    float nTimesPerThread = float(nTotalRolls) / ( nBlocks * nThreadsPerBlock );
     int currentDevice;
     CUDA_ERROR( cudaGetDevice( &currentDevice ) );
     std::cout << "Launch " << nBlocks << " blocks with " << nThreadsPerBlock
@@ -124,19 +112,33 @@ int main( int argc, char** argv )
 
     /* allocate and initialize needed memory */
     double pi = 1.0;
-    uint64 nInside = 0;
-    uint64 * dpnInside = NULL;
 
-    CUDA_ERROR( cudaMalloc( (void**) &dpnInside,    sizeof(dpnInside[0]) ) );
-    CUDA_ERROR( cudaMemset( (void*)   dpnInside, 0, sizeof(dpnInside[0]) ) );
-    CUDA_ERROR( cudaMemcpy( &nInside, dpnInside,    sizeof(dpnInside[0]), cudaMemcpyDeviceToHost ) );
+    GpuArray<uint64> nInside;
+    nInside.host[0] = 0;
+    nInside.up();
+    #ifndef NDEBUG
+        GpuArray<uint64> nIterationsDone;
+        nIterationsDone.host[0] = 0;
+        nIterationsDone.up();
+    #endif
 
-    kernelMonteKarloPi<<<nBlocks,nThreadsPerBlock>>>(dpnInside, nTimesPerThread /*nRepeat*/, 237890291 /*seed*/);
+
+    kernelMonteKarloPi<<<nBlocks,nThreadsPerBlock>>>(
+        nInside.gpu,
+        #ifndef NDEBUG
+            nIterationsDone.gpu,
+        #endif
+        nTotalRolls /*nRepeat*/, 237890291 /*seed*/);
     /* as both kernel and memcpy are sent to standardstream, they are executed
      * sequentially on the deviec */
-    CUDA_ERROR( cudaMemcpy( &nInside, dpnInside, sizeof(dpnInside[0]), cudaMemcpyDeviceToHost ) );
+    nInside.down();
+    #ifndef NDEBUG
+        nIterationsDone.down();
+        printf( "nIterationsDone = %llu\n", nIterationsDone.host[0] );
+        assert( nIterationsDone.host[0] == nTotalRolls );
+    #endif
     CUDA_ERROR( cudaDeviceSynchronize() );
-    pi = 4.0 * double(nInside) / ( (double)nBlocks*nThreadsPerBlock*nTimesPerThread );
+    pi = 4.0 * double( nInside.host[0] ) / ( nTotalRolls );
 
         CUDA_ERROR( cudaEventRecord( stop ) );
 
@@ -145,10 +147,7 @@ int main( int argc, char** argv )
     cudaEventElapsedTime( &milliseconds, start, stop );
 
     printf( "Rolling the dice %lu times resulted in pi ~ %.15f and took %f seconds\n",
-        nTimesPerThread * nThreadsPerBlock * nBlocks, pi, milliseconds / 1000.0f );
-
-    /* free all allocated memory */
-    CUDA_ERROR( cudaFree( dpnInside ) );
+        nTotalRolls, pi, milliseconds / 1000.0f );
 
     return 0;
 }

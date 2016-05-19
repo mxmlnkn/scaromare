@@ -1,0 +1,1089 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="svg2"
+   viewBox="0 0 850.89021 754.1501"
+   height="212.83792mm"
+   width="240.14012mm"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="compile-structure-deu-2.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1108"
+     inkscape:window-height="984"
+     id="namedview3572"
+     showgrid="false"
+     inkscape:zoom="0.39239427"
+     inkscape:cx="595.49598"
+     inkscape:cy="402.68988"
+     inkscape:window-x="774"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <defs
+     id="defs4">
+    <marker
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker16489"
+       style="overflow:visible">
+      <path
+         id="path16491"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker15759"
+       refX="0"
+       refY="0"
+       orient="auto">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path15761"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow1Mend"
+       refX="0"
+       refY="0"
+       orient="auto">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path4246"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker14925"
+       refX="0"
+       refY="0"
+       orient="auto">
+      <path
+         transform="matrix(-0.3,0,0,-0.3,0.69,0)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         id="path14927"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker14783"
+       style="overflow:visible">
+      <path
+         id="path14785"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(-0.3,0,0,-0.3,0.69,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker14641"
+       style="overflow:visible">
+      <path
+         id="path14643"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(-0.3,0,0,-0.3,0.69,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker14505"
+       style="overflow:visible">
+      <path
+         id="path14507"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(-0.3,0,0,-0.3,0.69,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow2Send"
+       refX="0"
+       refY="0"
+       orient="auto">
+      <path
+         transform="matrix(-0.3,0,0,-0.3,0.69,0)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         id="path4270"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker13042"
+       style="overflow:visible">
+      <path
+         id="path13044"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker12918"
+       refX="0"
+       refY="0"
+       orient="auto">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path12920"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker12800"
+       style="overflow:visible">
+      <path
+         id="path12802"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker10070"
+       refX="0"
+       refY="0"
+       orient="auto">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path10072"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker9380"
+       style="overflow:visible">
+      <path
+         id="path9382"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker7302"
+       refX="0"
+       refY="0"
+       orient="auto">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path7304"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7140"
+       style="overflow:visible">
+      <path
+         id="path7142"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7046"
+       style="overflow:visible">
+      <path
+         id="path7048"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5965"
+       style="overflow:visible">
+      <path
+         id="path5967"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow1Mstart"
+       refX="0"
+       refY="0"
+       orient="auto">
+      <path
+         transform="matrix(0.4,0,0,0.4,4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path4243"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker4715"
+       refX="0"
+       refY="0"
+       orient="auto">
+      <path
+         transform="scale(-0.6,-0.6)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         id="path4717"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow1Send"
+       refX="0"
+       refY="0"
+       orient="auto">
+      <path
+         transform="matrix(-0.2,0,0,-0.2,-1.2,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path4252"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow1Sstart"
+       refX="0"
+       refY="0"
+       orient="auto">
+      <path
+         transform="matrix(0.2,0,0,0.2,1.2,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path4249"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker4557"
+       refX="0"
+       refY="0"
+       orient="auto">
+      <path
+         transform="scale(-0.6,-0.6)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         id="path4559"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow2Mend"
+       refX="0"
+       refY="0"
+       orient="auto">
+      <path
+         transform="scale(-0.6,-0.6)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         id="path4264"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow1Lend"
+       refX="0"
+       refY="0"
+       orient="auto">
+      <path
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path4240"
+         inkscape:connector-curvature="0" />
+    </marker>
+  </defs>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(145.2809,-128.50507)"
+     id="layer1">
+    <text
+       id="text4160"
+       y="290.20212"
+       x="303.55084"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"
+       sodipodi:linespacing="125%"><tspan
+         y="290.20212"
+         x="303.55084"
+         id="tspan4162" /></text>
+    <g
+       transform="translate(0,-4)"
+       id="g15591">
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="rect3336"
+         width="179.74387"
+         height="69.824867"
+         x="102.07888"
+         y="372.33987" />
+      <flowRoot
+         xml:space="preserve"
+         id="flowRoot4138"
+         style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         transform="translate(-4,182.14286)"><flowRegion
+           id="flowRegion4140"><rect
+             id="rect4142"
+             width="134.35028"
+             height="19.192911"
+             x="110.6117"
+             y="193.22746"
+             style="font-size:15px" /></flowRegion><flowPara
+           id="flowPara4144">DummyEntry.java</flowPara><flowPara
+           id="flowPara4146" /></flowRoot>      <flowRoot
+         xml:space="preserve"
+         id="flowRoot4148"
+         style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         transform="translate(-4,182.14286)"><flowRegion
+           id="flowRegion4150"><rect
+             id="rect4152"
+             width="173.72267"
+             height="41.870552"
+             x="111.62186"
+             y="215.45082"
+             style="font-size:12.5px" /></flowRegion><flowPara
+           id="flowPara14103"
+           style="font-size:10px">Enthält Programmeinstiegspunkt, in dem der implementierte Kernel aufgerufen wird</flowPara></flowRoot>    </g>
+    <g
+       transform="translate(-8,-45.999997)"
+       id="g4176">
+      <rect
+         y="192.21732"
+         x="103.79317"
+         height="62.141026"
+         width="194.02959"
+         id="rect4178"
+         style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <flowRoot
+         style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         id="flowRoot4180"
+         xml:space="preserve"><flowRegion
+           id="flowRegion4182"><rect
+             style="font-size:15px"
+             y="193.22746"
+             x="110.6117"
+             height="22.05007"
+             width="185.06454"
+             id="rect4184" /></flowRegion><flowPara
+           id="flowPara4186">MonteCarloPiKernel.java</flowPara><flowPara
+           id="flowPara4188" /></flowRoot>      <flowRoot
+         style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         id="flowRoot4190"
+         xml:space="preserve"><flowRegion
+           id="flowRegion4192"><rect
+             style="font-size:12.5px"
+             y="215.45082"
+             x="111.62186"
+             height="39.727703"
+             width="182.29411"
+             id="rect4194" /></flowRegion><flowPara
+           style="font-size:10px"
+           id="flowPara4196">Implementiert Kernel-interface und stellt Konstruktor und private Member-Variablen zur Verfügung</flowPara></flowRoot>    </g>
+    <g
+       id="g4200"
+       transform="translate(-2,46.285714)">
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="rect4202"
+         width="183.31529"
+         height="99.579781"
+         x="103.79317"
+         y="191.71223" />
+      <flowRoot
+         xml:space="preserve"
+         id="flowRoot4204"
+         style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+           id="flowRegion4206"><rect
+             id="rect4208"
+             width="136.4931"
+             height="22.050064"
+             x="110.6117"
+             y="193.22746"
+             style="font-size:15px" /></flowRegion><flowPara
+           id="flowPara4210">MonteCarloPi.java</flowPara><flowPara
+           id="flowPara4212" /></flowRoot>      <flowRoot
+         xml:space="preserve"
+         id="flowRoot4214"
+         style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+           id="flowRegion4216"><rect
+             id="rect4218"
+             width="174.43695"
+             height="75.442001"
+             x="111.62186"
+             y="215.45082"
+             style="font-size:12.5px" /></flowRegion><flowPara
+           id="flowPara4220"
+           style="font-size:10px">- Initialisiert Rootbeer-Kontext und </flowPara><flowPara
+           id="flowPara14089"
+           style="font-size:10px">  bindet dieses an eine GPU</flowPara><flowPara
+           id="flowPara4224"
+           style="font-size:10px">- Berechnet Seeds für jeden</flowPara><flowPara
+           id="flowPara14091"
+           style="font-size:10px">  Threads aus einem gegebenen</flowPara><flowPara
+           id="flowPara14101"
+           style="font-size:10px">  Intervall</flowPara><flowPara
+           id="flowPara4226"
+           style="font-size:10px">- Startet Kernel</flowPara><flowPara
+           id="flowPara4222"
+           style="font-size:10px" /></flowRoot>    </g>
+    <rect
+       y="129.50507"
+       x="74.285713"
+       height="328.66397"
+       width="239.15854"
+       id="rect5750"
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:8, 2;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker14925)"
+       d="m 192.85742,234.42445 0,-26.55111 z"
+       id="path7860"
+       inkscape:connector-curvature="0" />
+    <path
+       id="path8168"
+       d="m 192.85742,364.3222 0,-26.55111 z"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Send)"
+       inkscape:connector-curvature="0" />
+    <path
+       id="path5963"
+       d="m 192.85742,508.46765 0,-50.80093 z"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker5965)"
+       inkscape:connector-curvature="0" />
+    <g
+       transform="translate(-10.101525,-48.423856)"
+       id="g6304">
+      <flowRoot
+         xml:space="preserve"
+         id="flowRoot5877"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         transform="translate(-99.616422,-37.815091)"><flowRegion
+           id="flowRegion5879"><rect
+             id="rect5881"
+             width="175"
+             height="28.571455"
+             x="102.85714"
+             y="558.07648" /></flowRegion><flowPara
+           id="flowPara5883"
+           style="font-size:10px">javac &lt;name&gt;.class -classpath</flowPara><flowPara
+           style="font-size:10px"
+           id="flowPara5885">$(ROOTBEER_ROOT)/Rootbeer.jar:.</flowPara></flowRoot>      <g
+         id="g6301">
+        <rect
+           ry="15.152288"
+           rx="15.152288"
+           y="516.98138"
+           x="-5.0507627"
+           height="34.345188"
+           width="188.89853"
+           id="rect6299"
+           style="fill:none;stroke:#000000;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      </g>
+    </g>
+    <g
+       id="g6968"
+       transform="translate(2.8571428,499.99722)">
+      <flowRoot
+         style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         id="flowRoot6972"
+         xml:space="preserve"
+         transform="translate(-12.857143,-119.28571)"><flowRegion
+           id="flowRegion6974"><rect
+             style="font-size:15px"
+             y="193.22746"
+             x="110.6117"
+             height="19.192911"
+             width="134.35028"
+             id="rect6976" /></flowRegion><flowPara
+           id="flowPara6980" /></flowRoot>    </g>
+    <g
+       id="g6990"
+       transform="translate(-11.857143,322.56865)">
+      <flowRoot
+         xml:space="preserve"
+         id="flowRoot6994"
+         style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+           id="flowRegion6996"><rect
+             id="rect6998"
+             width="190.77884"
+             height="73.47863"
+             x="110.6117"
+             y="193.22746"
+             style="font-size:15px" /></flowRegion><flowPara
+           style="font-size:12.5px"
+           id="flowPara7249">MonteCarloPiKernel.class</flowPara><flowPara
+           style="font-size:12.5px"
+           id="flowPara7258">MonteCarloPi.class</flowPara><flowPara
+           style="font-size:12.5px"
+           id="flowPara7264">DummyEntry.class</flowPara><flowPara
+           style="font-size:12.5px"
+           id="flowPara8824">manifest.txt</flowPara></flowRoot>    </g>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:8, 2;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect7044"
+       width="199.28572"
+       height="94.285667"
+       x="92.428574"
+       y="512.07373" />
+    <g
+       transform="translate(-6.714286,472.69415)"
+       id="g7286">
+      <flowRoot
+         style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         id="flowRoot7288"
+         xml:space="preserve"><flowRegion
+           id="flowRegion7290"><rect
+             style="font-size:15px"
+             y="193.22746"
+             x="110.6117"
+             height="20.621487"
+             width="147.2074"
+             id="rect7292" /></flowRegion><flowPara
+           id="flowPara7298">MontePiGPUtmp.jar</flowPara></flowRoot>    </g>
+    <rect
+       y="662.19922"
+       x="98.571426"
+       height="73.571411"
+       width="187.85718"
+       id="rect7300"
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot7570"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       transform="translate(5.142857,-62.285714)"><flowRegion
+         id="flowRegion7572"><rect
+           id="rect7574"
+           width="177.85715"
+           height="51.428493"
+           x="99.285713"
+           y="746.64789" /></flowRegion><flowPara
+         id="flowPara7576">Enthält minimal benötigte Struktur, damit Rootbeer den Kernelcode statisch analysieren und in CUDA-Code übersetzen kann</flowPara></flowRoot>    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker7302)"
+       d="m 192.85742,659.42853 0,-53.49346 z"
+       id="path7268"
+       inkscape:connector-curvature="0" />
+    <g
+       id="g7270"
+       transform="translate(-10.101525,101.98735)">
+      <flowRoot
+         transform="translate(-74.902136,-37.243662)"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         id="flowRoot7272"
+         xml:space="preserve"><flowRegion
+           id="flowRegion7274"><rect
+             y="558.07648"
+             x="102.85714"
+             height="25.000044"
+             width="147.85715"
+             id="rect7276" /></flowRegion><flowPara
+           id="flowPara7280"
+           style="font-size:10px">jar -cvfm MontePiGPUtmp.jar</flowPara><flowPara
+           id="flowPara7542"
+           style="font-size:10px">manifest.txt *.class</flowPara></flowRoot>      <g
+         id="g7282">
+        <rect
+           style="fill:none;stroke:#000000;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect7284"
+           width="168.18422"
+           height="34.345215"
+           x="15.663523"
+           y="516.98138"
+           rx="15.152288"
+           ry="15.152288" />
+      </g>
+    </g>
+    <flowRoot
+       transform="translate(-16.428571,-38)"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="flowRoot8826"
+       xml:space="preserve"><flowRegion
+         id="flowRegion8828"><rect
+           y="614.50507"
+           x="116.42857"
+           height="25.357143"
+           width="186.42856"
+           id="rect8830" /></flowRegion><flowPara
+         id="flowPara8834">- Setze den DummyEntry.class als</flowPara><flowPara
+         id="flowPara15617">  Einstiegspunkt für das jar-Archiv</flowPara></flowRoot>    <g
+       id="g9340"
+       transform="translate(9.285714,626.24151)">
+      <flowRoot
+         xml:space="preserve"
+         id="flowRoot9342"
+         style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+           id="flowRegion9344"><rect
+             id="rect9346"
+             width="147.2074"
+             height="20.621487"
+             x="110.6117"
+             y="193.22746"
+             style="font-size:15px" /></flowRegion><flowPara
+           id="flowPara9348">MontePiGPU.jar</flowPara></flowRoot>    </g>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect9350"
+       width="135.00003"
+       height="65.908615"
+       x="113.57143"
+       y="815.74658" />
+    <flowRoot
+       transform="translate(21.142857,91.26164)"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="flowRoot9352"
+       xml:space="preserve"><flowRegion
+         id="flowRegion9354"><rect
+           y="746.64789"
+           x="99.285713"
+           height="39.604431"
+           width="124.83313"
+           id="rect9356" /></flowRegion><flowPara
+         id="flowPara9358">Fertiggestellte MontePi-Klasse, welche auf einer GPU ausgeführt wird</flowPara></flowRoot>    <path
+       id="path9360"
+       d="m 192.85742,812.2616 0,-76.3506 z"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker9380)"
+       inkscape:connector-curvature="0" />
+    <g
+       transform="translate(-10.101525,230.67757)"
+       id="g9362">
+      <flowRoot
+         xml:space="preserve"
+         id="flowRoot9364"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         transform="translate(-85.473565,-38.529377)"><flowRegion
+           id="flowRegion9366"><rect
+             id="rect9368"
+             width="166.41371"
+             height="53.825287"
+             x="102.85714"
+             y="558.07648" /></flowRegion><flowPara
+           style="font-size:10px"
+           id="flowPara9372">java -jar $(ROOTBEER_ROOT)/Rootbeer.jar MontePiGPUtmp.jar MontePiGPU.jar -64bit -computecapability=sm_30</flowPara></flowRoot>      <g
+         id="g9374">
+        <rect
+           ry="15.152288"
+           rx="15.152288"
+           y="516.98138"
+           x="7.8063803"
+           height="56.568542"
+           width="176.04137"
+           id="rect9376"
+           style="fill:none;stroke:#000000;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      </g>
+    </g>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker10070)"
+       d="m 108.00461,843.99697 -122.727379,0 z"
+       id="path10068"
+       inkscape:connector-curvature="0" />
+    <g
+       transform="translate(22,-26.232233)"
+       id="g13649">
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="rect12744"
+         width="129.74387"
+         height="295.29401"
+         x="-166.2809"
+         y="599.96002" />
+      <flowRoot
+         xml:space="preserve"
+         id="flowRoot12746"
+         style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         transform="translate(-270.07406,413.80359)"><flowRegion
+           id="flowRegion12748"><rect
+             id="rect12750"
+             width="95.064537"
+             height="22.050064"
+             x="110.6117"
+             y="193.22746"
+             style="font-size:15px" /></flowRegion><flowPara
+           id="flowPara12752">Rootbeer.jar</flowPara><flowPara
+           id="flowPara12754" /></flowRoot>      <flowRoot
+         xml:space="preserve"
+         id="flowRoot12756"
+         style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         transform="translate(-270.07406,413.80359)"><flowRegion
+           id="flowRegion12758"><rect
+             id="rect12760"
+             width="118.00838"
+             height="266.15625"
+             x="111.62186"
+             y="215.45082"
+             style="font-size:12.5px" /></flowRegion><flowPara
+           id="flowPara13174"
+           style="font-size:10px">android/</flowPara><flowPara
+           id="flowPara13576"
+           style="font-size:10px">antlr/</flowPara><flowPara
+           id="flowPara13578"
+           style="font-size:10px">beaver/</flowPara><flowPara
+           id="flowPara13580"
+           style="font-size:10px">com/google/common/</flowPara><flowPara
+           id="flowPara13582"
+           style="font-size:10px">com/lmax/disruptor/</flowPara><flowPara
+           id="flowPara13584"
+           style="font-size:10px">jas/</flowPara><flowPara
+           id="flowPara13586"
+           style="font-size:10px">jasmin/</flowPara><flowPara
+           id="flowPara13588"
+           style="font-size:10px">java_cup/</flowPara><flowPara
+           id="flowPara13590"
+           style="font-size:10px">org/antlr/</flowPara><flowPara
+           id="flowPara13592"
+           style="font-size:10px">org/apache/commons/</flowPara><flowPara
+           id="flowPara13594"
+           style="font-size:10px">org/hamcrest/</flowPara><flowPara
+           id="flowPara13596"
+           style="font-size:10px">org/jf/dexlib2/</flowPara><flowPara
+           id="flowPara13598"
+           style="font-size:10px">org/jf/util/</flowPara><flowPara
+           id="flowPara13600"
+           style="font-size:10px">org/objectweb/</flowPara><flowPara
+           id="flowPara13602"
+           style="font-size:10px">org/trifort/rootber/</flowPara><flowPara
+           id="flowPara13604"
+           style="font-size:10px">org/xmlpull/</flowPara><flowPara
+           id="flowPara13606"
+           style="font-size:10px">pack/</flowPara><flowPara
+           id="flowPara13608"
+           style="font-size:10px">polyglot/ast</flowPara><flowPara
+           id="flowPara13610"
+           style="font-size:10px">ppg/</flowPara><flowPara
+           id="flowPara13612"
+           style="font-size:10px">scm/</flowPara><flowPara
+           id="flowPara13614"
+           style="font-size:10px">soot/</flowPara><flowPara
+           id="flowPara13616"
+           style="font-size:10px" /></flowRoot>    </g>
+    <g
+       id="g14048"
+       transform="translate(249.5889,-39.999997)">
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="rect14050"
+         width="249.588"
+         height="87.885056"
+         x="103.79317"
+         y="186.1564" />
+      <flowRoot
+         xml:space="preserve"
+         id="flowRoot14052"
+         style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+           id="flowRegion14054"><rect
+             id="rect14056"
+             width="236.58232"
+             height="22.050064"
+             x="110.6117"
+             y="193.22746"
+             style="font-size:15px" /></flowRegion><flowPara
+           id="flowPara14058">MonteCarloPiSpark.scala</flowPara><flowPara
+           id="flowPara14060" /></flowRoot>      <flowRoot
+         xml:space="preserve"
+         id="flowRoot14062"
+         style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+           id="flowRegion14064"><rect
+             id="rect14066"
+             width="231.37314"
+             height="51.329594"
+             x="111.62186"
+             y="215.45082"
+             style="font-size:12.5px" /></flowRegion><flowPara
+           id="flowPara15695"
+           style="font-size:10px">- Nutzt Spark's Map-Funktion um ein Tupel, </flowPara><flowPara
+           id="flowPara15697"
+           style="font-size:10px">  bestehend aus ( nRanks, iRank, nRolls )</flowPara><flowPara
+           id="flowPara15711"
+           style="font-size:10px">  mit MonteCarloPi abzubilden auf Pi</flowPara><flowPara
+           id="flowPara15713"
+           style="font-size:10px">- Berechne das Mittel aller Pis über alle Slices </flowPara><flowPara
+           id="flowPara15681"
+           style="font-size:10px" /></flowRoot>    </g>
+    <g
+       id="g15731"
+       transform="translate(485.88338,-270.73864)">
+      <flowRoot
+         transform="translate(-101.61642,-37.815091)"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         id="flowRoot15733"
+         xml:space="preserve"><flowRegion
+           id="flowRegion15735"><rect
+             y="558.07648"
+             x="102.85714"
+             height="75.992416"
+             width="215.30219"
+             id="rect15737" /></flowRegion><flowPara
+           id="flowPara15741"
+           style="font-size:10px">scalac MonteCarloPiSpark.scala -classpath</flowPara><flowPara
+           id="flowPara15749"
+           style="font-size:10px">/opt/spark-1.5.2/assembly/target/scala-2.10/spark-assembly-1.5.2-hadoop2.2.0.jar:/opt/spark-1.5.2/core/target/spark-core_2.10-1.5.2.jar:./gpu/MontePiGPU.jar:. -deprecation</flowPara></flowRoot>      <g
+         id="g15743">
+        <rect
+           style="fill:none;stroke:#000000;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect15745"
+           width="223.7767"
+           height="80.273819"
+           x="-5.0507627"
+           y="516.98138"
+           rx="15.152288"
+           ry="15.152288" />
+      </g>
+    </g>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker15759)"
+       d="m 460.54784,333.41386 0,-100.00101 z"
+       id="path15757"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect16389"
+       width="318.42807"
+       height="73.330627"
+       x="352.87701"
+       y="338.3468" />
+    <flowRoot
+       transform="translate(249.5889,150.67517)"
+       xml:space="preserve"
+       id="flowRoot16391"
+       style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+         id="flowRegion16393"><rect
+           ry="0"
+           id="rect16395"
+           width="307.18234"
+           height="66.990074"
+           x="110.6117"
+           y="193.22746"
+           style="font-size:15px" /></flowRegion><flowPara
+         style="font-size:12.5px"
+         id="flowPara16399">MonteCarloPiSpark$$anonfun$1.class</flowPara><flowPara
+         style="font-size:12.5px"
+         id="flowPara16451">MonteCarloPiSpark$$anonfun$2.class</flowPara><flowPara
+         style="font-size:12.5px"
+         id="flowPara16453">MonteCarloPiSpark$$anonfun$main$1.class</flowPara><flowPara
+         id="flowPara16461"
+         style="font-size:12.5px">MonteCarloPiSpark.classTestMonteCarloPi$.class</flowPara><flowPara
+         style="font-size:12.5px"
+         id="flowPara16455" /><flowPara
+         style="font-size:12.5px"
+         id="flowPara16457" /></flowRoot>    <g
+       transform="translate(485.88338,-92.1853)"
+       id="g16463">
+      <flowRoot
+         xml:space="preserve"
+         id="flowRoot16465"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         transform="translate(-99.616422,-37.815091)"><flowRegion
+           id="flowRegion16467"><rect
+             id="rect16469"
+             width="196.21323"
+             height="26.046103"
+             x="102.85714"
+             y="558.07648" /></flowRegion><flowPara
+           style="font-size:10px"
+           id="flowPara16473">jar -cvfm MonteCarloPiSpark.jar manifest.txt MonteCarloPiSpark*.class</flowPara></flowRoot>      <g
+         id="g16475">
+        <rect
+           ry="15.152288"
+           rx="15.152288"
+           y="516.98138"
+           x="-5.0507627"
+           height="32.32489"
+           width="206.5762"
+           id="rect16477"
+           style="fill:none;stroke:#000000;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      </g>
+    </g>
+    <path
+       id="path16487"
+       d="m 460.54784,470.7921 0,-59.83606 z"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker16489)"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
+    <g
+       transform="translate(316.53206,518.11963)"
+       id="g3576">
+      <flowRoot
+         style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         id="flowRoot3578"
+         xml:space="preserve"><flowRegion
+           id="flowRegion3580"><rect
+             style="font-size:15px"
+             y="193.22746"
+             x="110.6117"
+             height="20.621487"
+             width="147.2074"
+             id="rect3582" /></flowRegion><flowPara
+           id="flowPara3584">MontePi.jar</flowPara></flowRoot>    </g>
+    <rect
+       y="707.62469"
+       x="420.81778"
+       height="76.702095"
+       width="138.2135"
+       id="rect3586"
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3588"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       transform="translate(328.3892,-16.86024)"><flowRegion
+         id="flowRegion3590"><rect
+           id="rect3592"
+           width="125.73414"
+           height="51.317635"
+           x="99.285713"
+           y="746.64789" /></flowRegion><flowPara
+         id="flowPara3594">Fertiggestellte MontePi-Klasse, die sowohl Rootbeer als auch Spark enthält</flowPara></flowRoot>    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker16489)"
+       d="m 250.36708,843.79121 c 63.15032,-0.63711 86.54474,7.00826 101.93829,-27.39591 19.27113,-43.07047 -17.04592,-163.90489 39.99391,-162.92395 34.14247,0.58716 52.60543,17.51359 51.60626,51.60626"
+       id="path3829"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cssc" />
+    <g
+       id="g4789"
+       transform="translate(485.88338,123.15745)">
+      <flowRoot
+         transform="translate(-99.616422,-37.815091)"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         id="flowRoot4791"
+         xml:space="preserve"><flowRegion
+           id="flowRegion4793"><rect
+             y="558.07648"
+             x="102.85714"
+             height="42.264362"
+             width="196.21323"
+             id="rect4795" /></flowRegion><flowPara
+           id="flowPara4797"
+           style="font-size:10px">zipmerge MontePi.jar /usr/share/java/scala-library.jar gpu/MontePiGPU.jar MonteCarloPiSpark.jar</flowPara></flowRoot>      <g
+         id="g4799">
+        <rect
+           style="fill:none;stroke:#000000;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect4801"
+           width="204.77417"
+           height="44.93911"
+           x="-5.0507627"
+           y="516.98138"
+           rx="15.152288"
+           ry="15.152288" />
+      </g>
+    </g>
+    <g
+       id="g4803"
+       transform="translate(263.59042,284.38187)">
+      <flowRoot
+         xml:space="preserve"
+         id="flowRoot4805"
+         style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+           id="flowRegion4807"><rect
+             id="rect4809"
+             width="175.87753"
+             height="21.258604"
+             x="110.6117"
+             y="193.22746"
+             style="font-size:15px" /></flowRegion><flowPara
+           id="flowPara4811">MonteCarloPiSpark.jar</flowPara></flowRoot>    </g>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4813"
+       width="187.85716"
+       height="64.014725"
+       x="368.87613"
+       y="473.88693" />
+    <flowRoot
+       transform="translate(275.44756,-250.59799)"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="flowRoot4815"
+       xml:space="preserve"><flowRegion
+         id="flowRegion4817"><rect
+           y="746.64789"
+           x="99.285713"
+           height="40.597523"
+           width="181.04271"
+           id="rect4819" /></flowRegion><flowPara
+         id="flowPara4821">Im Allgemeinen enthält diese jar alle Klassen, die nicht mit Rootbeer kompiliert werden müssen</flowPara></flowRoot>    <path
+       sodipodi:nodetypes="ccc"
+       inkscape:connector-curvature="0"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker16489)"
+       d="m 460.54784,705.08351 0,-167.04836 z"
+       id="path4823" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="545.35101"
+       y="483.18451"
+       id="text4825"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4827"
+         x="545.35101"
+         y="483.18451"></tspan></text>
+  </g>
+</svg>
