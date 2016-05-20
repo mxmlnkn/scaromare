@@ -117,8 +117,8 @@ for (( i=i0; i<imax; i=3*i/2  )); do
     }
 
     #echo "nDiceRolls = $nDiceRolls"
-    #measure timesSingleCoreJava  'java -jar singleNode/singleCore/java/MontePi.jar'  $tmaxCpu
-    #measure timesSingleCoreScala 'java -jar singleNode/singleCore/scala/MontePi.jar' $tmaxCpu
+    measure timesSingleCoreJava  'java -jar singleNode/singleCore/java/MontePi.jar'  $tmaxCpu
+    measure timesSingleCoreScala 'java -jar singleNode/singleCore/scala/MontePi.jar' $tmaxCpu
     measure timesSingleGpuCpp    'singleNode/singleGpu/cpp/TestMonteCarloPiV2.exe'   $tmaxGpu 0
     measure timesSingleGpuJava   'java -jar singleNode/multiGpu/java/MontePi.jar'    $tmaxGpu 0
     measure timesSingleGpuScala  'java -jar singleNode/multiGpu/scala/MontePi.jar'   $tmaxGpu 0
