@@ -494,3 +494,54 @@ java -jar MontePi.jar
 
 what was -deprecation flag for?
 pdfs Nico
+
+
+Start Spark on Home-PC:
+    function startSparkLocal() {
+        # "$SPARK_ROOT"/sbin/start-master.sh
+        . "$SPARK_ROOT/sbin/spark-config.sh"
+        . "$SPARK_ROOT/bin/load-spark-env.sh"
+        SPARK_MASTER_IP=127.0.0.1
+        SPARK_MASTER_PORT=7077
+        SPARK_MASTER_WEBUI_PORT=8594
+        MASTER_ADDRESS=spark://$SPARK_MASTER_IP:$SPARK_MASTER_PORT
+        SPARK_WORKER_WEBUI_PORT=$((SPARK_MASTER_WEBUI_PORT+1))
+        "$SPARK_ROOT"/sbin/spark-daemon.sh start org.apache.spark.deploy.master.Master 1 \
+          --ip $SPARK_MASTER_IP --port $SPARK_MASTER_PORT --webui-port $SPARK_MASTER_WEBUI_PORT
+        "$SPARK_ROOT"/sbin/spark-daemon.sh start org.apache.spark.deploy.worker.Worker 1 \
+             --webui-port "$SPARK_WORKER_WEBUI_PORT" $MASTER_ADDRESS
+        echo "MASTER_ADDRESS : $MASTER_ADDRESS"
+        echo "MASTER_WEBUI   : http://$SPARK_MASTER_IP:$SPARK_MASTER_WEBUI_PORT"
+    }
+    function stopSparkLocal() {
+        SPARK_MASTER_ADDRESS=
+        "$SPARK_ROOT"/sbin/spark-daemon.sh stop org.apache.spark.deploy.master.Master 1
+        "$SPARK_ROOT"/sbin/spark-daemon.sh stop org.apache.spark.deploy.worker.Worker 1
+    }
+    # $SPARK_ROOT/bin/spark-shell --master $MASTER_ADDRESS
+
+
+Spark Bug:
+  - Can not handle space in path -.- ...:
+      $SPARK_ROOT/bin/spark-submit --master $MASTER_ADDRESS ./src/sort.py "$(pwd)"/data/The_Complete_Works_of_Willia.txt
+
+      java.io.FileNotFoundException: Added file file:/media/f/Studium/9TH%20SEMESTER/scaromare/spark-gpu/src/sort.py does not exist.
+          at org.apache.spark.SparkContext.addFile(SparkContext.scala:1365)
+          at org.apache.spark.SparkContext.addFile(SparkContext.scala:1341)
+          at org.apache.spark.SparkContext$$anonfun$15.apply(SparkContext.scala:484)
+          at org.apache.spark.SparkContext$$anonfun$15.apply(SparkContext.scala:484)
+          at scala.collection.immutable.List.foreach(List.scala:318)
+          at org.apache.spark.SparkContext.<init>(SparkContext.scala:484)
+          at org.apache.spark.api.java.JavaSparkContext.<init>(JavaSparkContext.scala:61)
+          at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+          at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+          at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+          at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+          at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:234)
+          at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:379)
+          at py4j.Gateway.invoke(Gateway.java:214)
+          at py4j.commands.ConstructorCommand.invokeConstructor(ConstructorCommand.java:79)
+          at py4j.commands.ConstructorCommand.execute(ConstructorCommand.java:68)
+          at py4j.GatewayConnection.run(GatewayConnection.java:207)
+          at java.lang.Thread.run(Thread.java:745)
+  -
