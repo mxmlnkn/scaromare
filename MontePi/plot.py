@@ -13,6 +13,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-e", "--error-log", dest="errorlog", help="File with data from error scaling", type=str, nargs="*" )
 parser.add_argument("-w", "--workload-log", dest="workloadlog", help="File with data from benchmark", type=str, nargs=1 )
 parser.add_argument("-c", "--workload-cluster", dest="workloadcluster", help="File with data from benchmark", type=str, nargs=1 )
+parser.add_argument("-r", "--rootbeer-setup-time", dest="rootbeersetup", help="File with data from benchmark", type=str, nargs=1 )
 args = parser.parse_args()
 
 def finishPlot( fig, ax, fname ):
@@ -244,6 +245,22 @@ if args.workloadcluster != None:
     #
     finishPlot( fig, ax, "cluster-weak-scaling" )
 
+
+########################### Rootbeer Setup Time ###########################
+
+if args.rootbeersetup != None:
+    fig = plt.figure( figsize=(6,4) )
+    ax = fig.add_subplot( 111,
+        xlabel = "Anzahl Slices / Partitionen",
+        ylabel = "Laufzeit / s"
+    )
+    # Total Elements   Elements Per Thread    Slices   Nodes   Time / s
+    data = genfromtxt( args.rootbeersetup[0]+"-cpu.dat" )
+    ax.plot( data[:,2], data[:,4], 'ro-', label="Intel Xeon E5-2680" )
+    data = genfromtxt( args.rootbeersetup[0]+"-gpu.dat" )
+    ax.plot( data[:,2], data[:,4], 'ro-', label="NVIDIA Tesla K80" )
+
+    finishPlot( fig, ax, "rootbeer-setup-time" )
 
 plt.show()
 exit()
