@@ -47,7 +47,7 @@ object TestMonteCarloPi
         val t1 = System.nanoTime()
         val duration = (t1-t0).toDouble / 1e9
 
-        println( "\nRolling the dice " + nRolls + " times " +
+        println( "\nUsing "+nSlices+" slice / cores. Rolling the dice " + nRolls + " times " +
             "resulted in pi ~ " + pi + " and took " + duration + " seconds\n" )
 
         sc.stop();
