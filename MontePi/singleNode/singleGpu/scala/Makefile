@@ -31,5 +31,5 @@ MontePiGPU.jar: TestMonteCarloPi.class manifest.txt
 	#zip --update META-INF/MANIFEST.MF
 
 	jar -cfm rest.jar manifest.txt TestMonteCarloPi*.class MonteCarloPi.class
-	zipmerge merged.jar "$SCALA_JAR" MontePiGPU.jar rest.jar
+	zipmerge merged.jar $(SCALA_JAR) MontePiGPU.jar rest.jar
 	java -jar merged.jar
