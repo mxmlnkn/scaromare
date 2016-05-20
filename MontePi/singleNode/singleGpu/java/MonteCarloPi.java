@@ -61,6 +61,7 @@ public class MonteCarloPi
         double quarterPi = 0;
         for ( int i = 0; i < nKernels; ++i )
             quarterPi += (double) nHits[i] / (double) nDiceRolls;
+
         long N = 0;
         for ( int i = 0; i < nKernels; ++i )
             N += nIterations[i];

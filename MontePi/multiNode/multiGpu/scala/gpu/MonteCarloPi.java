@@ -120,21 +120,24 @@ public class MonteCarloPi
         /* The first nRollsRemainder threads will work on 1 roll more. The
          * rest of the threads will roll the dice nRollsPerThreads */
         long[] nHits = new long[nKernels];
+        long[] nIterations = new long[nKernels];
 
         /* List of kernels / threads we want to run in this Level */
         List<Kernel> tasks = new ArrayList<Kernel>();
         for (int i = 0; i < nRollsRemainder; ++i )
         {
             nHits[i] = 0;
+            nIterations[i] = 0;
             final long seed = calcRandomSeed( nKernels, i, rSeed0, rSeed1 );
-            tasks.add( new MonteCarloPiKernel( nHits,i, seed, nRollsPerThreads+1 ) );
+            tasks.add( new MonteCarloPiKernel( nHits, nIterations, i, seed, nRollsPerThreads+1 ) );
             //System.out.println( "Kernel " + i + " has seed: " + seed );
         }
         for (int i = nRollsRemainder; i < nKernels; ++i )
         {
             nHits[i] = 0;
+            nIterations[i] = 0;
             final long seed = calcRandomSeed( nKernels, i, rSeed0, rSeed1 );
-            tasks.add( new MonteCarloPiKernel( nHits,i, seed, nRollsPerThreads ) );
+            tasks.add( new MonteCarloPiKernel( nHits, nIterations, i, seed, nRollsPerThreads ) );
             //System.out.println( "Kernel " + i + " has seed: " + seed );
         }
 
@@ -155,6 +158,12 @@ public class MonteCarloPi
         double quarterPi = 0;
         for ( int i = 0; i < nKernels; ++i )
             quarterPi += (double) nHits[i] / (double) nDiceRolls;
+
+        long N = 0;
+        for ( int i = 0; i < nKernels; ++i )
+            N += nIterations[i];
+        System.out.println( "Total iterations done by all kernels: " + N );
+        assert( N == nDiceRolls );
 
         return 4.0*quarterPi;
     }
