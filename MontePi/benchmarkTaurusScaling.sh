@@ -46,7 +46,9 @@ for nodes in ${nodeCounts[@]}; do   # 32 nodes equals 128 GPUs
                 $((nPerSlice*nSlices)) $nSlices $gpusPerNode 2>/dev/null |
                 tee tmp.log | tee -a "$fname-gpu.log"
             seconds=$(sed -nr 's/.*Rolling the dice.*and took (.*) seconds.*/\1/p' tmp.log)
-            printf "%16i %16i %4i %4i %10.5f\n" $((nPerSlice*nSlices)) $nPerSlice $nSlices $nodes $seconds >> "$fname-gpu.dat"
+            pi=$(sed -nr 's/.*pi ~ ([0-9.]+).*/\1/p' tmp.log)
+            printf "%16i %16i %4i %4i %10.5f %s\n" $((nPerSlice*nSlices))
+                $nPerSlice $nSlices $nodes $seconds $pi >> "$fname-gpu.dat"
         done
 
         # Spark + CPU
@@ -57,7 +59,9 @@ for nodes in ${nodeCounts[@]}; do   # 32 nodes equals 128 GPUs
                 $((nPerSlice*nSlices)) $nSlices 2>/dev/null |
                 tee tmp.log | tee -a "$fname-cpu.log"
             seconds=$(sed -nr 's/.*Rolling the dice.*and took (.*) seconds.*/\1/p' tmp.log)
-            printf "%16i %16i %4i %4i %10.5f\n" $((nPerSlice*nSlices)) $nPerSlice $nSlices $nodes $seconds >> "$fname-cpu.dat"
+            pi=$(sed -nr 's/.*pi ~ ([0-9.]+).*/\1/p' tmp.log)
+            printf "%16i %16i %4i %4i %10.5f %s\n" $((nPerSlice*nSlices))
+                $nPerSlice $nSlices $nodes $seconds $pi >> "$fname-cpu.dat"
         done
     }
     done
