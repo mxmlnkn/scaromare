@@ -7,7 +7,7 @@ JAVAC         := javac
 SPARKCORE_JAR = $(SPARK_ROOT)/core/target/spark-core_2.10-1.5.2.jar
 HADOOP_JAR    = $(SPARK_ROOT)/assembly/target/scala-2.10/spark-assembly-1.5.2-hadoop2.2.0.jar
 
-.phony: clean all *.jar *.class
+.phony: clean all *.jar
 
 all: MontePi.jar
 run: MontePi.jar
