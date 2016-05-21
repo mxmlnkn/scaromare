@@ -1,4 +1,3 @@
-ROOTBEER_ROOT := ../../../rootbeer1
 SPARK_VERSION := 1.5.2
 SPARK_ROOT    := /opt/spark-$(SPARK_VERSION)
 SCALA_ROOT    := /usr/share/java

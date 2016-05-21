@@ -26,7 +26,7 @@ MontePiGPU.jar: TestMonteCarloPi.class DummyEntry.class manifest.txt
 	jar -cfm tmp.jar manifest.txt *.class
 	# can't just merge into $@.tmp, as then META-INF/MANIFEST.MF from
 	# SCALA_JAR would overwrite that from $@.tmp!
-	zipmerge merged.jar $(SCALA_JAR) tmp.jar
+	zipmerge merged.jar $(ROOTBEER_ROOT)/Rootbeer.jar $(SCALA_JAR) tmp.jar
 	java -jar $(ROOTBEER_ROOT)/Rootbeer.jar merged.jar $@ -64bit -computecapability=sm_30
 	# Now replace the manifest point to the Dummy, and also delete the dummy
 	#zipmerge $@ $(SCALA_JAR) gpu/MontePiGPU.jar $<

@@ -37,7 +37,7 @@ MontePi.jar: gpu.jar nongpu.jar
 	# note that the order of gpu.jar before nongpu.jar is important, because
 	# gpu.jar contains a manifest with no content which must be overwritten
 	# by the manifest in nongpu.jar!
-	zipmerge $@ $(SCALA_ROOT)/scala-library.jar $^
+	zipmerge $@ $(ROOTBEER_ROOT)/Rootbeer.jar $(SCALA_ROOT)/scala-library.jar $^
 
 # jar -cf tmp.jar MonteCarloPiKernel.class &&
 # java -jar "$ROOTBEER_ROOT"/Rootbeer.jar tmp.jar gpu.jar -64bit -computecapability=sm_30 &&

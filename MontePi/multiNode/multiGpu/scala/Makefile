@@ -25,4 +25,4 @@ TestMontePi.jar: TestMonteCarloPi.class
 
 MontePi.jar: TestMontePi.jar
 	$(MAKE) -C gpu MontePiGPU.jar
-	zipmerge $@ $(SCALA_ROOT)/scala-library.jar gpu/MontePiGPU.jar $<
+	zipmerge $@ $(ROOTBEER_ROOT)/Rootbeer.jar $(SCALA_ROOT)/scala-library.jar gpu/MontePiGPU.jar $<

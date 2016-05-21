@@ -33,4 +33,4 @@ TestMonteCarloPi.class: TestMonteCarloPi.scala MontePiGPU.jar
 TestMontePi.jar: TestMonteCarloPi.class MonteCarloPi.class
 	jar -cvfm $@ manifest.txt TestMonteCarloPi*.class MonteCarloPi.class
 MontePi.jar: TestMontePi.jar MontePiGPU.jar
-	zipmerge $@ $(SCALA_ROOT)/scala-library.jar MontePiGPU.jar $<
+	zipmerge $@ $(ROOTBEER_ROOT)/Rootbeer.jar $(SCALA_ROOT)/scala-library.jar MontePiGPU.jar $<
