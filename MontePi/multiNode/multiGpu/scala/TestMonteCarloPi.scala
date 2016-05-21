@@ -18,11 +18,13 @@ object TestMonteCarloPi
         val sparkConf = new SparkConf().setAppName("MontePi")
         var sc = new SparkContext( sparkConf )
 
+        /**** Eval Command Line Arguments ****/
         val nRolls  = if ( args.length > 0 ) args(0).toLong else 100000l
         val nSlices = if ( args.length > 1 ) args(1).toInt  else 1
         val nGpusPerNode = if ( args.length > 2 ) args(2).toInt  else 2
         val nRollsPerSlice = nRolls / nSlices;
 
+        /**** Initialize Kernel + Parameter List ****/
         var sliceParams = new ArrayBuffer[ Array[Long] ]()
         for ( i <- 0 until nSlices )
         {
@@ -57,7 +59,7 @@ object TestMonteCarloPi
         val t1 = System.nanoTime()
         val duration = (t1-t0).toDouble / 1e9
 
-        println( "\nUsing "+nSlices+" slices. Rolling the dice " + nRolls + " times " +
+        println( "\nUsing "+nSlices+" slice / GPUs. Rolling the dice " + nRolls + " times " +
             "resulted in pi ~ " + pi + " and took " + duration + " seconds\n" )
 
         sc.stop();
