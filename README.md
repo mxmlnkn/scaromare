@@ -51,3 +51,31 @@
         strings MonteCarloPi.class | grep 'Run a total of'
             Run a total of 
     -> TODO: Look what Rootbeer does to make this shit happen ... (Note that a DummyFunction calling the constructor solves the problem also. So maybe it's just an optimization by Soot)
+
+ - Trying to compile only MontePiKernel with Rootbeer and then merge MontePi into it results in:
+
+    Exception in thread "main" java.lang.ClassCastException: MonteCarloPiKernel cannot be cast to org.trifort.rootbeer.runtime.CompiledKernel
+        at org.trifort.rootbeer.runtime.CUDAContext.setKernel(CUDAContext.java:119)
+        at org.trifort.rootbeer.runtime.Rootbeer.run(Rootbeer.java:88)
+        at MonteCarloPi.calc(MonteCarloPi.java:56)
+        at TestMonteCarloPi$.main(TestMonteCarloPi.scala:14)
+        at TestMonteCarloPi.main(TestMonteCarloPi.scala)
+
+
+    Exception in thread "main" java.lang.NoSuchMethodError: MonteCarloPi: method <init>()V not found
+        at TestMonteCarloPi$.main(TestMonteCarloPi.scala:11)
+        at TestMonteCarloPi.main(TestMonteCarloPi.scala)
+
+ - 
+        java.lang.ClassCastException: MonteCarloPiKernel cannot be cast to org.trifort.rootbeer.runtime.CompiledKernel
+    
+    MonteCarloPiKernel.class which is in target jar wasn't sent through Rootbeer.jar, e.g. if it was accidentally added to MontePiCPU.jar
+
+
+# ToDo
+
+- Benchmark Multi-GPU
+  - Implement Multi-GPU using runAsync
+    - try to convert MontePi.java to MontePi.scala so that it is easer to program
+      - Try it out on singleNode/singleGpu/scala first
+      

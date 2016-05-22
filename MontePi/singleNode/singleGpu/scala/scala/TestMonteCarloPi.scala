@@ -5,6 +5,7 @@ make -B SPARK_ROOT=~/spark-1.5.2-bin-hadoop2.6 SPARKCORE_JAR=~/spark-1.5.2-bin-h
 import org.apache.spark._
 import org.apache.spark.SparkContext._
 import scala.collection.mutable.ArrayBuffer
+import java.net.InetAddress
 
 
 object TestMonteCarloPi
@@ -25,35 +26,38 @@ object TestMonteCarloPi
         val nRollsPerSlice = nRolls / nSlices;
 
         /**** Initialize Kernel + Parameter List ****/
-        var sliceParams = new ArrayBuffer[ Array[Long] ]()
-        for ( i <- 0 until nSlices )
-        {
-            var tmp = new ArrayBuffer[Long]()
-            tmp += nSlices         // number of processes
-            tmp += i               // rank
-            tmp += nRollsPerSlice  // how many to do
-            tmp += nGpusPerNode
-            sliceParams += tmp.toArray
+        val sliceParams = List.range( 0, nSlices ).
+            map( ( _, ( nSlices, nRollsPerSlice ) ) )
+
+        /* This partitioner is for some reason more exact than the standard RangePartitioner -.- */
+        class ExactPartitioner[V]( partitions: Int, elements: Int) extends Partitioner {
+            def numPartitions() : Int = partitions
+            def getPartition(key: Any): Int = key.asInstanceOf[Int] % partitions
         }
+        var dataSet = sc.parallelize( sliceParams, sliceParams.size ).
+                         partitionBy( new ExactPartitioner( nSlices, nSlices ) )
 
-        var dataSet = sc.parallelize( sliceParams, nSlices )
+        /*** Check if every partition really goes to exactly one host ***/
+        assert( dataSet.map( x => InetAddress.getLocalHost.getHostName ).
+                distinct.collect.size == nSlices )
+        /* Would maybe be better to include this in the real map as the
+         * distribution may change in the two runs */
 
+        println( "Calling MonteCarloPi.calc() on "+nSlices+" distinct nodes" )
         val t0 = System.nanoTime()
-        val piSum = dataSet.map( ( params : Array[Long] ) =>
+        val piSum = dataSet.map( x =>
             {
-                val nRanks = params(0)
-                val iRank  = params(1)
-                val nRolls = params(2)
+                val iRank  = x._1
+                val nRanks = x._2._1
+                val nRolls = x._2._2
 
-                val seed0 = 71210l + Long.MaxValue / nRanks *  iRank
-                val seed1 = 71210l + Long.MaxValue / nRanks * (iRank+1)
+                var seed0 = 71210l + Long.MaxValue / nRanks *  iRank
+                var seed1 = 71210l + Long.MaxValue / nRanks * (iRank+1)
+                if ( seed0 < 0 ) seed0 += Long.MaxValue
+                if ( seed1 < 0 ) seed1 += Long.MaxValue
 
-                var piCalculator = new MonteCarloPi( iRank.toInt % nGpusPerNode )
-                /* Max Threads per Device which can run: 12288 on GTX 760.
-                 * Because of oversubscription even though we have no
-                 * memory latency only 12288 / 32 (warp size) = 384 are
-                 * actually running */
-                piCalculator.calc( nRolls, -1, seed0, seed1 )
+                var piCalculator = new MonteCarloPi()
+                piCalculator.calc( nRolls, seed0, seed1 )
             } ).reduce( _+_ );
         val pi = piSum / nSlices
         val t1 = System.nanoTime()

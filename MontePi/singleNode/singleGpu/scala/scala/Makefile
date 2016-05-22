@@ -11,16 +11,15 @@ HADOOP_JAR    = $(SPARK_ROOT)/assembly/target/scala-2.10/spark-assembly-1.5.2-ha
 
 all: MontePi.jar
 run: MontePi.jar
-	$(SPARK_ROOT)/bin/spark-submit --master local[4] --class TestMonteCarloPi $< 268435456 1
+	$(SPARK_ROOT)/bin/spark-submit --master local[1] --class TestMonteCarloPi $< 268435456 1
 clean:
 	rm -f *.class *.jar
 
 
-MonteCarloPi.class: MonteCarloPi.java
-	javac $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:.
+MonteCarloPi.class: MonteCarloPi.scala
+	#javac $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:.
+	$(SCALAC) $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:$(HADOOP_JAR):$(SPARKCORE_JAR):MontePiGPU.jar:. -deprecation
 MonteCarloPiKernel.class: MonteCarloPiKernel.java
-	javac $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:.
-DummyEntry.class: DummyEntry.java
 	javac $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:.
 
 MontePiGPU.jar: MonteCarloPiKernel.class
@@ -28,9 +27,10 @@ MontePiGPU.jar: MonteCarloPiKernel.class
 	java -jar $(ROOTBEER_ROOT)/Rootbeer.jar MontePiGPUtmp.jar $@ -64bit -computecapability=sm_30
 
 
-TestMonteCarloPi.class: TestMonteCarloPi.scala MontePiGPU.jar
-	$(SCALAC) $< -classpath $(HADOOP_JAR):$(SPARKCORE_JAR):MontePiGPU.jar:. -deprecation
-TestMontePi.jar: TestMonteCarloPi.class MonteCarloPi.class
-	jar -cvfm $@ manifest.txt TestMonteCarloPi*.class MonteCarloPi.class
-MontePi.jar: TestMontePi.jar MontePiGPU.jar
-	zipmerge $@ $(ROOTBEER_ROOT)/Rootbeer.jar $(SCALA_ROOT)/scala-library.jar MontePiGPU.jar $<
+TestMonteCarloPi.class: TestMonteCarloPi.scala MonteCarloPi.class MontePiGPU.jar
+	$(SCALAC) $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:$(HADOOP_JAR):$(SPARKCORE_JAR):MontePiGPU.jar:. -deprecation
+MontePiCPU.jar: TestMonteCarloPi.class MonteCarloPi.class
+	# Note that \$$ -> \$ by Makefile and \$ -> $ by interpreting shell
+	jar -cvfm $@ manifest.txt $^ TestMonteCarloPi\$$*.class MonteCarloPi\$$*.class
+MontePi.jar: MontePiGPU.jar MontePiCPU.jar
+	zipmerge $@ $(ROOTBEER_ROOT)/Rootbeer.jar $(SCALA_ROOT)/scala-library.jar $^
