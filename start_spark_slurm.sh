@@ -67,20 +67,23 @@ if [ "$1" != 'sran:D' ]; then
     echo "[Father] Path of this script: '$this'"
 
     export sparkLogs=$HOME/spark/logs
-    export sparkTmp=$HOME/spark/tmp
+    export sparkTmp=$(mktemp) #$HOME/spark/tmp
     mkdir -p "$sparkLogs" "$sparkTmp"
 
     # these variables must be set!
+    # http://spark.apache.org/docs/latest/configuration.html#application-properties
     export SPARK_ROOT=$HOME/spark-1.5.2-bin-hadoop2.6/
-    export SPARK_JAVA_OPTS+="-Dspark.local.dir=$sparkTmp -XX:+UseParallelGC -XX:MaxPermSize=5G"
+    export SPARK_JAVA_OPTS+="-XX:+UseParallelGC -XX:MaxPermSize=5G"
     export SPARK_DAEMON_MEMORY=$(( $SLURM_MEM_PER_CPU * $SLURM_CPUS_PER_TASK / 2 ))m
     export SPARK_MEM=$SPARK_DAEMON_MEMORY
     export SPARK_WORKER_DIR=$sparkLogs
-    export SPARK_LOCAL_DIRS=$sparkLogs
+    export SPARK_LOCAL_DIRS=$sparkTmp
     export SPARK_MASTER_PORT=7077
     export SPARK_MASTER_WEBUI_PORT=8080
     export SPARK_WORKER_CORES=$SLURM_CPUS_PER_TASK
 
+    echo "SPARK_LOCAL_DIRS = $SPARK_LOCAL_DIRS"
+    echo "SPARK_WORKER_DIR = $SPARK_WORKER_DIR"
     echo "[Father] srun $script 'sran:D' $@"
     srun "$script" 'sran:D' "$@"
     echo "[Father] srun finished, exiting now"
