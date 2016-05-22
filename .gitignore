@@ -35,7 +35,6 @@
 *.aux
 *.glo
 *.idx
-*.log
 *.toc
 *.ist
 *.acn
@@ -66,11 +65,6 @@ Geany
 *.class
 *.jar
 *.tmp
-*.exe
-*.out
-*.log
-*.pdf
-*~
 
 # Archives (git also has compression, so most of the time no need, else use -f)
 *.zip
@@ -93,6 +87,10 @@ Geany
 
 .fuse*
 .nfs*
+
+*.pdf
+*.dat
+*.log
 
 rootbeer1
 KNOWLEDGE
