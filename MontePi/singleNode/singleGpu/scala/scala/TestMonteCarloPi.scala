@@ -25,40 +25,39 @@ object TestMonteCarloPi
         val nGpusPerNode = if ( args.length > 2 ) args(2).toInt  else 2
         val nRollsPerSlice = nRolls / nSlices;
 
-        /**** Initialize Kernel + Parameter List ****/
-        val sliceParams = List.range( 0, nSlices ).
-            map( ( _, ( nSlices, nRollsPerSlice ) ) )
-
         /* This partitioner is for some reason more exact than the standard RangePartitioner -.- */
         class ExactPartitioner[V]( partitions: Int, elements: Int) extends Partitioner {
             def numPartitions() : Int = partitions
             def getPartition(key: Any): Int = key.asInstanceOf[Int] % partitions
         }
-        var dataSet = sc.parallelize( sliceParams, sliceParams.size ).
-                         partitionBy( new ExactPartitioner( nSlices, nSlices ) )
+        var dataSet = sc.
+            parallelize( ( 0 until nSlices ).zipWithIndex ).
+            partitionBy( new ExactPartitioner( nSlices, nSlices ) )
 
         /*** Check if every partition really goes to exactly one host ***/
-        assert( dataSet.map( x => InetAddress.getLocalHost.getHostName ).
-                distinct.collect.size == nSlices )
+        val hosts = dataSet.map( x => InetAddress.getLocalHost.getHostName )
+        print( "The "+nSlices+" partitions / slices will be mapped to these hosts : \n    " )
+        hosts.collect.foreach( x => print( x+" " ) )
+        assert( hosts.distinct.count == nSlices )
         /* Would maybe be better to include this in the real map as the
          * distribution may change in the two runs */
 
-        println( "Calling MonteCarloPi.calc() on "+nSlices+" distinct nodes" )
+        val seeds = dataSet.map( x => {
+            val iRank  = x._1
+            var seed0 = 71210l + (Long.MaxValue.toDouble / nSlices *  iRank   ).toLong
+            var seed1 = 71210l + (Long.MaxValue.toDouble / nSlices * (iRank+1)).toLong
+            if ( seed0 < 0 ) seed0 += Long.MaxValue
+            if ( seed1 < 0 ) seed1 += Long.MaxValue
+            ( seed0, seed1 )
+        } )
+        println( "These are the seed ranges for each partition of MonteCarloPi:" )
+        seeds.collect.foreach( x => println( "    "+x._1+" -> "+x._2) )
+
         val t0 = System.nanoTime()
-        val piSum = dataSet.map( x =>
-            {
-                val iRank  = x._1
-                val nRanks = x._2._1
-                val nRolls = x._2._2
-
-                var seed0 = 71210l + Long.MaxValue / nRanks *  iRank
-                var seed1 = 71210l + Long.MaxValue / nRanks * (iRank+1)
-                if ( seed0 < 0 ) seed0 += Long.MaxValue
-                if ( seed1 < 0 ) seed1 += Long.MaxValue
-
-                var piCalculator = new MonteCarloPi()
-                piCalculator.calc( nRolls, seed0, seed1 )
-            } ).reduce( _+_ );
+        val piSum = seeds.map( x => {
+            var piCalculator = new MonteCarloPi()
+            piCalculator.calc( nRolls, x._1, x._2 )
+        } ).reduce( _+_ )
         val pi = piSum / nSlices
         val t1 = System.nanoTime()
         val duration = (t1-t0).toDouble / 1e9
@@ -69,4 +68,3 @@ object TestMonteCarloPi
         sc.stop();
     }
 }
-

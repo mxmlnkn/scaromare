@@ -143,6 +143,12 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
      **/
     def calc( nDiceRolls : Long, rSeed0 : Long, rSeed1 : Long ) : Double =
     {
+        if ( mDevices.size <= 0 )
+        {
+            println( "[Error] Couldn't find GPUs, did you run this really on a GPU-node?" )
+            assert( mDevices.size > 0 )
+        }
+
         /* start as many threads as possible. (More are possible, but
          * they wouldn't be hardware multithreaded anymore, but
          * they would be executed in serial after the first maxThreads
@@ -191,11 +197,17 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
                 nKernelsPerGpu.slice(0,iGpu).sum + z._2
             } )
         } )
-        print( "This is the list of kernel ranks for this host : \n    " )
-        //testKernelHostRanks.slice(0,10).foreach( x => print( x+" " ) )
+        print( "This is the list of kernel ranks for this host (one line per GPU) : \n    " )
+        testKernelHostRanks.foreach( gpu => {
+            gpu.slice(0,10).foreach( rank => print( rank+" " ) )
+            println( "..." )
+        } )
         assert( testKernelHostRanks.distinct.size == mDevices.size )
 
-        runStates.map( x => { x._2.take; x._1.close } )
+        println( "Taking from GpuFuture now (Wait for asynchronous tasks)." )
+        runStates.map( x => { x._2.take } )
+        println( "Closing contexts now." )
+        runStates.map( x => { x._1.close } )
 
         /* Cumulate all the hits from the kernels. Divide each hit count by
          * number of rolls first and work with double then. This evades
