@@ -17,5 +17,5 @@ TestMonteCarloPi.class: TestMonteCarloPi.java MonteCarloPiKernel.class
 
 MontePi.jar: TestMonteCarloPi.class
 	jar -cvfm $@.tmp.jar manifest.txt *.class
-	java -jar $(ROOTBEER_ROOT)/Rootbeer.jar $@.tmp.jar $@ -64bit -computecapability=sm_30
-
+	java -jar $(ROOTBEER_ROOT)/Rootbeer.jar $@.tmp.jar gpu.jar -64bit -computecapability=sm_30
+	zipmerge MontePi.jar $(ROOTBEER_ROOT)/Rootbeer.jar gpu.jar
