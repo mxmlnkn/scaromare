@@ -65,8 +65,10 @@ public class MonteCarloPi
         GpuFuture future1 = context1.runAsync();
         System.out.println( "Wait for asynchronous kernels on GPU 0 to finish" );
         future0.take();
+        context0.close();
         System.out.println( "Wait for asynchronous kernels on GPU 1 to finish" );
         future1.take();
+        context1.close();
         System.out.println( "All finished" );
 
         System.out.println( "GPU 0 did "+nIterations0[0]+" out of which "+nHits0[0]+" were inside the circle." );
