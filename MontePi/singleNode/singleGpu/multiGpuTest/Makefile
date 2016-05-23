@@ -24,5 +24,5 @@ cpu.jar: TestMonteCarloPi.class MonteCarloPi.java
 	jar -cvfm $@ manifest.txt $^
 
 # Order of dependencies is important, because latter overwrites former especially the manifest file!
-MontePi.jar: gpu.jar cpu.jar
-	zipmerge MontePi.jar $(ROOTBEER_ROOT)/Rootbeer.jar $^
+MontePi.jar: $(ROOTBEER_ROOT)/Rootbeer.jar gpu.jar cpu.jar
+	zipmerge MontePi.jar $^
