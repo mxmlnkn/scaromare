@@ -52,7 +52,22 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
     ) : Tuple2[ Context, GpuFuture ] =
     {
         assert( riDevice < mDevices.size() )
-        val context = mDevices.get( riDevice ).createContext( -1 /* auto choose memory size. Not sure what this is about or what units -.- */ );
+        val context = mDevices.get( riDevice ).createContext(
+            ( work.size * 2 /* nIteration and nHits List */ * 8 /* sizeof(Long) */ +
+              work.size * 4 /* sizeof(exception) ??? */ ) * 4 /* empirical factor */ +
+              1024*1024 /* safety padding */
+        )
+        /* After some bisection on a node with two K80 GPUs (26624 max. threads)
+         * I found 2129920 B to be too few and 2129920+1024 sufficient.
+         * The later means
+         *     safety padding is : 1598464 B
+         *      calculated size  :  532480 B = max.Threads * ( 2 * 8 + 4 )
+         * The total size needed is therefore almost exactly 4 times the size
+         * calculated!
+         * Further tests show that max.Threads * ( 2 * 8 + 4 ) * 4 + pad
+         * works for pad = 192, but not for 191
+         **/
+
         /* Do our own configuration, because BlockShaper has some serious
          * flaws, at least performance-wise */
         val threadsPerBlock = 256;
