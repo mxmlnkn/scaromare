@@ -44,8 +44,10 @@ object TestMonteCarloPi
 
         val seeds = dataSet.map( x => {
             val iRank  = x._1
-            var seed0 = 71210l + (Long.MaxValue.toDouble / nSlices *  iRank   ).toLong
-            var seed1 = 71210l + (Long.MaxValue.toDouble / nSlices * (iRank+1)).toLong
+            /* Assuming nSlices ~< Long.MaxValue / 100 or else the div
+             * discretisation error may become too large. Add another seed */
+            var seed0 = Long.MaxValue / nSlices *  iRank + 7135068l
+            var seed1 = seed0 + Long.MaxValue / nSlices
             if ( seed0 < 0 ) seed0 += Long.MaxValue
             if ( seed1 < 0 ) seed1 += Long.MaxValue
             ( seed0, seed1 )
