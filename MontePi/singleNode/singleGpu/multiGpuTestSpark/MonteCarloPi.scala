@@ -57,7 +57,7 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
         val context = mDevices.get( riDevice ).createContext(
             ( work.size * 2 /* nIteration and nHits List */ * 8 /* sizeof(Long) */ +
               work.size * 4 /* sizeof(exception) ??? */ ) * 4 /* empirical factor */ +
-              1024*1024 /* safety padding */
+              2*1024*1024 /* safety padding */
         )
         /* After some bisection on a node with two K80 GPUs (26624 max. threads)
          * I found 2129920 B to be too few and 2129920+1024 sufficient.
@@ -68,6 +68,8 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
          * calculated!
          * Further tests show that max.Threads * ( 2 * 8 + 4 ) * 4 + pad
          * works for pad = 192, but not for 191
+         * K20x (28672 max. threads) failed with the pad of 192
+         * (total size: 2293952 B) , a pad of 1024*1024 worked, though.
          **/
 
         /* Do our own configuration, because BlockShaper has some serious
@@ -177,8 +179,8 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
          * they wouldn't be hardware multithreaded anymore, but
          * they would be executed in serial after the first maxThreads
          * batch finished */
-        val nKernelsPerGpu = mGpusToUse.map( mDevices.get(_) ).
-            map( x => x.getMultiProcessorCount * x.getMaxThreadsPerMultiprocessor )
+        val nKernelsPerGpu = mGpusToUse.map( x => 5*1024 /* mDevices.get(_) ).
+            map( x => x.getMultiProcessorCount * x.getMaxThreadsPerMultiprocessor */ )
 
         var nHits       = nKernelsPerGpu.map( List.fill[Long](_)(0).toArray )
         var nIterations = nKernelsPerGpu.map( List.fill[Long](_)(0).toArray )
@@ -207,7 +209,9 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
             println
         } )
 
-        var runStates = List.range( 0, mDevices.size ).map( iGpu => {
+        var runStates = List[ Tuple2[ Context, GpuFuture ] ]()
+        for ( iGpu <- 0 until mDevices.size  )
+        {
             val tasks =
                 distribute( nWorkPerGpu(iGpu), nKernelsPerGpu(iGpu) ).
                 zipWithIndex.map( z => {
@@ -220,8 +224,8 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
                             z._1    /* iterations to do */
                     )
                 } )
-            runOnDevice( iGpu, tasks )
-        } )
+            runStates +:= runOnDevice( iGpu, tasks )
+        }
         val t01 = System.nanoTime
         println( "[MonteCarloPi.scala:calc] Ran Kernels asynchronously on all GPUs. Took " + ((t01-t00)/1e9) + " seconds" )
 
@@ -244,9 +248,8 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
 
         val t10 = System.nanoTime
         println( "[MonteCarloPi.scala:calc] Taking from GpuFuture now (Wait for asynchronous tasks)." )
-        runStates.map( x => { x._2.take } )
-        println( "[MonteCarloPi.scala:calc] Closing contexts now." )
-        runStates.map( x => { x._1.close } )
+        for ( x <- runStates )
+            x._2.take
         val t11 = System.nanoTime
         println( "[MonteCarloPi.scala:calc] synchronize (take) i.e. kernels took " + ((t11-t10)/1e9) + " seconds" )
 
@@ -258,6 +261,10 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
         /* Count and check iterations done in total by kernels */
         println( "[MonteCarloPi.scala:calc] iterations actually done : " + nIterations.flatten.sum )
         assert( nIterations.flatten.sum == nDiceRolls )
+
+        println( "[MonteCarloPi.scala:calc] Closing contexts now." )
+        for ( x <- runStates )
+            x._1.close
 
         return 4.0*quarterPi;
     }
