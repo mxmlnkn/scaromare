@@ -35,5 +35,5 @@ TestMonteCarloPi.class: TestMonteCarloPi.scala MonteCarloPi.class MontePiGPU.jar
 MontePiCPU.jar: TestMonteCarloPi.class MonteCarloPi.class
 	# Note that \$$ -> \$ by Makefile and \$ -> $ by interpreting shell
 	jar -cvfm $@ manifest.txt $^ TestMonteCarloPi\$$*.class MonteCarloPi\$$*.class
-MontePi.jar: MontePiGPU.jar MontePiCPU.jar
-	zipmerge $@ $(ROOTBEER_ROOT)/Rootbeer.jar $(SCALA_ROOT)/scala-library.jar $^
+MontePi.jar: $(SCALA_ROOT)/scala-library.jar $(ROOTBEER_ROOT)/Rootbeer.jar MontePiGPU.jar MontePiCPU.jar
+	zipmerge $@ $^
