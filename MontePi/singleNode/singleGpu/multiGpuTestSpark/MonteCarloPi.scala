@@ -195,9 +195,11 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
         print( "[MonteCarloPi.scala:calc]     " )
         nKernelsPerGpu.foreach( x => print( x+" " ) )
         println
+
         println( "[MonteCarloPi.scala:calc] with each these workloads / number of iterations :" )
         print( "[MonteCarloPi.scala:calc] " )
         nWorkPerGpu.foreach( x => print( x+" " ) )
+        println
 
         println( "[MonteCarloPi.scala:calc] These are the seed ranges for each partition of MonteCarloPi:" )
         List.range( 0, mDevices.size ).map( iGpu => {
