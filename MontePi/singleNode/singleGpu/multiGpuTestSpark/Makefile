@@ -1,7 +1,7 @@
 # For Taurus:
 #    make -B SPARK_ROOT=~/spark-1.5.2-bin-hadoop2.6 SPARKCORE_JAR=~/spark-1.5.2-bin-hadoop2.6/lib/spark-assembly-1.5.2-hadoop2.6.0.jar SCALA_ROOT=$(dirname $(which scala))/../lib
 
-ROOTBEER_ROOT := ../../../../../rootbeer1
+ROOTBEER_ROOT := ../../../../rootbeer1
 SPARK_ROOT    := /opt/spark-1.5.2
 SCALA_ROOT    := /usr/share/java
 SCALAC        := scalac

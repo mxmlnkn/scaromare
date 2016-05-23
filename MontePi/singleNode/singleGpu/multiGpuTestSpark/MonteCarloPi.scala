@@ -42,8 +42,10 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
         return x
     }
 
-    /* This routine automatically chooses a GPU device and manually sets the
-     * Kernel configuration */
+    /**
+     * This routine automatically chooses a GPU device and manually sets the
+     * Kernel configuration.
+     */
     def runOnDevice(
         riDevice         : Integer,
         work             : List[Kernel]
@@ -76,6 +78,7 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
                     thread_config.getThreadCountY + "," +
                     thread_config.getThreadCountZ + ") threads" );
 
+        /* This part was taken from Rootbeer.java:run */
         context.setThreadConfig( thread_config )
         context.setKernel( work.get(0) )
         context.setUsingHandles( true )
@@ -159,6 +162,80 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
         var nHits       = nKernelsPerGpu.map( List.fill[Long](_)(0).toArray )
         var nIterations = nKernelsPerGpu.map( List.fill[Long](_)(0).toArray )
 
+
+
+
+        val device0 = mDevices.get(0)
+        val device1 = mDevices.get(1)
+
+        val context0 = device0.createContext( 4*1024*1024 /* 4 MiB with no basis whatsoever ... */ )
+        val context1 = device1.createContext( 4*1024*1024 /* 4 MiB with no basis whatsoever ... */ )
+
+        //context0.setCacheConfig(CacheConfig.PREFER_SHARED)
+        //context1.setCacheConfig(CacheConfig.PREFER_SHARED)
+
+        context0.setThreadConfig( new ThreadConfig( 1,1,1, 1,1, 1 ) )
+        context1.setThreadConfig( new ThreadConfig( 1,1,1, 1,1, 1 ) )
+
+        /* Note that we need to different arrays, because even if kernel on
+         * GPU 0 only writes to the first element and kernel on GPU 1 in the
+         * second, the whole array will be serialized to and from the GPU! */
+        context0.setKernel( new MonteCarloPiKernel( nHits(0), nIterations(0), 0, 87461487, nDiceRolls ) )
+        context1.setKernel( new MonteCarloPiKernel( nHits(1), nIterations(1), 1, 17461487, nDiceRolls ) )
+
+        context0.buildState()
+        context1.buildState()
+
+        /* run using two gpus without blocking the current thread */
+        println( "Start asynchronous kernel on GPU 0" )
+        var future0 = context0.runAsync
+        println( "Start asynchronous kernel on GPU 1" )
+        var future1 = context1.runAsync
+        println( "Wait for asynchronous kernels on GPU 0 to finish" )
+        future0.take
+        context0.close
+        println( "Wait for asynchronous kernels on GPU 1 to finish" )
+        future1.take
+        context1.close
+        println( "All finished" )
+
+        println( "GPU 0 did "+nIterations(0)(0)+" out of which "+nHits(0)(0)+" were inside the circle." )
+        println( "GPU 1 did "+nIterations(1)(1)+" out of which "+nHits(1)(1)+" were inside the circle." )
+
+
+        return 0
+
+
+
+        //for ( riDevice <- 0 until mDevices.size )
+        //{
+        //    val context = mDevices.get( riDevice ).createContext( -1 /* auto choose memory size. Not sure what this is about or what units -.- */ )
+        //    /* @ see runOnDevice for this code snippet */
+        //    val thread_config = new ThreadConfig( 1,1,1, 32,1, 1 );
+        //    context.setThreadConfig( thread_config )
+        //    var nHits       = List.fill[Long](32)(0).toArray
+        //    var nIterations = List.fill[Long](32)(0).toArray
+        //    val kernels = List.range(0,32).map( i => new MonteCarloPiKernel(
+        //        nHits, nIterations, i, 416547501, nDiceRolls
+        //    ) )
+        //    context.setKernel( kernels(0) )
+        //    context.setUsingHandles( true )
+        //    context.buildState()
+        //
+        //    val runWaitEvent = context.runAsync( kernels )
+        //    runWaitEvent.take
+        //    context.close
+        //}
+        //for ( riDevice <- 0 until mDevices.size )
+        //    println( riDevice+" : Taking from GpuFuture." )
+        //return 0
+
+
+
+
+
+
+
         /* first distribute work to each GPU accordingly. Then distribute
          * on each GPU the work to the Kernel configuration and calculate
          * corresponding seeds for each kernel */
@@ -177,10 +254,10 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
                     new MonteCarloPiKernel(
                             nHits(iGpu),
                             nIterations(iGpu),
-                            z._2,
+                            z._2,   /* rank on GPU */
                             calcRandomSeed( nKernelsPerGpu.sum,
                                 nKernelsPerGpu.slice(0,iGpu).sum + z._2 ),
-                            z._1
+                            z._1    /* iterations to do */
                     )
                 } )
             runOnDevice( iGpu, tasks )
