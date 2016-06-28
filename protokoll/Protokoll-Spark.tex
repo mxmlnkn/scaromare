@@ -1,0 +1,30 @@
+\chapter{Spark}
+\label{sct:spark}
+
+% Zusammenfasung
+Spark ist ein Programmierframework für Datenanalyse auf Clustern, was vor allem zusammen mit dem Stichwort Big-Data und maschinellem Lernen an Beliebtheit gewonnen hat. Es vereinigt hierbei ausfallgehärtet Funktionalitäten von Batchverarbeitungssystem bzw. Cluster-Management wie Slurm, paralleler Kommunikation zwischen Prozessen wie OpenMPI und OpenMP und Programmierbibliotheken. Die von Spark zur Verfügung gestellten primitiven sind inhärent hochparallel und ausfallgehärtet ausführbar und aus Java, Scala und Python heraus ansprechbar. Aus letzteren beiden auch interaktiv, was das Experimentieren und schnelle Erstellen von Prototypen vereinfacht. Es gibt erweiternde Bibliotheken für maschinelles Lernen und Graphen. Der große Funktionsumfang macht es für Anfänger schwer einzuordnen, was Spark ist, aber ermöglich das schnelle interaktive und nichtinteraktive Auswerten von Big Data auf Clustern.
+
+% Kurze Entstehungsgeschichte, um das alles einordnen zu können, Zusammenhang mit Map-Reduce-Paradigma
+%Spark wurde an der Berekely Universität entwickelt. (in memory. Spark erweitert das Map-Reduce-Paradigma mit komplexeren Operationen, sodass man ein Problem nicht mehr auf Map-Reduce konvertieren muss. Spark kann benutzt werden von Python, Java, Scala und SQL.
+
+
+\section{Architektur}
+
+Eine Map ist eine Abbildung die einem Eingabewert einen Ausgabewert zuordnet. Im Zusammenhang mit paralleler Programmierung bezeichnet sie ein Programmiermuster für trivial parallelisierbare Probleme, das heißt solche, die keine Kommunikation untereinander erfordern. Ein Beispiel sind mit OpenMP  \lstinline!#pragma omp parallel for! parallelisierte Schleifen. Jede Schleifeiteration kann dabei als eine Abbildung ohne Kommunikation angesehen werden.
+
+Eine Reduce-Operation ist
+
+ - spark vereinfacht mapReduce programmierung, keine manuelle Zerelegung in batche jobs mehr nötig
+ - Mischung aus OpenMPI, Slurm und Programmierparadigma
+ - sehr beliebt in Machine Learning
+
+\section{Konfiguration von Spark auf Taurus}
+
+Um Spark nutzen zu können müssen zuerst Master- und Slave-Knoten gestartet werden. Hier soll es nur einen Master-Knoten und $n$ Slave-Knoten geben. Damit alle gleichzeitig gestartet werden, kann Slurms \lstinline!--multi-prog! Option genutzt werden, welche als Argument einen Pfad zu einer Konfigurationsdatei erwartet, in der für jeden Rank ein auszuführendes Programm angegeben werden muss.
+
+Alternativ kann man auch anhand von der Umgebungsvariable \lstinline!SLURM_PROCID! im Skript entweder einen Master-Knoten oder einen Slave-Knoten starten. Letzeres wurde aufgrund der Übersichtlichkeit, d.h. alle Funktionalitäten in einem Skript zu haben, gewählt, siehe Listing~\ref{lst:start_spark_slurm.sh}.
+
+Wenn Spark gestartet ist, kann sich z.B. mit einer aktiven Eingabeaufforderung an den Master verbunden werden:
+\begin{lstlisting}[language=bash]
+spark-shell --master=$MASTER_ADDRESS
+\end{lstlisting}\vspace{-1.5\baselineskip}

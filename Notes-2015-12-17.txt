@@ -1,0 +1,18 @@
+
+------------------- 2015-12-17 ------------------
+
+workflow
+framework
+
+FactorGraphs -> wollte erst damit maximierung der energiefunktion erklären
+ -> jetzt übergang zu wärmeleitungsgleichung / diffusionsgleichung
+er stellt sich darunter vor: knotenkitter: austausch mit spark
+Aufteilen
+ -> Ziel ist wirklich ein Framework, was ein Funktional reinkriegt (z.B. gpuMethod) und vlt. einen Graphen, alle Kanten müssen kommuniziert werden -> anzahl edges, vertices evtl. bottleneck? -> dynamische graphenerzeugung
+    . leicht wie alpaka?
+- muss nicht scala machen, java reicht erstmal...
+Ziel: apache Spark -> GraphX -> (Google) Pregel (Page Rank) 
+    -> kann ich wsl. nicht einfach nur nutzen
+    -> proof of concept 2D in beliebiger größe: parameter: nGPUs, nNodes, -> automatische verteilung
+    
+-> "Vergleich mit nativer Implementation" -> gpuMethod einfach auf CPU aufrufen

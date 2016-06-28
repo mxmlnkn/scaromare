@@ -1,0 +1,56 @@
+\chapter{Rootbeer}
+\label{sct:rootbeer}
+
+Rootbeer\cite{pratt2012rootbeer} ist ein von Philip C. Pratt-Szeliga entwickeltes Programm und Bibliothek welches das Schreiben von CUDA-Kerneln in Java erleichtert. Zum aktuellen Zeitpunkt Mai 2016 hat Rootbeer leider noch Beta-Status und wurde seit ca. einem Jahr nicht weiterentwickelt\cite{rootbeergithub}.
+
+Mit Rootbeer lassen sich CUDA-Kernel direkt in Java schreiben anstatt in C/C++. Dafür muss zuerst vom Nutzer die \texttt{org.trifort.rootbeer.runtime.Kernel}-Klasse implementiert und zu einer Java class-Datei kompiliert werden.
+Wenn das komplette zu schreibende Programm zu einer jar-Datei zusammengefügt wurde, dann muss diese noch einmal an den Rootber-Compiler übergeben werden. Rootbeer nutzt Soot\cite{sootsite,sootretrospective}, um den Bytecode in Jimple zu übersetzen. Jimple ist eine vereinfachte Zwischendarstellung von Java-Bytecode, welcher ca. 200 verschiedene Befehle besitzt, in Drei-Address-Code mit nur 15 Befehlen.
+Der Jimple-Code wird dann analysiert und in CUDA übersetzt welcher dann mit einem installierten NVIDIA-Compiler übersetzt wird. All das geschieht automatisch, aber die Zwischenschritte kann man zur Fehlersuche unter Linux in \lstinline!$HOME/.rootbeer/! einsehen.
+Die erstellte cubin-Datei wird zusammen mit \texttt{Rootbeer.jar} der jar-Datei des selbstgeschriebenen Programms hinzugefügt.
+
+Die zweite große Vereinfachung, die Rootbeer zur Verfügung stellt, ist die Automatisierung des Datentransfers zwischen GPU und CPU. Das besondere hierbei ist, dass Rootbeer die Nutzung von beliebigen, also insbesonderen auch nicht-primitiven Datentypen erlaubt. Diese Datentypen serialisiert Rootbeer automatisch und unter Nutzung aller CPU-Kerne und transferiert sie danach auf die Grafikkarte.
+
+Diese zwei Vereinfachungen obig machen die erste Nutzung von Rootbeer verglichen zu anderen Lösungen sehr einfach, sodass Rootbeer insbesondere für das Erstellen von Prototypen günstig ist.
+In Kontrast dazu ist es jedoch auch mögliche wiederum sehr nah an der Grafikkarte zu programmieren. Dafür kann man mit Rootbeer auch manuell die Kernel-Konfiguration angeben, mehrere GPUs ansprechen und auch shared memory nutzen.
+
+%\section{Nutzung}
+
+Für die Nutzung von Rootbeer unter Debian-Derivaten ist das \texttt{openjdk-7-jdk}-Pakt und das \texttt{nvidia-cuda-toolkit}-Paket notwendig. Leider funktioniert Rootbeer nicht mit JDK 8. JDK 7 funktioniert vollends in den hier durchgeführten Beispielen, aber volle Unterstützung ist bisher nur für JDK 6 offiziell gegeben\cite{rootbeerjdk6}.
+
+Ein Minimalbeispiel für einen Kernel, dessen Threads nur ihre ID in einen Array schreiben sieht wie folgt aus:
+\lstinputlisting[language=Java]{minimal/ThreadIDsKernel.java}
+Der Aufruf der Kernels geschieht über eine Liste von Kernel-Objekten, die per Konstruktor mit Parametern initialisiert wurden. Diese Liste wird an \texttt{rootbeer.run} übergeben, der den Kernel dann mit einer passenden Konfiguration startet.
+\lstinputlisting[language=Java]{minimal/ThreadIDs.java}
+Zuerst müssen diese beiden Dateien mit `javac` kompiliert werden und dann zusammen mit einer `manifest.txt`-Datei, die die Einsprungsklasse anzeigt, zu einem Java-Archiv gepackt werden, welches im letzten Schritt mit Rootbeer kompiliert und dann ausgeführt wird.
+\lstinputlisting[language=Bash]{minimal/compile.sh}
+Bei der Kompilierung mit \texttt{Rootbeer.jar} muss beachtet werden, dass alle benutzten Klassen mit in der jar-Datei enthalten sind, sonst quittiert Soot mit folgender Fehlermeldung:
+\begin{lstlisting}
+java.lang.RuntimeException: cannot get resident body for phantom class
+\end{lstlisting}\vspace{-1.5\baselineskip}
+Bei Nutzung von scala heißt das insbesondere, dass \texttt{scala.jar} mit in das Java-Archiv gepackt werden muss.
+
+Weiterhin ist zu beachten, dass die an Rootbeer/Soot übergebene Datei entgegen der Linux-Ideologie mit \texttt{.jar} enden muss, insbesondere führen Dateinamen wie \texttt{gpu.jar.tmp} zu der Fehlermeldung
+\begin{lstlisting}
+There are no kernel classes. Please implement the following interface to use rootbeer:
+org.trifort.runtime.Kernel
+\end{lstlisting}
+
+
+%\section{Multithreaded Rootbeer}
+
+Bei der Benutzung von Rootbeer, kam es leider zu einigen Bugs, die teilweise in einem geforkten Repository auf Github behoben wurden, siehe~\cite{ownrootbeerfork}.
+Das wichtigste Problem sei hier kurz vorgestellt.
+
+Auf Taurus ist das Heimverzeichnis über alle Knoten zugreifbar. Dies führt zu einen Problem, wenn man Rootbeer auf verschiedenen Nodes oder von verschiedenen Threads aus nutzen möchte, da bei einem Kernel-Aufruf \lstinline!~/.rootbeer/rootbeer_cuda_x64.so.1! aus der jar-Datei extrahiert wird. Wenn also ein Thread meint die Datei fertig entpackt zu haben, während ein anderer Thread die Datei nochmal entpackt, aber noch nicht fertig ist, dann kam es in ersten Versuchen zu einem \texttt{java.lang.UnsatisfiedLinkError}. Dies wurde behoben, indem ein Pfad aus Hostname, Prozess-ID und Datum genutzt wird:
+\begin{lstlisting}[language=Java]
+m_rootbeerhome = home + File.separator + ".rootbeer" + File.separator
+               + getHostname() + File.separator
+               + getProcessId("pid") + "-" + System.nanoTime()
+               + File.separator;
+\end{lstlisting}\vspace{-1.5\baselineskip}
+Dies resultiert z.B. in diesen Pfad: \lstinline!~/.rootbeer/taurusi2093/7227-311934180383710/!.
+%Hier ist jedoch zu beachten, dass diese extrahierten Dateien bei Programmablauf nicht automatisch gelöscht werden.
+
+
+% - private Variablen werden wirklich immer per memcpy hin und her transportiert.
+% - muss nicht auf ungerade Kernel-Zahl achten, werden automatisch aussortiert 
