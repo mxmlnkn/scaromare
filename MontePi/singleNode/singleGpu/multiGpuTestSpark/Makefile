@@ -19,7 +19,9 @@ clean:
 	rm -f *.class *.jar
 
 
-MonteCarloPi.class: MonteCarloPi.scala
+Distribute.class: Distribute.scala
+	$(SCALAC) $< -deprecation
+MonteCarloPi.class: MonteCarloPi.scala Distribute.class
 	#javac $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:.
 	$(SCALAC) $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:$(HADOOP_JAR):$(SPARKCORE_JAR):MontePiGPU.jar:. -deprecation
 MonteCarloPiKernel.class: MonteCarloPiKernel.java
@@ -30,10 +32,10 @@ MontePiGPU.jar: MonteCarloPiKernel.class
 	java -jar $(ROOTBEER_ROOT)/Rootbeer.jar MontePiGPUtmp.jar $@ -64bit -computecapability=sm_30
 
 
-TestMonteCarloPi.class: TestMonteCarloPi.scala MonteCarloPi.class MontePiGPU.jar
+TestMonteCarloPi.class: TestMonteCarloPi.scala MonteCarloPi.class MontePiGPU.jar Distribute.class
 	$(SCALAC) $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:$(HADOOP_JAR):$(SPARKCORE_JAR):MontePiGPU.jar:. -deprecation
-MontePiCPU.jar: TestMonteCarloPi.class MonteCarloPi.class
+MontePiCPU.jar: TestMonteCarloPi.class MonteCarloPi.class Distribute.class
 	# Note that \$$ -> \$ by Makefile and \$ -> $ by interpreting shell
-	jar -cvfm $@ manifest.txt $^ TestMonteCarloPi\$$*.class MonteCarloPi\$$*.class
+	jar -cvfm $@ manifest.txt $^ TestMonteCarloPi\$$*.class MonteCarloPi\$$*.class Distribute\$$*.class
 MontePi.jar: $(SCALA_ROOT)/scala-library.jar $(ROOTBEER_ROOT)/Rootbeer.jar MontePiGPU.jar MontePiCPU.jar
 	zipmerge $@ $^

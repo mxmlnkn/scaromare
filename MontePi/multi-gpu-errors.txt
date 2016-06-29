@@ -1,0 +1,577 @@
+sparkSubmit MontePi.jar 12345678 1
+
+16/05/22 03:12:48 INFO MapOutputTrackerMasterEndpoint: Asked to send map output locations for shuffle 1 to 172.24.36.48:35925
+16/05/22 03:12:56 WARN TaskSetManager: Lost task 0.0 in stage 4.0 (TID 3, 172.24.36.48): java.lang.AssertionError: assertion failed
+	at scala.Predef$.assert(Predef.scala:165)
+	at MonteCarloPi.calc(MonteCarloPi.scala:206)
+	at TestMonteCarloPi$$anonfun$3.apply(TestMonteCarloPi.scala:60)
+	at TestMonteCarloPi$$anonfun$3.apply(TestMonteCarloPi.scala:48)
+	at scala.collection.Iterator$$anon$11.next(Iterator.scala:328)
+	at scala.collection.Iterator$class.foreach(Iterator.scala:727)
+	at scala.collection.AbstractIterator.foreach(Iterator.scala:1157)
+	at scala.collection.TraversableOnce$class.reduceLeft(TraversableOnce.scala:172)
+	at scala.collection.AbstractIterator.reduceLeft(Iterator.scala:1157)
+	at org.apache.spark.rdd.RDD$$anonfun$reduce$1$$anonfun$14.apply(RDD.scala:993)
+	at org.apache.spark.rdd.RDD$$anonfun$reduce$1$$anonfun$14.apply(RDD.scala:991)
+	at org.apache.spark.SparkContext$$anonfun$36.apply(SparkContext.scala:1943)
+	at org.apache.spark.SparkContext$$anonfun$36.apply(SparkContext.scala:1943)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:66)
+	at org.apache.spark.scheduler.Task.run(Task.scala:88)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:214)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:724)
+
+16/05/22 03:12:56 INFO TaskSetManager: Starting task 0.1 in stage 4.0 (TID 4, 172.24.36.47, PROCESS_LOCAL, 1953 bytes)
+16/05/22 03:12:56 INFO BlockManagerInfo: Added broadcast_3_piece0 in memory on 172.24.36.47:52522 (size: 1510.0 B, free: 529.9 MB)
+16/05/22 03:12:56 INFO MapOutputTrackerMasterEndpoint: Asked to send map output locations for shuffle 1 to 172.24.36.47:42533
+16/05/22 03:12:59 WARN TaskSetManager: Lost task 0.1 in stage 4.0 (TID 4, 172.24.36.47): java.lang.NullPointerException
+	at org.trifort.rootbeer.runtime.Serializer.checkWriteCache(Serializer.java:85)
+	at org.trifort.rootbeer.runtime.Serializer.writeToHeap(Serializer.java:110)
+	at MonteCarloPiKernel.org_trifort_writeToHeapRefFields_MonteCarloPiKernel0(Jasmin)
+	at MonteCarloPiKernelSerializer.doWriteToHeap(Jasmin)
+	at org.trifort.rootbeer.runtime.Serializer.writeToHeap(Serializer.java:120)
+	at org.trifort.rootbeer.runtime.Serializer.writeToHeap(Serializer.java:46)
+	at org.trifort.rootbeer.runtime.CUDAContext.writeBlocksList(CUDAContext.java:372)
+	at org.trifort.rootbeer.runtime.CUDAContext.access$1500(CUDAContext.java:17)
+	at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:330)
+	at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:308)
+	at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:128)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:724)
+
+sparkSubmit MontePi.jar 12345678 4
+
+16/05/22 03:12:59 INFO TaskSetManager: Starting task 0.2 in stage 4.0 (TID 5, 172.24.36.48, PROCESS_LOCAL, 1953 bytes)
+16/05/22 03:13:05 WARN TaskSetManager: Lost task 0.2 in stage 4.0 (TID 5, 172.24.36.48): java.lang.ClassCastException: MonteCarloPiKernel cannot be cast to [J
+	at MonteCarloPiKernel.org_trifort_readFromHeapRefFields_MonteCarloPiKernel0(Jasmin)
+	at MonteCarloPiKernelSerializer.doReadFromHeap(Jasmin)
+	at org.trifort.rootbeer.runtime.Serializer.readFromHeap(Serializer.java:155)
+	at org.trifort.rootbeer.runtime.CUDAContext.readBlocksList(CUDAContext.java:452)
+	at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:332)
+	at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:308)
+	at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:128)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:724)
+
+16/05/22 03:13:05 INFO TaskSetManager: Starting task 0.3 in stage 4.0 (TID 6, 172.24.36.47, PROCESS_LOCAL, 1953 bytes)
+16/05/22 03:13:11 INFO TaskSetManager: Finished task 0.3 in stage 4.0 (TID 6) in 5740 ms on 172.24.36.47 (1/1)
+16/05/22 03:13:11 INFO DAGScheduler: ResultStage 4 (reduce at TestMonteCarloPi.scala:61) finished in 22.328 s
+16/05/22 03:13:11 INFO TaskSchedulerImpl: Removed TaskSet 4.0, whose tasks have all completed, from pool
+16/05/22 03:13:11 INFO DAGScheduler: Job 1 finished: reduce at TestMonteCarloPi.scala:61, took 22.348754 s
+
+Using 1 slice / GPUs. Rolling the dice 12345678 times resulted in pi ~ 3.1414835216004193 and took 22.364038345 seconds
+
+16/05/22 03:13:11 INFO SparkUI: Stopped Spark web UI at http://172.24.32.16:4040
+
+
+16/05/22 03:14:51 INFO DAGScheduler: Job 0 finished: collect at TestMonteCarloPi.scala:42, took 8.166147 s
+Exception in thread "main" java.lang.AssertionError: assertion failed
+	at scala.Predef$.assert(Predef.scala:165)
+	at TestMonteCarloPi$.main(TestMonteCarloPi.scala:41)
+	at TestMonteCarloPi.main(TestMonteCarloPi.scala)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.apache.spark.deploy.SparkSubmit$.org$apache$spark$deploy$SparkSubmit$$runMain(SparkSubmit.scala:674)
+	at org.apache.spark.deploy.SparkSubmit$.doRunMain$1(SparkSubmit.scala:180)
+	at org.apache.spark.deploy.SparkSubmit$.submit(SparkSubmit.scala:205)
+	at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:120)
+	at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
+16/05/22 03:14:51 INFO SparkContext: Invoking stop() from shutdown hook
+16/05/22 03:14:51 INFO SparkUI: Stopped Spark web UI at http://172.24.32.16:4040
+
+sparkSubmit MontePi.jar 12345678 2
+
+16/05/22 03:15:34 WARN TaskSetManager: Lost task 0.0 in stage 4.0 (TID 6, 172.24.36.48): java.lang.ClassCastException: MonteCarloPiKernel cannot be cast to [J
+	at MonteCarloPiKernel.org_trifort_readFromHeapRefFields_MonteCarloPiKernel0(Jasmin)
+	at MonteCarloPiKernelSerializer.doReadFromHeap(Jasmin)
+	at org.trifort.rootbeer.runtime.Serializer.readFromHeap(Serializer.java:155)
+	at org.trifort.rootbeer.runtime.CUDAContext.readBlocksList(CUDAContext.java:452)
+	at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:332)
+	at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:308)
+	at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:128)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:724)
+
+
+
+
+
+
+
+
+Start asynchronous kernel on GPU 0
+16/05/23 00:57:59 ERROR FatalExceptionHandler: Exception processing: 1 org.trifort.rootbeer.runtime.GpuEvent@138dc832
+java.lang.OutOfMemoryError: currentHeapEnd: 192 allocationSize: 213024 memorySize: 57156
+	at org.trifort.rootbeer.runtime.FixedMemory$MemPointer.mallocWithSize(FixedMemory.java:445)
+	at org.trifort.rootbeer.runtime.FixedMemory.mallocWithSize(FixedMemory.java:306)
+	at org.trifort.rootbeer.runtime.Serializer.checkWriteCache(Serializer.java:88)
+	at org.trifort.rootbeer.runtime.Serializer.writeToHeap(Serializer.java:110)
+	at MonteCarloPiKernel.org_trifort_writeToHeapRefFields_MonteCarloPiKernel0(Jasmin)
+	at MonteCarloPiKernelSerializer.doWriteToHeap(Jasmin)
+	at org.trifort.rootbeer.runtime.Serializer.writeToHeap(Serializer.java:120)
+	at org.trifort.rootbeer.runtime.Serializer.writeToHeap(Serializer.java:46)
+	at org.trifort.rootbeer.runtime.CUDAContext.writeBlocksTemplate(CUDAContext.java:416)
+	at org.trifort.rootbeer.runtime.CUDAContext.access$1200(CUDAContext.java:17)
+	at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:376)
+	at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:345)
+	at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:128)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:724)
+Start asynchronous kernel on GPU 1
+
+
+
+
+
+
+
+Using the following GPUs : 0, 1,
+MonteCarloPi constructor took 0.576063257 seconds
+*** glibc detected *** /sw/global/tools/java/jdk1.7.0_25/bin/java: free(): invalid next size (fast): 0x00002add64205d30 ***
+======= Backtrace: =========
+/lib64/libc.so.6[0x371ee75f4e]
+/lib64/libc.so.6[0x371ee78cf0]
+/home/h0/s3495379/.rootbeer/tauruslogin4/31008-5816763467550419/rootbeer_x64.so.1(Java_org_trifort_rootbeer_runtime_FixedMemory_free+0x20)[0x2adc76e46a27]
+[0x2adc10011f90]
+======= Memory map: ========
+00400000-00401000 r-xp 00000000 00:1d 98733353                           /sw/global/tools/java/jdk1.7.0_25/bin/java
+00600000-00601000 rw-p 00000000 00:1d 98733353                           /sw/global/tools/java/jdk1.7.0_25/bin/java
+01050000-01071000 rw-p 00000000 00:00 0                                  [heap]
+b0000000-b2c90000 rw-p 00000000 00:00 0
+b2c90000-c0000000 rw-p 00000000 00:00 0
+c0000000-100000000 rw-p 00000000 00:00 0
+200000000-2100000000 ---p 00000000 00:00 0
+371ea00000-371ea20000 r-xp 00000000 08:03 393945                         /lib64/ld-2.12.so
+371ec1f000-371ec20000 r--p 0001f000 08:03 393945                         /lib64/ld-2.12.so
+371ec20000-371ec21000 rw-p 00020000 08:03 393945                         /lib64/ld-2.12.so
+371ec21000-371ec22000 rw-p 00000000 00:00 0
+371ee00000-371ef8a000 r-xp 00000000 08:03 393647                         /lib64/libc-2.12.so
+371ef8a000-371f18a000 ---p 0018a000 08:03 393647                         /lib64/libc-2.12.so
+371f18a000-371f18e000 r--p 0018a000 08:03 393647                         /lib64/libc-2.12.so
+371f18e000-371f18f000 rw-p 0018e000 08:03 393647                         /lib64/libc-2.12.so
+371f18f000-371f194000 rw-p 00000000 00:00 0
+371f200000-371f283000 r-xp 00000000 08:03 393908                         /lib64/libm-2.12.so
+371f283000-371f482000 ---p 00083000 08:03 393908                         /lib64/libm-2.12.so
+371f482000-371f483000 r--p 00082000 08:03 393908                         /lib64/libm-2.12.so
+371f483000-371f484000 rw-p 00083000 08:03 393908                         /lib64/libm-2.12.so
+371f600000-371f602000 r-xp 00000000 08:03 393765                         /lib64/libdl-2.12.so
+371f602000-371f802000 ---p 00002000 08:03 393765                         /lib64/libdl-2.12.so
+371f802000-371f803000 r--p 00002000 08:03 393765                         /lib64/libdl-2.12.so
+371f803000-371f804000 rw-p 00003000 08:03 393765                         /lib64/libdl-2.12.so
+371fa00000-371fa17000 r-xp 00000000 08:03 393642                         /lib64/libpthread-2.12.so
+371fa17000-371fc17000 ---p 00017000 08:03 393642                         /lib64/libpthread-2.12.so
+371fc17000-371fc18000 r--p 00017000 08:03 393642                         /lib64/libpthread-2.12.so
+371fc18000-371fc19000 rw-p 00018000 08:03 393642                         /lib64/libpthread-2.12.so
+371fc19000-371fc1d000 rw-p 00000000 00:00 0
+371fe00000-371fe07000 r-xp 00000000 08:03 393470                         /lib64/librt-2.12.so
+371fe07000-3720006000 ---p 00007000 08:03 393470                         /lib64/librt-2.12.so
+3720006000-3720007000 r--p 00006000 08:03 393470                         /lib64/librt-2.12.so
+3720007000-3720008000 rw-p 00007000 08:03 393470                         /lib64/librt-2.12.so
+3720e00000-3720e16000 r-xp 00000000 08:03 393910                         /lib64/libresolv-2.12.so
+3720e16000-3721016000 ---p 00016000 08:03 393910                         /lib64/libresolv-2.12.so
+3721016000-3721017000 r--p 00016000 08:03 393910                         /lib64/libresolv-2.12.so
+3721017000-3721018000 rw-p 00017000 08:03 393910                         /lib64/libresolv-2.12.so
+3721018000-372101a000 rw-p 00000000 00:00 0
+2adc07b40000-2adc07b41000 rw-p 00000000 00:00 0
+2adc07b5b000-2adc07b5c000 rw-p 00000000 00:00 0
+2adc07b5c000-2adc07b72000 r-xp 00000000 00:1d 96051412                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/jli/libjli.so
+2adc07b72000-2adc07d72000 ---p 00016000 00:1d 96051412                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/jli/libjli.so
+2adc07d72000-2adc07d73000 rw-p 00016000 00:1d 96051412                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/jli/libjli.so
+2adc07d73000-2adc07d76000 rw-p 00000000 00:00 0
+2adc07d76000-2adc087b7000 r-xp 00000000 00:1d 85584527                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/server/libjvm.so
+2adc087b7000-2adc089b7000 ---p 00a41000 00:1d 85584527                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/server/libjvm.so
+2adc089b7000-2adc08a5a000 rw-p 00a41000 00:1d 85584527                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/server/libjvm.so
+2adc08a5a000-2adc08a96000 rw-p 00000000 00:00 0
+2adc08a96000-2adc08a97000 ---p 00000000 00:00 0
+2adc08a97000-2adc08b97000 rwxp 00000000 00:00 0
+2adc08b97000-2adc08ba4000 r-xp 00000000 00:1d 95705422                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libverify.so
+2adc08ba4000-2adc08da3000 ---p 0000d000 00:1d 95705422                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libverify.so
+2adc08da3000-2adc08da5000 rw-p 0000c000 00:1d 95705422                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libverify.so
+2adc08da5000-2adc08dce000 r-xp 00000000 00:1d 96255281                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libjava.so
+2adc08dce000-2adc08fce000 ---p 00029000 00:1d 96255281                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libjava.so
+2adc08fce000-2adc08fd0000 rw-p 00029000 00:1d 96255281                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libjava.so
+2adc08fd0000-2adc08fd1000 r--p 00000000 00:00 0
+2adc08fd1000-2adc08fd2000 rw-p 00000000 00:00 0
+2adc08fd2000-2adc08fda000 rw-s 00000000 08:02 3014658                    /tmp/hsperfdata_s3495379/31008
+2adc08fec000-2adc08ff8000 r-xp 00000000 08:03 393516                     /lib64/libnss_files-2.12.so
+2adc08ff8000-2adc091f8000 ---p 0000c000 08:03 393516                     /lib64/libnss_files-2.12.so
+2adc091f8000-2adc091f9000 r--p 0000c000 08:03 393516                     /lib64/libnss_files-2.12.so
+2adc091f9000-2adc091fa000 rw-p 0000d000 08:03 393516                     /lib64/libnss_files-2.12.so
+2adc091fa000-2adc09215000 r-xp 00000000 00:1d 95705423                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libzip.so
+2adc09215000-2adc09414000 ---p 0001b000 00:1d 95705423                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libzip.so
+2adc09414000-2adc09415000 rw-p 0001a000 00:1d 95705423                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libzip.so
+2adc0c000000-2adc0cdbf000 rw-p 00000000 00:00 0
+2adc0cdbf000-2adc10000000 ---p 00000000 00:00 0
+2adc10000000-2adc10270000 rwxp 00000000 00:00 0
+2adc10270000-2adc13000000 rw-p 00000000 00:00 0
+2adc13000000-2adc1300a000 rw-p 00000000 00:00 0
+2adc1300a000-2adc130c0000 rw-p 00000000 00:00 0
+2adc130c0000-2adc130d7000 rw-p 00000000 00:00 0
+2adc130d7000-2adc13140000 rw-p 00000000 00:00 0
+2adc13140000-2adc134ae000 rw-p 00000000 00:00 0
+2adc134ae000-2adc13517000 rw-p 00000000 00:00 0
+2adc13517000-2adc13518000 ---p 00000000 00:00 0
+2adc13518000-2adc13618000 rwxp 00000000 00:00 0
+2adc13618000-2adc13619000 ---p 00000000 00:00 0
+2adc13619000-2adc13719000 rwxp 00000000 00:00 0
+2adc13719000-2adc1371a000 ---p 00000000 00:00 0
+2adc1371a000-2adc1381a000 rwxp 00000000 00:00 0
+2adc1381a000-2adc1381b000 ---p 00000000 00:00 0
+2adc1381b000-2adc1391b000 rwxp 00000000 00:00 0
+2adc1391b000-2adc1391c000 ---p 00000000 00:00 0
+2adc1391c000-2adc13a1c000 rwxp 00000000 00:00 0
+2adc13a1c000-2adc13a1d000 ---p 00000000 00:00 0
+2adc13a1d000-2adc13b1d000 rwxp 00000000 00:00 0
+2adc13b1d000-2adc13b1e000 ---p 00000000 00:00 0
+2adc13b1e000-2adc13c1e000 rwxp 00000000 00:00 0
+2adc13c1e000-2adc13c1f000 ---p 00000000 00:00 0
+2adc13c1f000-2adc13d1f000 rwxp 00000000 00:00 0
+2adc13d1f000-2adc13d20000 ---p 00000000 00:00 0
+2adc13d20000-2adc13e20000 rwxp 00000000 00:00 0
+2adc13e20000-2adc13e21000 ---p 00000000 00:00 0
+2adc13e21000-2adc13f21000 rwxp 00000000 00:00 0
+2adc13f21000-2adc13f22000 ---p 00000000 00:00 0
+2adc13f22000-2adc14022000 rwxp 00000000 00:00 0
+2adc14022000-2adc14023000 ---p 00000000 00:00 0
+2adc14023000-2adc14123000 rwxp 00000000 00:00 0
+2adc14123000-2adc14124000 ---p 00000000 00:00 0
+2adc14124000-2adc14224000 rwxp 00000000 00:00 0
+2adc14224000-2adc14225000 ---p 00000000 00:00 0
+2adc14225000-2adc14325000 rwxp 00000000 00:00 0
+2adc14325000-2adc14326000 ---p 00000000 00:00 0
+2adc14326000-2adc14426000 rwxp 00000000 00:00 0
+2adc14426000-2adc14427000 ---p 00000000 00:00 0
+2adc14427000-2adc14527000 rwxp 00000000 00:00 0
+2adc14527000-2adc14528000 ---p 00000000 00:00 0
+2adc14528000-2adc14628000 rwxp 00000000 00:00 0
+2adc14628000-2adc14629000 ---p 00000000 00:00 0
+2adc14629000-2adc14729000 rwxp 00000000 00:00 0
+2adc14729000-2adc17951000 rw-p 00000000 00:00 0
+2adc17951000-2adc17f57000 rwxp 00000000 00:00 0
+2adc17f57000-2adc17f58000 rw-p 00000000 00:00 0
+2adc18000000-2adc18021000 rw-p 00000000 00:00 0
+2adc18021000-2adc1c000000 ---p 00000000 00:00 0
+2adc1c000000-2adc1c021000 rw-p 00000000 00:00 0
+2adc1c021000-2adc20000000 ---p 00000000 00:00 0
+2adc20000000-2adc20021000 rw-p 00000000 00:00 0
+2adc20021000-2adc24000000 ---p 00000000 00:00 0
+2adc24000000-2adc24021000 rw-p 00000000 00:00 0
+2adc24021000-2adc28000000 ---p 00000000 00:00 0
+2adc28000000-2adc28021000 rw-p 00000000 00:00 0
+2adc28021000-2adc2c000000 ---p 00000000 00:00 0
+2adc2c000000-2adc2c021000 rw-p 00000000 00:00 0
+2adc2c021000-2adc30000000 ---p 00000000 00:00 0
+2adc30000000-2adc30021000 rw-p 00000000 00:00 0
+2adc30021000-2adc34000000 ---p 00000000 00:00 0
+2adc34000000-2adc34021000 rw-p 00000000 00:00 0
+2adc34021000-2adc38000000 ---p 00000000 00:00 0
+2adc38000000-2adc38021000 rw-p 00000000 00:00 0
+2adc38021000-2adc3c000000 ---p 00000000 00:00 0
+2adc3c000000-2adc3c021000 rw-p 00000000 00:00 0
+2adc3c021000-2adc40000000 ---p 00000000 00:00 0
+2adc40000000-2adc40021000 rw-p 00000000 00:00 0
+2adc40021000-2adc44000000 ---p 00000000 00:00 0
+2adc44000000-2adc44021000 rw-p 00000000 00:00 0
+2adc44021000-2adc48000000 ---p 00000000 00:00 0
+2adc48000000-2adc48021000 rw-p 00000000 00:00 0
+2adc48021000-2adc4c000000 ---p 00000000 00:00 0
+2adc4c000000-2adc4c021000 rw-p 00000000 00:00 0
+2adc4c021000-2adc50000000 ---p 00000000 00:00 0
+2adc50000000-2adc50021000 rw-p 00000000 00:00 0
+2adc50021000-2adc54000000 ---p 00000000 00:00 0
+2adc54000000-2adc54021000 rw-p 00000000 00:00 0
+2adc54021000-2adc58000000 ---p 00000000 00:00 0
+2adc58000000-2adc581bd000 r--s 039f9000 00:1d 94794757                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/rt.jar
+2adc581bd000-2adc5bdd9000 rw-p 00000000 00:00 0
+2adc5bdd9000-2adc5bdda000 ---p 00000000 00:00 0
+2adc5bdda000-2adc5bfdb000 rwxp 00000000 00:00 0
+2adc5c000000-2adc5c021000 rw-p 00000000 00:00 0
+2adc5c021000-2adc60000000 ---p 00000000 00:00 0
+2adc60000000-2adc60021000 rw-p 00000000 00:00 0
+2adc60021000-2adc64000000 ---p 00000000 00:00 0
+2adc64000000-2adc64021000 rw-p 00000000 00:00 0
+2adc64021000-2adc68000000 ---p 00000000 00:00 0
+2adc68000000-2adc68303000 rwxp 00000000 00:00 0
+2adc68303000-2adc68304000 ---p 00000000 00:00 0
+2adc68304000-2adc68404000 rwxp 00000000 00:00 0
+2adc68404000-2adc68405000 ---p 00000000 00:00 0
+2adc68405000-2adc68606000 rwxp 00000000 00:00 0
+2adc68606000-2adc68607000 ---p 00000000 00:00 0
+2adc68607000-2adc69313000 rwxp 00000000 00:00 0
+2adc69313000-2adc69318000 r-xp 00000000 08:03 393496                     /lib64/libnss_dns-2.12.so
+2adc69318000-2adc69517000 ---p 00005000 08:03 393496                     /lib64/libnss_dns-2.12.so
+2adc69517000-2adc69518000 r--p 00004000 08:03 393496                     /lib64/libnss_dns-2.12.so
+2adc69518000-2adc69519000 rw-p 00005000 08:03 393496                     /lib64/libnss_dns-2.12.so
+2adc69519000-2adc6ac30000 rwxp 00000000 00:00 0
+2adc6ac30000-2adc6ac6d000 r-xp 00000000 08:02 28                         /tmp/snappy-unknown-9be6c44d-bfa2-4648-b60f-14c1f91b212d-libsnappyjava.so
+2adc6ac6d000-2adc6ae6d000 ---p 0003d000 08:02 28                         /tmp/snappy-unknown-9be6c44d-bfa2-4648-b60f-14c1f91b212d-libsnappyjava.so
+2adc6ae6d000-2adc6ae70000 rw-p 0003d000 08:02 28                         /tmp/snappy-unknown-9be6c44d-bfa2-4648-b60f-14c1f91b212d-libsnappyjava.so
+2adc6ae70000-2adc6ae82000 rw-p 00000000 00:00 0
+2adc6ae82000-2adc6af83000 rwxp 00000000 00:00 0
+2adc6af83000-2adc6af87000 r--s 000f7000 00:1d 99206616                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/ext/localedata.jar
+2adc6af87000-2adc6b48c000 rwxp 00000000 00:00 0
+2adc6b48c000-2adc6b48d000 ---p 00000000 00:00 0
+2adc6b48d000-2adc6b68d000 rwxp 00000000 00:00 0
+2adc6b68d000-2adc6b68e000 rw-p 00000000 00:00 0
+2adc6c000000-2adc6c021000 rw-p 00000000 00:00 0
+2adc6c021000-2adc70000000 ---p 00000000 00:00 0
+2adc70000000-2adc75e91000 r--p 00000000 08:03 304276                     /usr/lib/locale/locale-archive
+2adc75e91000-2adc76a72000 r-xp 00000000 08:03 433354                     /usr/lib64/libcuda.so.352.39
+2adc76a72000-2adc76c71000 ---p 00be1000 08:03 433354                     /usr/lib64/libcuda.so.352.39
+2adc76c71000-2adc76e2f000 rw-p 00be0000 08:03 433354                     /usr/lib64/libcuda.so.352.39
+2adc76e2f000-2adc76e45000 rw-p 00000000 00:00 0
+2adc76e45000-2adc76e47000 r-xp 00000000 00:1a 119829625                  /home/h0/s3495379/.rootbeer/tauruslogin4/31008-5816763467550419/rootbeer_x64.so.1
+2adc76e47000-2adc77047000 ---p 00002000 00:1a 119829625                  /home/h0/s3495379/.rootbeer/tauruslogin4/31008-5816763467550419/rootbeer_x64.so.1
+2adc77047000-2adc77048000 rw-p 00002000 00:1a 119829625                  /home/h0/s3495379/.rootbeer/tauruslogin4/31008-5816763467550419/rootbeer_x64.so.1
+2adc77048000-2adc7704c000 r-xp 00000000 00:1a 119829626                  /home/h0/s3495379/.rootbeer/tauruslogin4/31008-5816763467550419/rootbeer_cuda_x64.so.1
+2adc7704c000-2adc7724b000 ---p 00004000 00:1a 119829626                  /home/h0/s3495379/.rootbeer/tauruslogin4/31008-5816763467550419/rootbeer_cuda_x64.so.1
+2adc7724b000-2adc7724c000 rw-p 00003000 00:1a 119829626                  /home/h0/s3495379/.rootbeer/tauruslogin4/31008-5816763467550419/rootbeer_cuda_x64.so.1
+2adc7724c000-2adc7724d000 r--s c4000000 00:05 17401                      /dev/nvidia0
+2adc7724d000-2adc7724e000 r--s c3000000 00:05 17442                      /dev/nvidia1
+2adc7724e000-2adc7724f000 r--s fa000000 00:05 18494                      /dev/nvidia2
+2adc7724f000-2adc77250000 r--s f9000000 00:05 18668                      /dev/nvidia3
+2adc78000000-2adc78021000 rw-p 00000000 00:00 0
+2adc78021000-2adc7c000000 ---p 00000000 00:00 0
+2adc7c000000-2adc7c021000 rw-p 00000000 00:00 0
+2adc7c021000-2adc80000000 ---p 00000000 00:00 0
+2adc80000000-2adc80f05000 rw-p 00000000 00:00 0
+2adc80f05000-2adc84000000 ---p 00000000 00:00 0
+2adc84000000-2adc85284000 rw-p 00000000 00:00 0
+2adc85284000-2adc88000000 ---p 00000000 00:00 0
+2adc88000000-2adc88021000 rw-p 00000000 00:00 0
+2adc88021000-2adc8c000000 ---p 00000000 00:00 0
+2adc8c000000-2adc8c021000 rw-p 00000000 00:00 0
+2adc8c021000-2adc90000000 ---p 00000000 00:00 0
+2adc90000000-2adc90bbc000 r--s 0a3bd000 00:1a 4672591                    /home/h0/s3495379/spark-1.5.2-bin-hadoop2.6/lib/spark-assembly-1.5.2-hadoop2.6.0.jar
+2adc90bbc000-2adc90e95000 rw-p 00000000 00:00 0
+2adc90e95000-2adc90ead000 r--s 001b6000 00:1a 4672586                    /home/h0/s3495379/spark-1.5.2-bin-hadoop2.6/lib/datanucleus-core-3.2.10.jar
+2adc90ead000-2adc90eb2000 r--s 0004e000 00:1a 4672587                    /home/h0/s3495379/spark-1.5.2-bin-hadoop2.6/lib/datanucleus-api-jdo-3.2.6.jar
+2adc90eb2000-2adc90ec8000 r--s 001a4000 00:1a 4672588                    /home/h0/s3495379/spark-1.5.2-bin-hadoop2.6/lib/datanucleus-rdbms-3.2.9.jar
+2adc90ec8000-2adc91015000 r--s 013a4000 00:1a 7737415                    /home/h0/s3495379/scaromare/MontePi/singleNode/singleGpu/multiGpuTestSpark/MontePi.jar
+2adc91015000-2adc9106b000 rw-p 00000000 00:00 0
+2adc9106b000-2adc9107b000 r-xp 00000000 00:1d 98401065                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libnio.so
+2adc9107b000-2adc9127b000 ---p 00010000 00:1d 98401065                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libnio.so
+2adc9127b000-2adc9127c000 rw-p 00010000 00:1d 98401065                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libnio.so
+2adc9127c000-2adc91291000 r-xp 00000000 00:1d 98401064                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libnet.so
+2adc91291000-2adc91491000 ---p 00015000 00:1d 98401064                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libnet.so
+2adc91491000-2adc91492000 rw-p 00015000 00:1d 98401064                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libnet.so
+2adc91492000-2adc94493000 rw-p 00000000 00:00 0
+2adc94493000-2adc94497000 r--s 0008a000 00:1d 94794747                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/jsse.jar
+2adc94497000-2adc9449f000 r-xp 00000000 00:1d 98401062                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libmanagement.so
+2adc9449f000-2adc9469e000 ---p 00008000 00:1d 98401062                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libmanagement.so
+2adc9469e000-2adc9469f000 rw-p 00007000 00:1d 98401062                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libmanagement.so
+2adc9469f000-2adc947c8000 rwxp 00000000 00:00 0
+2adc947c8000-2adc947c9000 r-xp 00000000 00:1d 96255280                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libjaas_unix.so
+2adc947c9000-2adc949c8000 ---p 00001000 00:1d 96255280                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libjaas_unix.so
+2adc949c8000-2adc949c9000 rw-p 00000000 00:1d 96255280                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libjaas_unix.so
+2adc949c9000-2adc949cb000 r--s 00019000 00:1d 94794743                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/jce.jar
+2adc949cb000-2adc949cc000 r--s 00003000 00:1d 99206618                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/ext/sunec.jar
+2adc949cc000-2adc949fe000 r-xp 00000000 00:1d 95705419                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libsunec.so
+2adc949fe000-2adc94bfd000 ---p 00032000 00:1d 95705419                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libsunec.so
+2adc94bfd000-2adc94c03000 rw-p 00031000 00:1d 95705419                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/amd64/libsunec.so
+2adc94c03000-2adc94c13000 rw-p 00000000 00:00 0
+2adc94c13000-2adc94c29000 r-xp 00000000 00:1d 87562235                   /sw/global/compilers/gcc/4.9.1/lib64/libgcc_s.so.1
+2adc94c29000-2adc94e28000 ---p 00016000 00:1d 87562235                   /sw/global/compilers/gcc/4.9.1/lib64/libgcc_s.so.1
+2adc94e28000-2adc94e29000 rw-p 00015000 00:1d 87562235                   /sw/global/compilers/gcc/4.9.1/lib64/libgcc_s.so.1
+2adc94e29000-2adc94e2d000 r--s 0002d000 00:1d 99206619                   /sw/global/tools/java/jdk1.7.0_25/jre/lib/ext/sunjce_provider.jar
+2adc94e2d000-2adc95534000 rwxp 00000000 00:00 0
+2adc98000000-2adc98021000 rw-p 00000000 00:00 0
+2adc98021000-2adc9c000000 ---p 00000000 00:00 0
+2adc9c000000-2adc9c021000 rw-p 00000000 00:00 0
+2adc9c021000-2adca0000000 ---p 00000000 00:00 0
+2adca0000000-2adca0021000 rw-p 00000000 00:00 0
+2adca0021000-2adca4000000 ---p 00000000 00:00 0
+2adca4000000-2adca4021000 rw-p 00000000 00:00 0
+2adca4021000-2adca8000000 ---p 00000000 00:00 0
+2adca8000000-2adca8070000 rw-p 00000000 00:00 0
+2adca8070000-2adcac000000 ---p 00000000 00:00 0
+2adcac000000-2adcac021000 rw-p 00000000 00:00 0
+2adcac021000-2adcb0000000 ---p 00000000 00:00 0
+2adcb0000000-2adcb0021000 rw-p 00000000 00:00 0
+2adcb0021000-2adcb4000000 ---p 00000000 00:00 0
+2adcb4000000-2adcb4021000 rw-p 00000000 00:00 0
+2adcb4021000-2adcb8000000 ---p 00000000 00:00 0
+2adcb8000000-2adcb8191000 rw-p 00000000 00:00 0
+2adcb8191000-2adcbc000000 ---p 00000000 00:00 0
+2adcbc000000-2adcbc021000 rw-p 00000000 00:00 0
+2adcbc021000-2adcc0000000 ---p 00000000 00:00 0
+2adcc0000000-2adcc0021000 rw-p 00000000 00:00 0
+2adcc0021000-2adcc4000000 ---p 00000000 00:00 0
+2adcc4000000-2adcc4021000 rw-p 00000000 00:00 0
+2adcc4021000-2adcc8000000 ---p 00000000 00:00 0
+2adcc8000000-2adcc8021000 rw-p 00000000 00:00 0
+2adcc8021000-2adccc000000 ---p 00000000 00:00 0
+2adccc000000-2adccc021000 rw-p 00000000 00:00 0
+2adccc021000-2adcd0000000 ---p 00000000 00:00 0
+2adcd0000000-2adcd0021000 rw-p 00000000 00:00 0
+2adcd0021000-2adcd4000000 ---p 00000000 00:00 0
+2adcd4000000-2adcd4021000 rw-p 00000000 00:00 0
+2adcd4021000-2adcd8000000 ---p 00000000 00:00 0
+2adcd8000000-2adcd8021000 rw-p 00000000 00:00 0
+2adcd8021000-2adcdc000000 ---p 00000000 00:00 0
+2adcdc000000-2adcdc021000 rw-p 00000000 00:00 0
+2adcdc021000-2adce0000000 ---p 00000000 00:00 0
+2adce0000000-2adce0021000 rw-p 00000000 00:00 0
+2adce0021000-2adce4000000 ---p 00000000 00:00 0
+2adce4000000-2adce4023000 rw-p 00000000 00:00 0
+2adce4023000-2adce8000000 ---p 00000000 00:00 0
+2adce8000000-2adce8021000 rw-p 00000000 00:00 0
+2adce8021000-2adcec000000 ---p 00000000 00:00 0
+2adcec000000-2adcec021000 rw-p 00000000 00:00 0
+2adcec021000-2adcf0000000 ---p 00000000 00:00 0
+2adcf0000000-2adcf0021000 rw-p 00000000 00:00 0
+2adcf0021000-2adcf4000000 ---p 00000000 00:00 0
+2adcf4000000-2adcf4021000 rw-p 00000000 00:00 0
+2adcf4021000-2adcf8000000 ---p 00000000 00:00 0
+2adcf8000000-2adcf8021000 rw-p 00000000 00:00 0
+2adcf8021000-2adcfc000000 ---p 00000000 00:00 0
+2adcfc000000-2adcfc021000 rw-p 00000000 00:00 0
+2adcfc021000-2add00000000 ---p 00000000 00:00 0
+2add00000000-2add00021000 rw-p 00000000 00:00 0
+2add00021000-2add04000000 ---p 00000000 00:00 0
+2add04000000-2add04021000 rw-p 00000000 00:00 0
+2add04021000-2add08000000 ---p 00000000 00:00 0
+2add08000000-2add08021000 rw-p 00000000 00:00 0
+2add08021000-2add0c000000 ---p 00000000 00:00 0
+2add0c000000-2add0c021000 rw-p 00000000 00:00 0
+2add0c021000-2add10000000 ---p 00000000 00:00 0
+2add10000000-2add10021000 rw-p 00000000 00:00 0
+2add10021000-2add14000000 ---p 00000000 00:00 0
+2add14000000-2add14021000 rw-p 00000000 00:00 0
+2add14021000-2add18000000 ---p 00000000 00:00 0
+2add18000000-2add18021000 rw-p 00000000 00:00 0
+2add18021000-2add1c000000 ---p 00000000 00:00 0
+2add1c000000-2add1c021000 rw-p 00000000 00:00 0
+2add1c021000-2add20000000 ---p 00000000 00:00 0
+2add20000000-2add20021000 rw-p 00000000 00:00 0
+2add20021000-2add24000000 ---p 00000000 00:00 0
+2add24000000-2add24021000 rw-p 00000000 00:00 0
+2add24021000-2add28000000 ---p 00000000 00:00 0
+2add28000000-2add28021000 rw-p 00000000 00:00 0
+2add28021000-2add2c000000 ---p 00000000 00:00 0
+2add2c000000-2add2c021000 rw-p 00000000 00:00 0
+2add2c021000-2add30000000 ---p 00000000 00:00 0
+2add30000000-2add30021000 rw-p 00000000 00:00 0
+2add30021000-2add34000000 ---p 00000000 00:00 0
+2add34000000-2add34021000 rw-p 00000000 00:00 0
+2add34021000-2add38000000 ---p 00000000 00:00 0
+2add38000000-2add38021000 rw-p 00000000 00:00 0
+2add38021000-2add3c000000 ---p 00000000 00:00 0
+2add3c000000-2add3c0e5000 rw-p 00000000 00:00 0
+2add3c0e5000-2add40000000 ---p 00000000 00:00 0
+2add40000000-2add40021000 rw-p 00000000 00:00 0
+2add40021000-2add44000000 ---p 00000000 00:00 0
+2add44000000-2add44021000 rw-p 00000000 00:00 0
+2add44021000-2add48000000 ---p 00000000 00:00 0
+2add48000000-2add48021000 rw-p 00000000 00:00 0
+2add48021000-2add4c000000 ---p 00000000 00:00 0
+2add4c000000-2add4c021000 rw-p 00000000 00:00 0
+2add4c021000-2add50000000 ---p 00000000 00:00 0
+2add50000000-2add50021000 rw-p 00000000 00:00 0
+2add50021000-2add54000000 ---p 00000000 00:00 0
+2add54000000-2add54021000 rw-p 00000000 00:00 0
+2add54021000-2add58000000 ---p 00000000 00:00 0
+2add58000000-2add58021000 rw-p 00000000 00:00 0
+2add58021000-2add5c000000 ---p 00000000 00:00 0
+2add5c000000-2add5c021000 rw-p 00000000 00:00 0
+2add5c021000-2add60000000 ---p 00000000 00:00 0
+2add60000000-2add6002b000 rw-p 00000000 00:00 0
+2add6002b000-2add64000000 ---p 00000000 00:00 0
+2add64000000-2add644aa000 rw-p 00000000 00:00 0
+2add644aa000-2add68000000 ---p 00000000 00:00 0
+2add68000000-2add68021000 rw-p 00000000 00:00 0
+2add68021000-2add6c000000 ---p 00000000 00:00 0
+2add6c000000-2add6c021000 rw-p 00000000 00:00 0
+2add6c021000-2add70000000 ---p 00000000 00:00 0
+2add70000000-2add70021000 rw-p 00000000 00:00 0
+2add70021000-2add74000000 ---p 00000000 00:00 0
+2add74000000-2add74021000 rw-p 00000000 00:00 0
+2add74021000-2add78000000 ---p 00000000 00:00 0
+2add78000000-2add78021000 rw-p 00000000 00:00 0
+2add78021000-2add7c003000 ---p 00000000 00:00 0
+2add7c003000-2add7c201000 rwxp 00000000 00:00 0
+2add80000000-2add80448000 rw-p 00000000 00:00 0
+2add80448000-2add84000000 ---p 00000000 00:00 0
+2add84000000-2add84021000 rw-p 00000000 00:00 0
+2add84021000-2add88000000 ---p 00000000 00:00 0
+7ffd191df000-7ffd191f2000 rwxp 00000000 00:00 0                          [stack]
+7ffd191f2000-7ffd191f6000 rw-p 00000000 00:00 0
+7ffd191f9000-7ffd191fa000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+[CUDAContext.c] Create context on device 0 ( cuDevice = 0 )
+[CUDAContext.c] Launch kernel on ( cuDevice = 0 )
+srun: error: taurusi2108: task 0: Aborted
+
+
+
+
+
+Creating Rootbeer Context...OK
+Get Device List
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x00002ad4d367f470, pid=808, tid=47090663696128
+#
+# JRE version: 7.0_25-b15
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (23.25-b01 mixed mode linux-amd64 compressed oops)
+# Problematic frame:
+# C  [libcuda.so.352.39+0x186470]  cuMemGetAttribute_v2+0x156e0
+#
+# Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+# An error report file with more information is saved as:
+# /home/h0/s3495379/scaromare/MontePi/singleNode/singleGpu/multiGpuTest/hs_err_pid808.log
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.sun.com/bugreport/crash.jsp
+#
+srun: error: taurusi2108: task 0: Aborted
+
+
+
+
+Debugging Output:
+    GPU size         : 11971633152 B
+    CPU_SIZE         : 999502488 B
+    Exceptions size  : 4 B
+    class memory size: 1024 B
+    cubin size       : 54080 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54080 B
+    alignment        : 16 B
+Start asynchronous kernel on GPU 0
+Start asynchronous kernel on GPU 1
+Wait for asynchronous kernels on GPU 0 to finish
+May 23, 2016 3:45:00 AM com.lmax.disruptor.FatalExceptionHandler handleEventException
+SEVERE: Exception processing: 1 org.trifort.rootbeer.runtime.GpuEvent@1de9c46d
+java.lang.OutOfMemoryError: [FixedMemory.java]     currentHeapEnd / bytes currently in use: 192 B
+    Bytes requested to allocate            : 213024 B
+    total size available in FixedMemory    : 70496 B
+(This happens if createContext(size) was called with an insufficient size, or CUDAContext.java:findMemorySize failed to determine the correct size automatically)
+	at org.trifort.rootbeer.runtime.FixedMemory$MemPointer.mallocWithSize(FixedMemory.java:451)
+	at org.trifort.rootbeer.runtime.FixedMemory.mallocWithSize(FixedMemory.java:306)
+	at org.trifort.rootbeer.runtime.Serializer.checkWriteCache(Serializer.java:91)
+	at org.trifort.rootbeer.runtime.Serializer.writeToHeap(Serializer.java:114)
+	at MonteCarloPiKernel.org_trifort_writeToHeapRefFields_MonteCarloPiKernel0(Jasmin)
+	at MonteCarloPiKernelSerializer.doWriteToHeap(Jasmin)
+	at org.trifort.rootbeer.runtime.Serializer.writeToHeap(Serializer.java:124)
+	at org.trifort.rootbeer.runtime.Serializer.writeToHeap(Serializer.java:49)
+	at org.trifort.rootbeer.runtime.CUDAContext.writeBlocksTemplate(CUDAContext.java:429)
+	at org.trifort.rootbeer.runtime.CUDAContext.access$1200(CUDAContext.java:19)
+	at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:389)
+	at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:358)
+	at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:128)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:724)
+
+  => size returned by compiledKernel.getCubin64size seems to be remarkbly less than size needed for serializing compiledKernel (exactly 3 times?)
+     The latter seems to calculate the size with 'doGetSize' which seems to be a method defined dynamically by 'generate/bytecode/VisitorGen.java'
