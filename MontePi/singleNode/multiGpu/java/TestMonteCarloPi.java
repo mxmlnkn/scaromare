@@ -18,7 +18,7 @@ public class TestMonteCarloPi
         int iGpuDeviceToUse = args.length < 2 ? 0  : Integer.parseInt( args[1], 10 /* decimal system */ );
 
         MonteCarloPi piCalculator = new MonteCarloPi( iGpuDeviceToUse );
-        //piCalculator.gpuDeviceInfo( iGpuDeviceToUse );
+        piCalculator.gpuDeviceInfo( iGpuDeviceToUse );
 
         /* execute and time pi calculation */
         long t0 = System.nanoTime();

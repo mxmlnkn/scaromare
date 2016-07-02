@@ -15,7 +15,12 @@ MonteCarloPiKernel.class: MonteCarloPiKernel.java MonteCarloPi.class $(ROOTBEER_
 TestMonteCarloPi.class: TestMonteCarloPi.java MonteCarloPiKernel.class $(ROOTBEER_ROOT)/Rootbeer.jar
 	javac $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:.
 
-MontePi.jar: TestMonteCarloPi.class $(ROOTBEER_ROOT)/Rootbeer.jar
-	jar -cvfm $@.tmp.jar manifest.txt *.class
-	java -jar $(ROOTBEER_ROOT)/Rootbeer.jar $@.tmp.jar $@ -64bit -computecapability=sm_30
+gpu.jar: MonteCarloPiKernel.class
+	jar -cf tmp.jar $^
+	java -jar $(ROOTBEER_ROOT)/Rootbeer.jar tmp.jar $@ -64bit -computecapability=sm_30
+nongpu.jar: MonteCarloPi.class TestMonteCarloPi.class
+	jar -cfm $@ manifest.txt $^
+
+MontePi.jar: gpu.jar nongpu.jar
+	zipmerge $@ $(ROOTBEER_ROOT)/Rootbeer.jar $(SCALA_ROOT)/scala-library.jar $^
 

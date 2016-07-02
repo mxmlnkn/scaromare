@@ -18,9 +18,29 @@ public class MonteCarloPiKernel implements Kernel
     private long   mRandomSeed;
     private long   mnDiceRolls;
 
-    /* Constructor which stores thread arguments: seed, diceRolls */
+    /**
+     * Constructor which stores thread arguments: seed, diceRolls
+     * @param[in] rnHits           stores the reduced result, i.e. the number
+     *                             of random numbers inside the circle
+     * @param[in] rnIterations     array storing the actually done number of
+     *                             iterations i.e. dice rolls (was added later
+     *                             for debugging)
+     * @param[in] riLinearThreadId a thread id used to access the correct
+     *                             entry in rnHits and rnIterations
+     * @param[in] rRandomSeed      random seed to use, should be different for
+     *                             each kernel!
+     * @param[in] rnDiceRolls      Could also be called rnIterations, i.e.
+     *                             number of Monte-Carlo iterations this kernel
+     *                             shall do, not the total of all kernels!
+     */
     public MonteCarloPiKernel
-    ( long[] rnHits, long[] rnIterations, int riLinearThreadId, long rRandomSeed, long rnDiceRolls )
+    (
+        long[] rnHits          ,
+        long[] rnIterations    ,
+        int    riLinearThreadId,
+        long   rRandomSeed     ,
+        long   rnDiceRolls
+    )
     {
         mnHits           = rnHits;
         miLinearThreadId = riLinearThreadId;

@@ -151,7 +151,8 @@ public class MonteCarloPi
         int  nRollsRemainder  = (int)( nDiceRolls % (long) nKernels );
         /* The first nRollsRemainder threads will work on 1 roll more. The
          * rest of the threads will roll the dice nRollsPerThreads */
-        long[] nHits = new long[nKernels];
+        long[] nHits      = new long[nKernels];
+        long[] nRollsDone = new long[nKernels]; /* for debugging */
 
         /* List of kernels / threads we want to run in this Level */
         List<Kernel> tasks = new ArrayList<Kernel>();
@@ -159,14 +160,14 @@ public class MonteCarloPi
         {
             nHits[i] = 0;
             final long seed = calcRandomSeed( nKernels,i );
-            tasks.add( new MonteCarloPiKernel( nHits,i, seed, nRollsPerThreads+1 ) );
+            tasks.add( new MonteCarloPiKernel( nHits, nRollsDone, i, seed, nRollsPerThreads+1 ) );
             //System.out.println( "Kernel " + i + " has seed: " + seed );
         }
         for (int i = nRollsRemainder; i < nKernels; ++i )
         {
             nHits[i] = 0;
             final long seed = calcRandomSeed(nKernels,i);
-            tasks.add( new MonteCarloPiKernel( nHits,i, seed, nRollsPerThreads ) );
+            tasks.add( new MonteCarloPiKernel( nHits, nRollsDone, i, seed, nRollsPerThreads ) );
             //System.out.println( "Kernel " + i + " has seed: " + seed );
         }
 
@@ -180,6 +181,11 @@ public class MonteCarloPi
         runOnDevice( mRootbeerContext, miGpuDeviceToUse, tasks ); // kernel in order out-of-order ?
         t1 = System.nanoTime();
         System.out.println( "runOnDevice took " + ((t1-t0)/1e9) + " seconds" );
+
+        long nDiceRollsDone = 0;
+        for ( int i = 0; i < nKernels; ++i )
+            nDiceRollsDone += nRollsDone[i];
+        assert( nDiceRollsDone == nDiceRolls );
 
         /* Cumulate all the hits from the kernels. Divide each hit count by
          * number of rolls first and work with double then. This evades

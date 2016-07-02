@@ -16,7 +16,7 @@ RUN="time -p"
 if [ "$taurus" -eq 1 ]; then RUN="srun $RUN"; fi
 
 i0=256
-imax=268435456000
+imax=2684354560000
 tmaxCpu=100 # seconds
 tmaxGpu=7
 
@@ -59,6 +59,8 @@ values=array([ ( (x + 26624 - 1 ) / 26624 ) * 26624 for x in values ])
 print ' '.join( str(x) for x in unique( values ) )
 EOF
 ) )
+echo "nRollsList = ${nRollsList[@]}" 1>&2
+
 # command for taurus interactive
 #    echo '' > tmp.log && cat > tmp.sh <<EOF
 #    #!/bin/bash
@@ -108,6 +110,7 @@ for (( i=i0; i<imax; i=3*i/2  )); do
             # would be used! -> works bash 4.3, but not in 4.1 -.-
             # Therefore just use 'time' but with -p (posix) which has the
             # same output as bash
+            echo "$RUN $2 $nDiceRolls $4" 1>&2
             ( $RUN $2 $nDiceRolls $4 ) > tmp.log 2>&1
             cat tmp.log >> "$logFolder/$1.log"
             append $1 $(getTime tmp.log)
