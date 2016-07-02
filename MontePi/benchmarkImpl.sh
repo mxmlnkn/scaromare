@@ -3,7 +3,7 @@
 # E.g. use this in
 #   salloc -p gpu2-interactive --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --gres=gpu:1 --time=1:00:00
 # or
-#   sbatch -p gpu2 --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --gres=gpu:1 --time=01:00:00 ./benchmarkAll.sh 1
+#   sbatch -p gpu2 --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --gres=gpu:1 --time=02:00:00 ./benchmarkImpl.sh 1
 taurus=$1
 if [ -z "$taurus" ]; then
     taurus=0
@@ -18,7 +18,7 @@ if [ "$taurus" -eq 1 ]; then RUN="srun $RUN"; fi
 i0=256
 imax=2684354560000
 tmaxCpu=100 # seconds
-tmaxGpu=7
+tmaxGpu=120
 
 allDiceRolls=( )
 timesSingleCoreJava=( )
@@ -50,7 +50,7 @@ logFolder="./raw-logs/benchmarks-impl-$HOSTNAME-$(date +%Y-%m-%d_%H-%M-%S)"
 mkdir -p "$logFolder"
 resultsFile="$logFolder/results.log"
 echo "You can find the output in '$resultsFile'"
-printf "nDiceRolls  |  1 Core (java)  |  1 Core (scala)  | 1 GPU (C++)  | 1 GPU (Java)  | 1 GPU (Scala)\n" | tee $resultsFile
+printf "# nDiceRolls  |  1 Core (java)  |  1 Core (scala)  | 1 GPU (C++)  | 1 GPU (Java)  | 1 GPU (Scala)\n" | tee $resultsFile
 
 nRollsList=( $(python <<EOF
 from numpy import *
