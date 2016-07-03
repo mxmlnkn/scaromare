@@ -1,1 +1,0 @@
-../../../../singleNode/singleGpu/scala/MonteCarloPiKernel.java
