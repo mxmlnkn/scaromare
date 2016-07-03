@@ -58,7 +58,7 @@ public class MonteCarloPiKernel implements Kernel
         /* why 0x7F... instead 0xFF ??? ... I mean it is unsigned, not signed
          * ... I strongly think this algorithm was used for signed integers,
          * that's why */
-        final int randMax = 0x7FFFFFFF;
+        final int  randMax   = 0x7FFFFFFF;
         final long randMagic = 950706376;
         /* copy parameter to gpu. Without this the program takes 4.65s instead
          * of 2.25s! */

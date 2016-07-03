@@ -1,13 +1,13 @@
 # on Taurus use:
-# make SPARK_ROOT=~/spark-1.5.2-bin-hadoop2.6 SPARKCORE_JAR=~/spark-1.5.2-bin-hadoop2.6/lib/spark-assembly-1.5.2-hadoop2.6.0.jar SCALA_ROOT=$(dirname $(which scala))/../lib
+# make SPARK_ROOT=~/spark-1.5.2-bin-hadoop2.6 SPARK_JAR=~/spark-1.5.2-bin-hadoop2.6/lib/spark-assembly-1.5.2-hadoop2.6.0.jar SCALA_ROOT=$(dirname $(which scala))/../lib
 ROOTBEER_ROOT := ../../../../rootbeer1
 SPARK_ROOT    := /opt/spark-1.5.2
 SCALA_ROOT    := /usr/share/java
 SCALAC        := scalac
 JAVAC         := javac
-
-SPARKCORE_JAR = $(SPARK_ROOT)/core/target/spark-core_2.10-1.5.2.jar
-HADOOP_JAR    = $(SPARK_ROOT)/assembly/target/scala-2.10/spark-assembly-1.5.2-hadoop2.2.0.jar
+ROOTBEER_JAR   = $(ROOTBEER_ROOT)/Rootbeer.jar
+SCALA_JAR	   = $(SCALA_ROOT)/scala-library.jar
+SPARK_JAR      = $(SPARK_ROOT)/assembly/target/scala-2.10/spark-assembly-1.5.2-hadoop2.2.0.jar
 
 .phony: clean all *.jar
 
@@ -18,13 +18,15 @@ clean:
 	$(MAKE) -C gpu clean
 	rm -f *.class *.jar
 
-TestMonteCarloPi.class: TestMonteCarloPi.scala
-	$(MAKE) -C gpu MontePiGPU.jar
-	$(SCALAC) $< -classpath $(HADOOP_JAR):$(SPARKCORE_JAR):gpu/MontePiGPU.jar:. -deprecation
+MonteCarloPi.class: MonteCarloPi.java gpu/gpu.jar
+	$(MAKE) -C gpu gpu.jar
+	javac $< -classpath $(ROOTBEER_JAR):gpu/gpu.jar
 
-TestMontePi.jar: TestMonteCarloPi.class
-	jar -cvfm $@ manifest.txt *.class
+TestMonteCarloPi.class: TestMonteCarloPi.scala MonteCarloPi.class
+	$(SCALAC) $< -classpath $(ROOTBEER_JAR):$(SPARK_JAR):cpu.jar:gpu/gpu.jar:. -deprecation
 
-MontePi.jar: TestMontePi.jar
-	$(MAKE) -C gpu MontePiGPU.jar
-	zipmerge $@ $(ROOTBEER_ROOT)/Rootbeer.jar $(SCALA_ROOT)/scala-library.jar gpu/MontePiGPU.jar $<
+cpu.jar: TestMonteCarloPi.class MonteCarloPi.class
+	jar -cvfm $@ manifest.txt $^
+
+MontePi.jar: gpu/gpu.jar cpu.jar
+	zipmerge $@ $(ROOTBEER_JAR) $(SCALA_JAR) $^

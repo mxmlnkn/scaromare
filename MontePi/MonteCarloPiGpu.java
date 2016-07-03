@@ -36,19 +36,72 @@ public class MonteCarloPi
         mDevice = devices.get( miGpuDeviceToUse );
 
         t1 = System.nanoTime();
+        t1 = System.nanoTime();
         System.out.println( "MonteCarloPi constructor took " + ((t1-t0)/1e9) + " seconds" );
     }
 
-    private long calcRandomSeed( int rnKernels, int riKernel, long rSeed0, long rSeed1 )
+    /**
+     * Partitions a given interval into subintervals and returns some for
+     * riKernel. Note that MonteCarloPiKernel doesn't yet support a 64-bit
+     * random number generator, meaning 64-bit seeds are useless if not
+     * negative, because some kernels could be started with the same seeds.
+     * Of course for a pure performance benchmark it doesn't really matter,
+     * but for the error scaling it may very well matter.
+     */
+    private long calcRandomSeed
+    (
+        final int rnKernels,
+        final int riKernel ,
+        long      rSeed0   ,
+        long      rSeed1
+    )
     {
         assert( riKernel < rnKernels );
         return rSeed0 + (long)( (double)(rSeed1-rSeed0)/rnKernels * riKernel );
     }
 
+    static public void gpuDeviceInfo( int riDevice )
+    {
+        long t0, t1;
+        t0 = System.nanoTime();
+        Rootbeer rootbeerContext = new Rootbeer();
+        t1 = System.nanoTime();
+        System.out.println( "Creating Rootbeer context took " + ((t1-t0)/1e9) + " seconds" );
+
+        t0 = System.nanoTime();
+        List<GpuDevice> devices = rootbeerContext.getDevices();
+        GpuDevice device = devices.get( riDevice );
+
+        System.out.println( "\n================== Device Number " + device.getDeviceId() + " ==================" );
+        System.out.println( "| Device name              : " + device.getDeviceName() );
+        System.out.println( "| Device type              : " + device.getDeviceType() );
+        System.out.println( "| Computability            : " + device.getMajorVersion() + "." + device.getMinorVersion() );
+		System.out.println( "|------------------- Architecture -------------------" );
+        System.out.println( "| Number of SM             : " + device.getMultiProcessorCount() );
+        System.out.println( "| Max Threads per SM       : " + device.getMaxThreadsPerMultiprocessor() );
+        System.out.println( "| Max Threads per Block    : " + device.getMaxThreadsPerBlock() );
+        System.out.println( "| Warp Size                : " + device.getWarpSize() );
+        System.out.println( "| Clock Rate               : " + (device.getClockRateHz() / 1e6) + " GHz" );
+        System.out.println( "| Max Block Size           : (" + device.getMaxBlockDimX() + "," + device.getMaxBlockDimY() + "," + device.getMaxBlockDimZ() + ")" );
+        System.out.println( "| Max Grid Size            : (" + device.getMaxGridDimX() + "," + device.getMaxGridDimY() + "," + device.getMaxGridDimZ() + ")" );
+		System.out.println( "|---------------------- Memory ----------------------" );
+        System.out.println( "| Total Global Memory      : " + device.getTotalGlobalMemoryBytes() + " Bytes" );
+        System.out.println( "| Free Global Memory       : " + device.getFreeGlobalMemoryBytes() + " Bytes" );
+        System.out.println( "| Total Constant Memory    : " + device.getTotalConstantMemoryBytes() + " Bytes" );
+        System.out.println( "| Shared Memory per Block  : " + device.getMaxSharedMemoryPerBlock() + " Bytes" );
+        System.out.println( "| Registers per Block      : " + device.getMaxRegistersPerBlock() );
+        System.out.println( "| Memory Clock Rate        : " + (device.getMemoryClockRateHz() / 1e9 ) + " GHz" );
+        System.out.println( "| Memory Pitch             : " + device.getMaxPitch() );
+        System.out.println( "| Device is Integrated     : " + device.getIntegrated() );
+        System.out.println( "=====================================================" );
+        t1 = System.nanoTime();
+        System.out.println( "Getting GPU devince information took " + ((t1-t0)/1e9) + " seconds" );
+    }
+
     static public void runOnDevice
     (
-        Rootbeer rRootbeerContext,
-        int riDevice,
+        Rootbeer     rRootbeerContext,
+        final int    riDevice        ,
         List<Kernel> work
     )
     {
@@ -100,7 +153,13 @@ public class MonteCarloPi
      * ranges for different processes this function can be used in a thread-
      * safe manner
      **/
-    public double calc( long nDiceRolls, int nKernels, long rSeed0, long rSeed1 )
+    public double calc
+    (
+        final long nDiceRolls,
+        int        nKernels  ,
+        final long rSeed0    ,
+        final long rSeed1
+    )
     {
         if ( nKernels <= 0 )
         {
@@ -119,25 +178,25 @@ public class MonteCarloPi
         int  nRollsRemainder  = (int)( nDiceRolls % (long) nKernels );
         /* The first nRollsRemainder threads will work on 1 roll more. The
          * rest of the threads will roll the dice nRollsPerThreads */
-        long[] nHits = new long[nKernels];
-        long[] nIterations = new long[nKernels];
+        long[] nHits      = new long[nKernels];
+        long[] nRollsDone = new long[nKernels]; /* for debugging */
 
         /* List of kernels / threads we want to run in this Level */
         List<Kernel> tasks = new ArrayList<Kernel>();
         for (int i = 0; i < nRollsRemainder; ++i )
         {
             nHits[i] = 0;
-            nIterations[i] = 0;
+            nRollsDone[i] = 0;
             final long seed = calcRandomSeed( nKernels, i, rSeed0, rSeed1 );
-            tasks.add( new MonteCarloPiKernel( nHits, nIterations, i, seed, nRollsPerThreads+1 ) );
+            tasks.add( new MonteCarloPiKernel( nHits, nRollsDone, i, seed, nRollsPerThreads+1 ) );
             //System.out.println( "Kernel " + i + " has seed: " + seed );
         }
         for (int i = nRollsRemainder; i < nKernels; ++i )
         {
             nHits[i] = 0;
-            nIterations[i] = 0;
+            nRollsDone[i] = 0;
             final long seed = calcRandomSeed( nKernels, i, rSeed0, rSeed1 );
-            tasks.add( new MonteCarloPiKernel( nHits, nIterations, i, seed, nRollsPerThreads ) );
+            tasks.add( new MonteCarloPiKernel( nHits, nRollsDone, i, seed, nRollsPerThreads ) );
             //System.out.println( "Kernel " + i + " has seed: " + seed );
         }
 
@@ -152,18 +211,17 @@ public class MonteCarloPi
         t1 = System.nanoTime();
         System.out.println( "runOnDevice took " + ((t1-t0)/1e9) + " seconds" );
 
+        long nDiceRollsDone = 0;
+        for ( int i = 0; i < nKernels; ++i )
+            nDiceRollsDone += nRollsDone[i];
+        assert( nDiceRollsDone == nDiceRolls );
+
         /* Cumulate all the hits from the kernels. Divide each hit count by
          * number of rolls first and work with double then. This evades
          * integer overflows by maybe being less exact */
-        double quarterPi = 0;
+        double quarterPi = 0.;
         for ( int i = 0; i < nKernels; ++i )
             quarterPi += (double) nHits[i] / (double) nDiceRolls;
-
-        long N = 0;
-        for ( int i = 0; i < nKernels; ++i )
-            N += nIterations[i];
-        System.out.println( "Total iterations done by all kernels: " + N );
-        assert( N == nDiceRolls );
 
         return 4.0*quarterPi;
     }

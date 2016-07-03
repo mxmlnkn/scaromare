@@ -18,7 +18,7 @@ TestMonteCarloPi.class: TestMonteCarloPi.java MonteCarloPi.class
 # Splitting compilation in these units makes it faster, because Rootbeer is very slow!
 gpu.jar: MonteCarloPiKernel.class
 	# Note that .tmp is not possible, because Soot won't analyze files not ending with .jar!
-	jar -cvf $@.tmp.jar manifest.txt $^
+	jar -cvf $@.tmp.jar $^
 	java -jar $(ROOTBEER_ROOT)/Rootbeer.jar $@.tmp.jar $@ -64bit -computecapability=sm_30
 cpu.jar: TestMonteCarloPi.class MonteCarloPi.java
 	jar -cvfm $@ manifest.txt $^

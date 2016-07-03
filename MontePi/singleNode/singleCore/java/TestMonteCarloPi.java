@@ -15,7 +15,7 @@ public class TestMonteCarloPi
 
         /* execute and time pi calculation */
         long t0 = System.nanoTime();
-        double pi = piCalculator.calc( nDiceRolls );
+        double pi = piCalculator.calc( nDiceRolls, 17138123l );
         long t1 = System.nanoTime();
         double duration = (double) (t1-t0) / 1e9;
 

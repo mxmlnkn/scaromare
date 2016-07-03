@@ -1,22 +1,16 @@
-JAVA_FILES    := $(wildcard *.java)
-CLASS_FILES   := $(JAVA_FILES:.java=.class)
 ROOTBEER_ROOT := ../../../../../rootbeer1
+ROOTBEER_JAR   = $(ROOTBEER_ROOT)/Rootbeer.jar
 
-.phony: clean all MontePiGPU.jar $(CLASS_FILES)
+.phony: clean all
 
-all: $(CLASS_FILES) MontePiGPU.jar
+all: gpu.jar
 
 clean:
 	rm -f *.class *.jar
 
-MonteCarloPi.class: MonteCarloPi.java
-	javac $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:.
 MonteCarloPiKernel.class: MonteCarloPiKernel.java
-	javac $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:.
-DummyEntry.class: DummyEntry.java
-	javac $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:.
+	javac $< -classpath $(ROOTBEER_JAR):.
 
-MontePiGPU.jar: $(CLASS_FILES)
-	jar -cvfm MontePiGPUtmp.jar manifest.txt *.class
-	java -jar $(ROOTBEER_ROOT)/Rootbeer.jar MontePiGPUtmp.jar MontePiGPU.jar -64bit -computecapability=sm_30
-
+gpu.jar: MonteCarloPiKernel.class
+	jar -cvf $@.tmp.jar $^
+	java -jar $(ROOTBEER_JAR) $@.tmp.jar $@ -64bit -computecapability=sm_30

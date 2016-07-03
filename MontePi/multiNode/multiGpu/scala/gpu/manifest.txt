@@ -1,2 +1,0 @@
-Main-Class: DummyEntry
-Class-Path: .
