@@ -33,7 +33,11 @@ while [ ! -z "$1" ]; do
     esac
     shift
 done
-jarFile=$(pwd)/multiNode/multiGpu/MontePi.jar
+jarFile=$(pwd)/multiNode/multiGpu/scala/MontePi.jar
+if [ ! -f "$jarFile" ]; then
+    echo "Couldn't find '$jarFile', please check path!"
+    exit 1
+fi
 echo "Run with following node configurations : ${nodeCounts[@]}"
 echo "Cores per node                         : $coresPerNode"
 echo "GPUs  per node                         : $gpusPerNode"

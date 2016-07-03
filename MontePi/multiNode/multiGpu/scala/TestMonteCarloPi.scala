@@ -7,7 +7,7 @@ import org.apache.spark.SparkContext._
 import scala.collection.mutable.ArrayBuffer
 import java.net.InetAddress
 import org.trifort.rootbeer.runtime.Rootbeer
-
+import scala.collection.JavaConversions._   // toList
 
 object TestMonteCarloPi
 {
@@ -21,16 +21,22 @@ object TestMonteCarloPi
         var sc = new SparkContext( sparkConf )
 
         /**** Eval Command Line Arguments ****/
-        val nRolls  = if ( args.length > 0 ) args(0).toLong else 100000l
-        val nSlices = if ( args.length > 1 ) args(1).toInt  else 1
-        val nRollsPerSlice = nRolls / nSlices;
+        val nRolls     = if ( args.length > 0 ) args(0).toLong else 100000l
+        val nGpusToUse = if ( args.length > 1 ) args(1).toInt  else 1
 
-        /* This partitioner is for some reason more exact than the standard RangePartitioner -.- */
+        /* This partitioner is for some reason more exact than the standard
+         * RangePartitioner -.-.
+         * Actually not really necessary anymore in this version, because each
+         * partition spawns multiple GPUs. Normally there should be one
+         * partition per Host i.e. one executor per Host.
+         * It is needed for the first step or else the spawned partitions may
+         * not end up using alle the nodes */
         class ExactPartitioner[V]( partitions: Int, elements: Int) extends Partitioner {
             def numPartitions() : Int = partitions
             def getPartition(key: Any): Int = key.asInstanceOf[Int] % partitions
         }
 
+        /**** Find out the number of executors ****/
         /**
          * Find out the number of executors by doubling up the number as
          * long as the resulting unique hostnames changes.
@@ -53,7 +59,7 @@ object TestMonteCarloPi
 
         /**
          * First start as many partitions as possible and count number of GPUs
-         * per host.
+         * per host: slices -> ( hostname, nGPUs, peak flops )
          * In the worst case this means every node may only have one GPU.
          */
         val dataSet = sc.
@@ -61,31 +67,49 @@ object TestMonteCarloPi
             partitionBy( new ExactPartitioner( nExecutors, nExecutors ) )
         val hostGpus = dataSet.
             map( x => {
-                ( InetAddress.getLocalHost.getHostName,
-                  (new Rootbeer()).getDevices.size    )
+                val devices = (new Rootbeer()).getDevices
+                val totalPeakFlops = devices.toList.map( x => {
+                    x.getMultiProcessorCount.toDouble *
+                    x.getMaxThreadsPerMultiprocessor.toDouble *
+                    x.getClockRateHz.toDouble
+                } ).sum
+                /* return */
+                ( ( InetAddress.getLocalHost.getHostName,
+                      totalPeakFlops ),
+                  devices.size
+                )
             } ).
             reduceByKey( (x,y) => { assert( x == y ); x } ).
             collect
+
         println( "Found these hosts with each these number of GPUs : " )
-        hostGpus.foreach( x => println( "    "+x._1+" : "+x._2 ) )
+        hostGpus.foreach( x => println( "    " + x._1._1 + " : " + x._2 +
+                          " (" + x._1._2/1e9 + "GFlops)" ) )
+
         if ( hostGpus.size != nExecutors )
         {
             throw new RuntimeException( "Anticipated mapping seems to be wrong. Some partitions didn't map to different hosts! This could, but also shouldn't happen if the Spark cluster has some workers with multiple cores." )
         }
+
         val totalGpusAvailable = hostGpus.map( x => x._2 ).sum
         println( "Found "+totalGpusAvailable+" GPUs in total." )
-        if ( totalGpusAvailable < nSlices )
+        if ( totalGpusAvailable < nGpusToUse )
         {
             throw new RuntimeException( "More parallelism specified in command line argument than GPUs found!" );
         }
 
         val distributor = new Distribute
-        val hostGpusToUse = distributor.distributeRessources( nSlices, hostGpus )
+        /* E.g. dist( 10,{4,4,4} ) -> { 4,3,3 } */
+        val hostGpusToUse = distributor.distributeRessources( nGpusToUse, hostGpus )
         println( "GPUs per host actually to be used : " )
         hostGpusToUse.foreach( x => println( "    "+x._1+" : "+x._2 ) )
-        val hostWork = distributor.distributeWeighted( nRolls, hostGpusToUse.map( _._2.toDouble ) )
+        val hostWork = distributor.distributeWeighted(
+                           nRolls,
+                           hostGpusToUse.map( _._1._2.toDouble /* peak flops */ )
+                       )
 
         /*** generate random seeds ***/
+        val nSlices = nExecutors
         val seeds = dataSet.map( x => {
             val iRank  = x._1
             /* Assuming nSlices ~< Long.MaxValue / 100 or else the div
@@ -97,13 +121,14 @@ object TestMonteCarloPi
             ( seed0, seed1 )
         } )
         println( "These are the seed ranges for each partition of MonteCarloPi:" )
-        seeds.collect.foreach( x => println( "    "+x._1+" -> "+x._2) )
+        seeds.collect.foreach( x => println( "    " + x._1 + " -> " + x._2 ) )
 
-        /*** Finally launch Spark ***/
+        /**** Finally launch Spark i.e. one worker per node who sends work ****
+         **** to all available GPUs                                        ****/
         val t0 = System.nanoTime()
         val pis = seeds.map( x => {
             val hostname = InetAddress.getLocalHost.getHostName
-            val rank = hostGpusToUse.map( _._1 ).indexWhere( _ == hostname )
+            val rank = hostGpusToUse.map( _._1._1 ).indexWhere( _ == hostname )
             var piCalculator = new MonteCarloPi( (0 until hostGpusToUse(rank)._2).toArray /* list of GPUs to use */ )
             piCalculator.calc( hostWork( rank ),
                                x._1, /* seed range start */
@@ -113,12 +138,13 @@ object TestMonteCarloPi
         print( "Individual PIs are : " )
         pis.foreach( x => print( x+" " ) )
 
-        val pi = pis.sum / nSlices
+        val pi = pis.sum / pis.size
         val t1 = System.nanoTime()
         val duration = (t1-t0).toDouble / 1e9
 
-        println( "\nUsing "+nSlices+" slice / GPUs. Rolling the dice " + nRolls + " times " +
-            "resulted in pi ~ " + pi + " and took " + duration + " seconds\n" )
+        println( "\nUsing " + nSlices + " slices and " + nGpusToUse +
+                 " GPUs. Rolling the dice " + nRolls + " times resulted " +
+                 "in pi ~ " + pi + " and took " + duration + " seconds\n" )
 
         sc.stop();
     }

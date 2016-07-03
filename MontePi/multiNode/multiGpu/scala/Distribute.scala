@@ -2,12 +2,15 @@
 class Distribute {
 
     /* distributes e.g. 10 on n=3 to (4,3,3) */
-    def distribute( x : Long, n : Int ) = {
-        val res = List.range(0,n).map( i => {
-            if ( i < x % n ) x/n + 1 else x/n
+    def distribute( x : Long, n : Long ) : List[Long] = {
+        val res = List.range( 0l, n ).map( i => {
+            if ( i < x % n )
+                x/n + 1l
+            else
+                x/n
         } )
         assert( res.sum == x )
-        res
+        /* return */ res
     }
 
     /* distributes e.g. 10 on n=3 if weighted as 1,2,2 to: 2,4,4 */
@@ -44,7 +47,7 @@ class Distribute {
             assert( res.sum == x )
         }
         res.foreach( x => assert( x >= 0 ) )
-        res
+        /* return */ res
     }
 
     /**

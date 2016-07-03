@@ -62,7 +62,7 @@ public class MonteCarloPiKernel implements Kernel
         final long randMagic = 950706376;
         /* copy parameter to gpu. Without this the program takes 4.65s instead
          * of 2.25s! */
-        int dRandomSeed = (int) mRandomSeed;
+        int dRandomSeed = Math.abs( (int) mRandomSeed );
         assert( mnDiceRolls <= Integer.MAX_VALUE );
         final int dnDiceRolls = (int) mnDiceRolls;
         /* using nHits += 1 instead of mnHits[ miLinearThreadId ] += 1

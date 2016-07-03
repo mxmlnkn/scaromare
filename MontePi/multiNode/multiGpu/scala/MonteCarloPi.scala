@@ -7,35 +7,52 @@ import java.net.InetAddress
  * This class starts the actual CUDA-Kernels and also calculates random seeds
  * for those kernels
  **/
-class MonteCarloPi( gpusToUse : Array[Int] = null )
+class MonteCarloPi( iGpusToUse : Array[Int] = null )
 {
     private val t0 = System.nanoTime
 
-    private var mRootbeerContext = new Rootbeer()
-    private val mDevices         = mRootbeerContext.getDevices()
-    private var mGpusToUse       = gpusToUse
-    if ( gpusToUse == null || gpusToUse.size == 0 )
+    private var mRootbeerContext  = new Rootbeer()
+    private val mAvailableDevices = mRootbeerContext.getDevices()
+    private var miGpusToUse       = iGpusToUse
+    if ( iGpusToUse == null || iGpusToUse.size == 0 )
     {
-        mGpusToUse = List.range( 0, mDevices.size ).toArray
+        miGpusToUse = List.range( 0, mAvailableDevices.size ).toArray
     }
     else
     {
-        assert( mGpusToUse.size <= mDevices.size )
-        for ( iGpu <- mGpusToUse )
-            assert( iGpu < mDevices.size )
+        assert( miGpusToUse.size <= mAvailableDevices.size )
+        for ( iGpu <- miGpusToUse )
+            assert( iGpu < mAvailableDevices.size )
     }
     print( "[MonteCarloPi.scala:<constructor>] Using the following GPUs : " )
-        mGpusToUse.foreach( x => print( x+", " ) )
+        miGpusToUse.foreach( x => print( x+", " ) )
         println
     private val t1 = System.nanoTime
     println( "[MonteCarloPi.scala:<constructor>] MonteCarloPi constructor took " + ((t1-t0)/1e9) + " seconds" )
 
     /******* End of Constructor *******/
 
-    def calcRandomSeed( rnKernels : Integer, riKernel : Integer ) : Long =
+    /**
+     * Partitions a given interval into subintervals and returns some for
+     * riKernel.
+     * Note that MonteCarloPiKernel doesn't yet support a 64-bit
+     * random number generator, meaning 64-bit seeds are useless if not
+     * negative, because some kernels could be started with the same seeds.
+     * Of course for a pure performance benchmark it doesn't really matter,
+     * but for the error scaling it may very well matter.
+     */
+    def calcRandomSeed(
+        rnKernels : Long,
+        riKernel  : Long,
+        rSeed0    : Long,
+        rSeed1    : Long
+    ) : Long =
     {
         assert( riKernel < rnKernels )
-        var x = 17138123l + ( Long.MaxValue.toDouble / rnKernels * riKernel ).toLong
+        var dSeed = rSeed1 - rSeed0
+        if ( dSeed < 0 )
+            dSeed += Long.MaxValue
+        var x = rSeed0 + ( dSeed.toDouble / rnKernels * riKernel ).toLong
         if (x < 0)
             x += Long.MaxValue
         return x
@@ -52,11 +69,11 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
     {
         val t00 = System.nanoTime
 
-        assert( riDevice < mDevices.size() )
-        val context = mDevices.get( riDevice ).createContext(
+        assert( riDevice < mAvailableDevices.size() )
+        val context = mAvailableDevices.get( riDevice ).createContext(
             ( work.size * 2 /* nIteration and nHits List */ * 8 /* sizeof(Long) */ +
               work.size * 4 /* sizeof(exception) ??? */ ) * 4 /* empirical factor */ +
-              2*1024*1024 /* safety padding */
+              64*1024*1024 /* safety padding */
         )
         context.useCheckedMemory
         /* After some bisection on a node with two K80 GPUs (26624 max. threads)
@@ -127,73 +144,115 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
 
         val t00 = System.nanoTime
 
-        if ( mDevices.size <= 0 ) {
-            throw new RuntimeException( "No GPU devices found!" )
+        if ( mAvailableDevices.size <= iGpusToUse.size ) {
+            throw new RuntimeException( "Not enough GPU devices found!" )
         }
 
         /* start as many threads as possible. (More are possible, but
          * they wouldn't be hardware multithreaded anymore, but
          * they would be executed in serial after the first maxThreads
          * batch finished */
-        val nKernelsPerGpu = mGpusToUse.map( x => 5*1024 /* mDevices.get(_) ).
-            map( x => x.getMultiProcessorCount * x.getMaxThreadsPerMultiprocessor */ )
+        /* { 0, ..., nGpusToUse-1 } -> ( GpuDevice, GpuDevice, ... }
+         * prefix l stands for list */
+        val lGpuDevices = miGpusToUse.map( mAvailableDevices.get(_) )
+        val lnKernelsPerGpu = lGpuDevices.map( device =>
+                                 device.getMultiProcessorCount *
+                                 device.getMaxThreadsPerMultiprocessor
+                             )
+        val nKernelsTotal = lnKernelsPerGpu.sum
 
-        var nHits       = nKernelsPerGpu.map( List.fill[Long](_)(0).toArray )
-        var nIterations = nKernelsPerGpu.map( List.fill[Long](_)(0).toArray )
+        var lnHits       = lnKernelsPerGpu.map( List.fill[Long](_)(0).toArray )
+        var lnIterations = lnKernelsPerGpu.map( List.fill[Long](_)(0).toArray )
 
         /* first distribute work to each GPU accordingly. Then distribute
          * on each GPU the work to the Kernel configuration and calculate
          * corresponding seeds for each kernel */
-        val nWorkPerGpu = distributor.distributeWeighted( nDiceRolls, nKernelsPerGpu.map( _.toDouble ) )
+        val lnWorkPerGpu = distributor.distributeWeighted( nDiceRolls,
+                                            lnKernelsPerGpu.map( _.toDouble ) )
 
-        println( "[MonteCarloPi.scala:calc] Running MonteCarlo on " + mGpusToUse.size +
-                 " GPUs with these maximum kernel configurations : " )
+        /**************************** Debug Output ****************************/
+        println( "[MonteCarloPi.scala:calc] Running MonteCarlo on " +
+                 miGpusToUse.size + " GPUs with these maximum kernel " +
+                 "configurations : " )
         print( "[MonteCarloPi.scala:calc]     " )
-        nKernelsPerGpu.foreach( x => print( x+" " ) )
+        lnKernelsPerGpu.foreach( x => print( x.toString + " " ) )
         println
 
         println( "[MonteCarloPi.scala:calc] with each these workloads / number of iterations :" )
-        print( "[MonteCarloPi.scala:calc] " )
-        nWorkPerGpu.foreach( x => print( x+" " ) )
+        print( "[MonteCarloPi.scala:calc]     " )
+        lnWorkPerGpu.foreach( x => print( x.toString + " " ) )
         println
+        /**********************************************************************/
 
-        println( "[MonteCarloPi.scala:calc] These are the seed ranges for each partition of MonteCarloPi:" )
-        List.range( 0, mDevices.size ).map( iGpu => {
-            distributor.distribute( nWorkPerGpu(iGpu), nKernelsPerGpu(iGpu) ).
-            zipWithIndex.map( z => { calcRandomSeed( nKernelsPerGpu.sum,
-                                nKernelsPerGpu.slice(0,iGpu).sum + z._2 ) } )
-        } ).foreach( x => { x.slice(0,4).foreach(
-            x => print( "    "+x+" " ) )
-            println
-        } )
+        /* debug output the first 4 kernel constructor calls */
+        val nKernelsToShow = 4
+        println( "[MonteCarloPi.scala:calc] These are the seeds for the first " +
+                 nKernelsToShow + " kernels:" )
 
+        /* for each device create Rootbeer-Kernels */
         var runStates = List[ Tuple2[ Context, GpuFuture ] ]()
-        for ( iGpu <- 0 until mDevices.size  )
+        /*   iGpu              nRollsPerKernel
+         * {  0, 1, 2,... } -> { {4,3,3},      {4,3,3}, ... } */
+        for ( iGpu <- 0 until lGpuDevices.size )
         {
-            val tasks =
-                distributor.distribute( nWorkPerGpu(iGpu), nKernelsPerGpu(iGpu) ).
-                zipWithIndex.map( z => {
-                    new MonteCarloPiKernel(
-                            nHits(iGpu),
-                            nIterations(iGpu),
-                            z._2,   /* rank on GPU */
-                            calcRandomSeed( nKernelsPerGpu.sum,
-                                nKernelsPerGpu.slice(0,iGpu).sum + z._2 ),
-                            z._1    /* iterations to do */
+            println( "[MonteCarloPi.scala:calc]   GPU " + iGpu + " which runs " +
+                     lnKernelsPerGpu(iGpu) + " kernels and a total of " +
+                     lnWorkPerGpu(iGpu) + " iterations: " )
+            /* for each GPU distributed work to each kernel */
+            /* distributes e.g. 10 on n=3 to (4,3,3) */
+            val lnWorkPerKernel = distributor.distribute(
+                                      lnWorkPerGpu(iGpu),
+                                      lnKernelsPerGpu(iGpu)
+                                  )
+            /* map each kernel to a seed (use zipWithIndex only to be almost
+             * exact like the non-debug loop following which needs the index
+             * i.e. the kernel rank to call MonteCarloPiKernel */
+            val tasks = lnWorkPerKernel.zipWithIndex.map( x => {
+                val nWorkPerKernel = x._1
+                val iKernel        = x._2
+                val nPreviousKernels = lnKernelsPerGpu.slice(0,iGpu).sum
+                val kernelSeed = calcRandomSeed(
+                                     lnKernelsPerGpu.sum,
+                                     nPreviousKernels + iKernel,
+                                     rSeed0, rSeed1
+                                 )
+                /* Debug output */
+                if ( iKernel < (nKernelsToShow+1)/2 ||
+                     ( lnKernelsPerGpu(iGpu)-1 - iKernel ) < nKernelsToShow/2 )
+                {
+                    /* show toInt seed, because the seed will be cast to int
+                     * in MonteCarloPiKernel */
+                    val seed = Math.abs( kernelSeed.toInt )
+                    println( "[MonteCarloPi.scala:calc] " +
+                        "    MonteCarloPiKernel( " +
+                        //lnHits(iGpu)       + ", "
+                        //lnIterations(iGpu) + ", "
+                        "iKernel:"     + iKernel        + ", " +
+                        "seed:"        + seed           + ", " +
+                        "nIterations:" + nWorkPerKernel + " )"
                     )
-                } )
+                }
+                /* return */
+                new MonteCarloPiKernel(
+                    lnHits(iGpu)      ,
+                    lnIterations(iGpu),
+                    iKernel           , /* rank on GPU */
+                    kernelSeed        ,
+                    nWorkPerKernel      /* iterations to do */
+                )
+            } )
             runStates +:= runOnDevice( iGpu, tasks )
         }
         val t01 = System.nanoTime
         println( "[MonteCarloPi.scala:calc] Ran Kernels asynchronously on all GPUs. Took " + ((t01-t00)/1e9) + " seconds" )
 
-        /* Test if random see global iRank is unique:
+        /* Test if random seed and global iRank is unique:
          *   iGpu -> kernels -> kernel+GPU rank
          * rank = sum of kernels on lower GPUs + kernel rank on this GPU */
-        val testKernelHostRanks = List.range( 0, mDevices.size ).map( iGpu => {
-            distributor.distribute( nWorkPerGpu(iGpu), nKernelsPerGpu(iGpu) ).
+        val testKernelHostRanks = List.range( 0, lGpuDevices.size ).map( iGpu => {
+            distributor.distribute( lnWorkPerGpu(iGpu), lnKernelsPerGpu(iGpu) ).
             zipWithIndex.map( z => {
-                nKernelsPerGpu.slice(0,iGpu).sum + z._2
+                lnKernelsPerGpu.slice(0,iGpu).sum + z._2
             } )
         } )
         println( "[MonteCarloPi.scala:calc] This is the list of kernel ranks for this host (one line per GPU) : " )
@@ -202,9 +261,7 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
             gpu.slice(0,10).foreach( rank => print( rank+" " ) )
             println( "..." )
         } )
-        assert( testKernelHostRanks.distinct.size == mDevices.size )
-
-        //java.lang.Thread.sleep( 3000 ) // Does not solve java.lang.ClassCastException: MonteCarloPiKernel cannot be cast to [J
+        assert( testKernelHostRanks.distinct.size == lGpuDevices.size )
 
         val t10 = System.nanoTime
         println( "[MonteCarloPi.scala:calc] Taking from GpuFuture now (Wait for asynchronous tasks)." )
@@ -213,16 +270,14 @@ class MonteCarloPi( gpusToUse : Array[Int] = null )
         val t11 = System.nanoTime
         println( "[MonteCarloPi.scala:calc] synchronize (take) i.e. kernels took " + ((t11-t10)/1e9) + " seconds" )
 
-        //java.lang.Thread.sleep( 3000 ) // Does not solve java.lang.ClassCastException: MonteCarloPiKernel cannot be cast to [J
-
         /* Cumulate all the hits from the kernels. Divide each hit count by
          * number of rolls first and work with double then. This evades
          * integer overflows by maybe being less exact */
-        val quarterPi = nHits.flatten.map( _.toDouble / nDiceRolls ).sum
+        val quarterPi = lnHits.flatten.map( _.toDouble / nDiceRolls ).sum
 
         /* Count and check iterations done in total by kernels */
-        println( "[MonteCarloPi.scala:calc] iterations actually done : " + nIterations.flatten.sum )
-        assert( nIterations.flatten.sum == nDiceRolls )
+        println( "[MonteCarloPi.scala:calc] iterations actually done : " + lnIterations.flatten.sum )
+        assert( lnIterations.flatten.sum == nDiceRolls )
 
         println( "[MonteCarloPi.scala:calc] Closing contexts now." )
         for ( x <- runStates )
