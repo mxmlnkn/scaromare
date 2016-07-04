@@ -82,7 +82,7 @@ public class MonteCarloPiKernel implements Kernel
          * on GPU could be reduced by increasing loop unrolling.
          * Also if really more dice rolls are needed, just start additional
          * kernels */
-        for ( int i = 0; i < dnDiceRolls; ++i )
+        for ( long i = 0; i < dnDiceRolls; ++i )
         {
             /* create random 2D vector with coordinates ranging from 0 to 1,  *
              * meaning the length ranges from 0 to sqrt(2)                    */
