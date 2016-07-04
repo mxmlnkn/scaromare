@@ -67,15 +67,16 @@ object TestMonteCarloPi
             partitionBy( new ExactPartitioner( nExecutors, nExecutors ) )
         val hostGpus = dataSet.
             map( x => {
-                val devices = (new Rootbeer()).getDevices
-                val totalPeakFlops = devices.toList.map( x => {
+                // force only 1 GPU to use
+                val devices = (new Rootbeer()).getDevices.slice(0,1)
+                val totalPeakFlopsPerHost = devices.toList.map( x => {
                     x.getMultiProcessorCount.toDouble *
                     x.getMaxThreadsPerMultiprocessor.toDouble *
                     x.getClockRateHz.toDouble
                 } ).sum
                 /* return */
                 ( ( InetAddress.getLocalHost.getHostName,
-                      totalPeakFlops ),
+                      totalPeakFlopsPerHost ),
                   devices.size
                 )
             } ).
@@ -105,7 +106,7 @@ object TestMonteCarloPi
         hostGpusToUse.foreach( x => println( "    "+x._1+" : "+x._2 ) )
         val hostWork = distributor.distributeWeighted(
                            nRolls,
-                           hostGpusToUse.map( _._1._2.toDouble /* peak flops */ )
+                           hostGpusToUse.map( _._1._2 /* peak flops */ )
                        )
 
         /*** generate random seeds ***/
