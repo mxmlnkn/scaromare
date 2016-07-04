@@ -277,7 +277,21 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
 
         /* Count and check iterations done in total by kernels */
         println( "[MonteCarloPi.scala:calc] iterations actually done : " + lnIterations.flatten.sum )
-        assert( lnIterations.flatten.sum == nDiceRolls )
+        if ( ! ( lnIterations.flatten.sum == nDiceRolls ) )
+        {
+            val lnWorkPerKernel = distributor.distribute(
+                                      lnWorkPerGpu(0),
+                                      lnKernelsPerGpu(0)
+                                  )
+            throw new RuntimeException(
+                "[MonteCarloPi] This thread working on GPUs " +
+                miGpusToUse.mkString(" ") +
+                " should do " + nDiceRolls + "(nWorkPerKernel(iGpu=0).sum = " +
+                lnWorkPerKernel.sum + ")" +
+                " iterations, but actually did " + lnIterations.flatten.sum +
+                " (seed range " + rSeed0 + " -> " + rSeed1 + ")"
+            )
+        }
 
         println( "[MonteCarloPi.scala:calc] Closing contexts now." )
         for ( x <- runStates )
