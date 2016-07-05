@@ -5,6 +5,7 @@ make -B SPARK_ROOT=~/spark-1.5.2-bin-hadoop2.6 SPARKCORE_JAR=~/spark-1.5.2-bin-h
 import org.apache.spark._
 import org.apache.spark.SparkContext._
 import scala.collection.mutable.ArrayBuffer
+import java.net.InetAddress
 
 
 object TestMonteCarloPi
@@ -18,9 +19,9 @@ object TestMonteCarloPi
         val sparkConf = new SparkConf().setAppName("MontePi")
         var sc = new SparkContext( sparkConf )
 
-        val nRolls  = if ( args.length > 0 ) args(0).toLong else 100000l
-        val nSlices = if ( args.length > 1 ) args(1).toInt  else 1
-        val nGpusPerNode = if ( args.length > 2 ) args(2).toInt  else 2
+        val nRolls       = if ( args.length > 0 ) args(0).toLong else 100000l
+        val nSlices      = if ( args.length > 1 ) args(1).toInt  else 1
+        val nGpusPerNode = if ( args.length > 2 ) args(2).toInt  else 1
         val nRollsPerSlice = nRolls / nSlices;
 
         var sliceParams = new ArrayBuffer[ Array[Long] ]()
@@ -46,12 +47,20 @@ object TestMonteCarloPi
                 val seed0 = 71210l + Long.MaxValue / nRanks *  iRank
                 val seed1 = 71210l + Long.MaxValue / nRanks * (iRank+1)
 
+                val host = InetAddress.getLocalHost().getHostName()
+
                 var piCalculator = new MonteCarloPi( iRank.toInt % nGpusPerNode )
                 /* Max Threads per Device which can run: 12288 on GTX 760.
                  * Because of oversubscription even though we have no
                  * memory latency only 12288 / 32 (warp size) = 384 are
                  * actually running */
-                piCalculator.calc( nRolls, 384 /* threads per device */, seed0, seed1 )
+                val pi = piCalculator.calc( nRolls, -1 /* threads per device */, seed0, seed1 )
+
+                println( "[" + host + ", seeds " + seed0 + "->" + seed1 +
+                         ", rank " + iRank + "] " + nRolls + " iterations -> " +
+                         "pi=" + pi )
+
+                /* return */ pi
             } ).reduce( _+_ );
         val pi = piSum / nSlices
         val t1 = System.nanoTime()

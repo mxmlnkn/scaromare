@@ -55,7 +55,7 @@ public class MonteCarloPi
         List<GpuDevice> devices = rRootbeerContext.getDevices();
         assert( riDevice < devices.size() );
         GpuDevice device = devices.get( riDevice );
-        Context context = device.createContext( -1 /* auto choose memory size. Not sure what this is about or what units -.- */ );
+        Context context = device.createContext( 128*1024*1024 /* auto choose memory size. Not sure what this is about or what units -.- */ );
         /* this is more or less copy-past from Rootbeer.run because an easy
          * API for multi-GPU seems to be missing */
         //Context context = createDefaultContext();
