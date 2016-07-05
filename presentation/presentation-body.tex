@@ -1,8 +1,9 @@
-\title{Computational Science and Engineering:\\Parallele Lastbalancierung mit Octrees}
+\title{Belegarbeit Computational Science and Engineering:\\
+       Verteilte GPGPU-Berechnungen mit Spark }
 \author {
 	Maximilian Knespel
 	\newline	\newline
-	Betreuer: \and Nico Hoffmann
+	Betreuer: \and Dipl.-Inf. Nico Hoffmann
 }
 \date{}
 %\date{7. Juli 2016}
@@ -58,7 +59,7 @@ Vorteile gegenüber von Hadoop MapReduce:
   + Im Gegensatz zu zu Hadoop MapReduce auch lokales Dateisystem nutzbar (Hadoop erzwingt HDFS)
 \end{frame}
 
-
+%%%%NH: Nimm gleich das Monte Carlo Pi Beispiel statt wordcount
 \begin{frame}
     Ermittlung der häufigsten Wörter in einem Text:
 
@@ -86,6 +87,14 @@ Vorteile gegenüber von Hadoop MapReduce:
     %  (das,38866)
 \end{frame}
 
+\begin{frame}
+    \frametitle{Spark Monte-Carlo Pi-Berechnung}
+    \begin{lstlisting}{language=shell}
+        $SPARK_ROOT/bin/spark-shell --master local[*]
+    \end{lstlisting}
+\end{frame}
+
+%%%%NH: Bin mir nicht sicher, ob die Folie zu Graysort wirklich relevant ist, da du in deinem Framework ja das Sortieren nicht untersuchst/optimierst. (Insb. ist es für GPU computing eher ungeeignet, da du viele Host-GPU transfers hast => shuffle intensiv)
 \begin{frame}
 GraySort Gewinner 5.11.2014: Apache Spark von Reynold Xin (Databricks Inc.)
   % https://databricks.com/blog/2014/10/10/spark-petabyte-sort.html
@@ -121,7 +130,6 @@ GraySort Gewinner 5.11.2014: Apache Spark von Reynold Xin (Databricks Inc.)
 % Was ist Spark, warum will ich es nehmen
 % Wie funktioniert Spark ( RDD, Reduce, Slurm )
 % Ein Beispiel mit Spark ( Monte Carlo und/oder word count -> chat log :) )
-
 
 % \begin{frame}
 % \begin{lstlisting}[language=bash]
@@ -160,6 +168,7 @@ GraySort Gewinner 5.11.2014: Apache Spark von Reynold Xin (Databricks Inc.)
 %
 % \end{frame}
 
+%%%%NH: Was willst du mit dem folgenden sagen? Wie Spark auf einer GPU Partition gestartet wird? Lieber später diskutieren ...
 startSpark --time=04:00:00 --nodes=$((nodes+1)) --partition=gpu2 --gres=gpu:$gpusPerNode --cpus-per-task=$coresPerNode
 sparkSubmit ~/scaromare/MontePi/singleNode/singleGpu/multiGpuTestSpark/MontePi.jar \
                  $((nPerSlice*nSlices)) $nSlices $gpusPerNode 2>/dev/null |
@@ -170,8 +179,12 @@ sparkSubmit ~/scaromare/MontePi/singleNode/singleGpu/multiGpuTestSpark/MontePi.j
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Rootbeer}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%NH: hier eine Einführung Rootbeer (Paper referenzieren + kurz erklären -> insb. mit Übersetzung in 3 adress code etc. ..)
 
 \begin{frame}
+%%%%NH: die folgenden Punkte finde ich gut, aber lieber am Schluss des Results-Kapitel einfügen. Kannst ja auch deine contributions+deren Effekt rootbeer erwähnen.
+%%%%NH: multi gpu fähigkeiten von rb erwähnen
+
 % sagen:
 %  - Leider wurde die meiste Bearbeitungszeit für diesen Beleg vom Lösen von Bugs beansprucht, sodass ich nicht darauf verzichten kann, zumindest einige davon zu erwähnen, auf dass sie jemanden helfen mögen, der einen ähnlichen Ansatz wie ich verfolgen möchte
 Rootbeer zu beachten:
@@ -352,7 +365,7 @@ Rootbeer-Paper:
       Aparapi very similar, but less full-featured
 \end{frame}
 
-
+%%%%NH: gibt es beschränkungen, welche funktionen implementiert werden können oder ist die geschichte turing-vollständig?
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -395,9 +408,12 @@ Rootbeer-Paper:
 \section{Performanceanalyse}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%NH: hardware auf der du deine tests durchgeführt hast beschreiben
+%%%%NH: nochmal kurz den benchmark + motivation beschreiben  (use case => machine learning in labs). auch erwähnen, dass du eine cuda implementation erstellt hast ..
+%%%%NH: spannend wäre, ob bottlenecks in der implementierung => allg. profiling von spark/rootbeer code // hast du bottlenecks entdeckt?
 
 \begin{frame}
-    Einkernleistungsanalysen:
+    Einkernleistungsanalysen: %%%%NH: was bedeutet 1 Kern: 1 Core? 1 Node? 1 GPU?
     % Erstellt  mit:
     %   ssh taurus
     %   # Rootbeer commit ef79eaddc7956bf9bb3b9bd4d287e377e3949075
@@ -409,8 +425,7 @@ Rootbeer-Paper:
     %     ./pack-rootbeer )
     %   makeOpts=( \
     %       "SPARK_ROOT=$HOME/spark-1.5.2-bin-hadoop2.6" \
-    %       "SPARK_JAR=$HOME/spark-1.5.2-bin-hadoop2.6/lib/spark-assembly-1.5.2-hadoop2.6.0.jar" \
-    %       "SPARKCORE_JAR=$SPARK_JAR" \
+    %       "SPARKCORE_JAR=~/spark-1.5.2-bin-hadoop2.6/lib/spark-assembly-1.5.2-hadoop2.6.0.jar" \
     %       "SCALA_ROOT=$(dirname $(which scala))/../lib" \
     %   )
     %   cd ~/scaromare/MontePi
@@ -423,14 +438,15 @@ Rootbeer-Paper:
     %   salloc -p gpu2-interactive --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --gres=gpu:1 --time=02:00:00
     %   ~/scaromare/MontePi/benchmarkImpl.sh
     %   cd scaromare/MontePi/
-    %   python plot.py -w ./raw-logs/benchmarks-impl-taurusi2095-2016-07-02_07-54-35/results.log
-    %   python plot.py -w ./raw-logs/benchmarks-impl-taurusi2105-2016-07-02_15-19-46/results.log
+    %   python plot.py --workload-log 2016-07-02_01-18-12/results.log
     \includegraphics[width=0.8\linewidth]{benchmarks-workload-scaling.pdf}
     % sagen:
     %   - benchmarkImpl.sh misst mittels 'time' Linuxshellbefehls
     %   - overhead ist riesig, für GPU vs CPU und für Java vs. C++ -> relativ große Probleme rentieren sich nur
     %   - Java wird für sehr große Probleme schneller als C++ -> Vorteil der automatischen Optimierungen durch die JVM durch Rootbeer! -> nächste Seite Profiler nur kurz erwähnen
 \end{frame}
+
+%%%%NH: multi gpu, multi node single gpu, multi node multi gpu, ...
 
 \begin{frame}
 Profiling von Rootbeer ohne Spark mit dem NVIDIA Visual Profiler:
@@ -442,17 +458,15 @@ Profiling von Rootbeer ohne Spark mit dem NVIDIA Visual Profiler:
  -> BILDER!
 \end{frame}
 
-\begin{frame}
-    \frametitle{Spark+GPU strong scaling}
-    % cd scaromare/MontePi
-    % make -C multiNode/multiGpu/scala ${makeOpts[@]} MontePi.jar
-    % ./benchmarkTaurusScaling.sh
-\end{frame}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Zusammenfassung}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%%%%NH: Herr Nagel fragt gern: ``Was haben wir gelernt''
+%%%%NH: => generell im Ausblick vielleicht noch erwähnen, was zukünftig (an deinem Framework, Rootbeer) verbessert werden sollte
+%%%%NH: => z.B. gibt es möglichkeiten, um host-gpu transfers zu vermeiden/verringern
+%%%%NH: verringerung der latenz durch einsatz neuer bustechnologien (nvlink)?
 \begin{frame}
 	\frametitle{Zusammenfassung}
 	\begin{itemize}
