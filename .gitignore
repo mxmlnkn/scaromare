@@ -53,6 +53,7 @@
 *.mtc
 *.mtc1
 *.out
+*.snm
 *.synctex.gz
 
 Geany
