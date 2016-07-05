@@ -1,0 +1,1067 @@
+
+Also Spark habe ich einfach nicht kompiliert bekommen, aber ich habe dann das vorkompilierte Paket genommen und das funktioniert. Auf meinem Heimrechner habe ich damit auch schon einiges getestet (Zeitangaben sind ca. +- 0.1s):
+
+singleNode/singleCore/java:
+    Rolling the dice 268435456 times resulted in pi ~ 3.1415507942438126 and took 13.085591258 seconds
+singleNode/singleGpu/cpp:
+    Rolling the dice 268435200 times resulted in pi ~ 3.143844 and took 1.554619 seconds
+singleNode/singleGpu/java:
+    Rolling the dice 268435456 times resulted in pi ~ 3.141373321413994 and took 0.618712789 seconds
+singleNode/singleGpu/scala:
+    Rolling the dice 268435456 times resulted in pi ~ 3.141373321413994 and took 0.559703168 seconds
+multiNode/multiCore:
+    Rolling the dice 268435456 times resulted in pi ~ 3.14170278608799 and took 1.68811998 seconds
+multiNode/multiGpu/scala
+    Rolling the dice 268435456 times resulted in pi ~ 3.141659140586853 and took 1.258847878 seconds
+
+Multi GPU heißt bisher nur so, da ich nur eine habe und noch ein paar Schwierigkeiten auf dem Cluster habe, aber lokal wird schon ausgeführt:
+
+    cd /media/d/Studium/9TH SEMESTER/scaromare/MontePi/singleNode/singleCore/java
+    /opt/spark-1.5.2/bin/spark-submit --master local[4] --class TestMonteCarloPi MontePi.jar 268435456 1
+        Rolling the dice 268435456 times resulted in pi ~ 3.1415507942438126 and took 13.114100024 seconds
+    cd /media/d/Studium/9TH SEMESTER/scaromare/MontePi/multiNode/multiCore
+    /opt/spark-1.5.2/bin/spark-submit --master local[4] --class TestMonteCarloPi MontePi.jar 268435456 1
+        Rolling the dice 268435456 times resulted in pi ~ 3.141687050461769 and took 3.250571662 seconds
+
+Es wird also nur ein graka benutzt. Die Zeit ist damit relativ schlecht verglichen zu 0.6s obig für die GPU-Versionen. Sicher der Overhead vom spark context.
+Allgemein sind die GPU-Zeiten grottig, wsl. ist es beschränkt durch die Integer-Einheiten, die für den Pseudozufallsgenerator notwendig sind. Könnte man ja mal mit einem regelmäßigen Gitter testen, was nur die FPUs brauchen sollte. Den PNG musste ich schnell selber reinhacken, weil ein Aufruf an java.util.Random die gpu-kernels serialisiert hat und 100x langsamer als die CPU-Version gemacht hat. Allgemein muss man arg aufpassen mit Rootbeer. Ich hatte auch ein paar Zugriffe auf Variablen außerhalb von gpuMethod (private Klassenmembers), die schien es auch immer zwischen Host und Device hin und her zu transportieren, sodass es immer noch leicht langsamer als die CPU-Version war.
+
+Was den Cluster angeht. Ich erhalte speedups, wenn ich bei folgendem "Skript" die 4 hinter dem letzten Befehl hin und her ändere z.B. auf 1,2,3,4, das ist die programminterne Anzahl an Spark Partitionen, die man zusätzlich zu total-executor-cores=4 noch einstellen kann:
+
+        salloc -p gpu-interactive --nodes=2 --ntasks-per-node=4 --cpus-per-task=1 --gres=gpu:4 --time=1:30:00
+        cd $HOME/scaromare/MontePi/multiNode/multiCore
+        make SPARK_ROOT=~/spark-1.5.2-bin-hadoop2.6 SPARKCORE_JAR=~/spark-1.5.2-bin-hadoop2.6/lib/spark-assembly-1.5.2-hadoop2.6.0.jar SCALA_ROOT=$(dirname $(which scala))/../lib MontePi.jar
+        spark-submit --total-executor-cores 4 --class TestMonteCarloPi MontePi.jar 268435456 4
+
+Jetzt wo ich das nochmal teste und zwar auch mit höheren Parameter wie
+        spark-submit --total-executor-cores 4 --class TestMonteCarloPi MontePi.jar 268435456 8
+erkenne ich immernoch einen leichten Speedup. Es scheint als würden sowhl die Ressourcen von salloc, als auch die von total-executor-cores ignoriert zu werden :S...
+
+Allgemein scheint spark-submit automatisch master und worker zu starten (lokal?).
+In der PDF von dir, versucht man master und worker manuell zu starten und dann erst spark-submit auszuführen.
+Hier stellen sich mehrere Probleme:
+  - auf /home/zihforschung/hoffmnic/ habe ich keine Zugriff
+  - sbin/start-master-noDaemon.sh gibt es in meiner spark-version (1.5.2) nicht, nur start-master.sh, was intern spark-daemon.sh aufruft
+  - startet man srun mit start-master direkt vom login knoten, dann klappt obiges irgendwie nicht. Entweder ersetze ich srun durch salloc oder ich mache interaktiv salloc und rufe dann srun auf, dann geht es mehr oder minder (wird halt als daemon gestartet)
+  - was ist master.tmp, anscheinend eine Datei, die sowas wie spark://taurusi2108:7077 enthält?
+  - allgemein verstehe ich nicht so recht, wie die Skripte funktionieren. Z.b. weiß ich nicht woher stop-master.sh den gestarteten daemon auf taurusi2108 gefunden hat, wenn ich doch auf trauslogin4 war und in squeue erschien auch nichts. Woher wusste er dann wo der master war und dass er mir gehörte ... Prinzipiell wurde es in die logs geschrieben, aber ich bezweifle, dass das Skript die auswertet.
+
+Hier noch ein paar Aufrufe nach
+    salloc -p gpu-interactive --nodes=1 --ntasks-per-node=4 --cpus-per-task=1 --gres=gpu:2 --time=1:30:00
+
+
+    s3495379@tauruslogin4:~/scaromare/MontePi/multiNode/multiCore$ spark-submit --total-executor-cores 2 --class TestMonteCarloPi MontePi.jar 268435456 2
+        Rolling the dice 268435456 times resulted in pi ~ 3.141659528017044 and took 1.626073389 seconds
+
+    s3495379@tauruslogin4:~/scaromare/MontePi/multiNode/multiCore$ spark-submit --total-executor-cores 2 --class TestMonteCarloPi MontePi.jar 268435456 1
+        Rolling the dice 268435456 times resulted in pi ~ 3.141687050461769 and took 2.764824267 seconds
+
+    s3495379@tauruslogin4:~/scaromare/MontePi/multiNode/multiCore$ spark-submit --total-executor-cores 2 --class TestMonteCarloPi MontePi.jar 268435456 4
+        Rolling the dice 268435456 times resulted in pi ~ 3.14170278608799 and took 0.972152219 seconds
+
+    s3495379@tauruslogin4:~/scaromare/MontePi/multiNode/multiCore$ spark-submit --total-executor-cores 2 --class TestMonteCarloPi MontePi.jar 268435456 2
+        Rolling the dice 268435456 times resulted in pi ~ 3.141659528017044 and took 1.568750811 seconds
+
+    s3495379@tauruslogin4:~/scaromare/MontePi/multiNode/multiCore$ spark-submit --total-executor-cores 2 --class TestMonteCarloPi MontePi.jar 268435456 8
+        Rolling the dice 268435456 times resulted in pi ~ 3.1416446417570114 and took 0.714971521 seconds
+
+    s3495379@tauruslogin4:~/scaromare/MontePi/multiNode/multiCore$ spark-submit --total-executor-cores 2 --class TestMonteCarloPi MontePi.jar 268435456 16
+        Rolling the dice 268435456 times resulted in pi ~ 3.1416993141174316 and took 0.604922371 seconds
+
+Im Anhang ist auch mal ein vollständiger Log. Es wird also anscheinend wirklich nur lokal Threads oder so etwas erzeugt. Das heißt multiple Node geht damit wsl. nicht. Das ist aber notwendig für GPUs dann, sonst stürzt Rootbeer ab, weil es keine Ressourcen findet. Zumindest auf meinem Rechner ist das so:
+    /media/d/Studium/9TH SEMESTER/scaromare/MontePi/multiNode/multiGpu/scala$ /opt/spark-1.5.2/bin/spark-submit --master local[4] --class TestMonteCarloPi MontePi.jar 268435456 2
+
+    16/01/22 03:27:59 ERROR Executor: Exception in task 1.0 in stage 0.0 (TID 1)
+org.trifort.rootbeer.runtime.CudaErrorException: CUDA_ERROR_OUT_OF_MEMORY: Error in cuMemAlloc: gpu_object_mem
+    at org.trifort.rootbeer.runtime.CUDAContext.nativeBuildState(Native Method)
+    at org.trifort.rootbeer.runtime.CUDAContext.access$1100(CUDAContext.java:17)
+    at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:315)
+    at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:308)
+    at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:128)
+    at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+    at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+    at java.lang.Thread.run(Thread.java:745)
+
+Ich bezweifle sehr stark, dass er wirklich out-of-memory ist, ist wsl. nur eine irreführende Fehlermeldung, weil es kein Multithreading erwartet. Oder Rootbeer alloziiert einfach alles und managet das dann selber.
+
+Mit
+    srun -p gpu-interactive --nodes=1 --ntasks-per-node=4 --cpus-per-task=1 --gres=gpu:2 --time=1:30:00 --pty bash
+    cd ~/scaromare/MontePi/multiNode/multiGpu/scala
+    spark-submit --total-executor-cores 1 --class TestMonteCarloPi MontePi.jar 268435456 1
+funktioniert es, sogar mit 2 statt 1 ganz am Ende, was auf meinem Rechner zu einem Out-of-Memory Fehler führte. Möglicherweise nimmt es einfach eine zweite Grafikkarte im Node, weil multi-node sollte es ja eigtl. nicht sein. Dagegen spricht jedoch, dass sich die Zeit von 2.5s auf 4s fast verdoppelt, obwohl man es auf 2 Grakas ausführen lässt. Das sieht also so aus, als würden die hintereinander ausgeführt werden.
+
+Ich finde es unschön, dass ich nicht weiß, wie man außer dem Web-Interface sehen kann, ob die Worker und Master laufen bzw. wie sie konfiguriert sind. Gibt es denn da nichts was in der Konsole läuft? Geht aber auch mit ssh -X firefox
+Aber aus irgendeinem Grund scheint der master tauruslogin4 zu laufen, trotzdass ich start-master mit salloc aufrufe.
+
+
+How to get the location of scala-library.jar:
+
+    scala> val so = classOf[ScalaObject].getResource("ScalaObject.class").toString
+    scala> val scalaJar = so.substring(so.lastIndexOf(":") + 1, so.lastIndexOf("!"))
+        /sw/global/compilers/scala/2.10.4/lib/scala-library.jar
+
+Kompilieren auf Taurus:
+
+    cd ~/scaromare/MontePi/singleNode/singleCore/scala
+    make SCALA_ROOT=/sw/global/compilers/scala/2.10.4/lib/
+    for (( i=0; i<10; i++ )); do
+        srun -N1 java -jar MontePi.jar 268435456
+    done
+
+    salloc -p gpu-interactive --nodes=2 --ntasks-per-node=4 --cpus-per-task=1 --gres=gpu:4 --time=1:30:00
+
+    cd ~/scaromare/MontePi/singleNode/singleCore/java
+    make MontePi.jar
+    srun -n 8 java -jar MontePi.jar 268435456  # note: this will run the algo 8 times, thereby repeating the measurement, but not making it faster, because it's not parallelized!
+
+    cd ~/scaromare/MontePi/singleNode/singleCore/scala
+    make SCALA_ROOT=/sw/global/compilers/scala/2.10.4/lib/
+    srun -n 8 java -jar MontePi.jar 268435456
+
+    cd ~/scaromare/MontePi/singleNode/singleGpu/cpp
+    make TestMonteCarloPi.exe
+    srun -n 8 ./TestMonteCarloPi.exe 268435456
+        block:4 found 35140804 points inside circle.
+        block:5 found 35136385 points inside circle.
+        block:1 found 35140941 points inside circle.
+        block:3 found 35138587 points inside circle.
+        block:2 found 35135303 points inside circle.
+        block:0 found 35287551 points inside circle.
+        Rolling the dice 268435200 times resulted in pi ~ 3.143844 and took 2.071777 seconds
+        block:2 found 35135303 points inside circle.
+        block:4 found 35140804 points inside circle.
+        block:3 found 35138587 points inside circle.
+        block:5 found 35136385 points inside circle.
+        block:1 found 35140941 points inside circle.
+        block:0 found 35287551 points inside circle.
+        Rolling the dice 268435200 times resulted in pi ~ 3.143844 and took 2.044605 seconds
+        block:4 found 35140804 points inside circle.
+        block:5 found 35136385 points inside circle.
+        block:1 found 35140941 points inside circle.
+        block:3 found 35138587 points inside circle.
+        block:2 found 35135303 points inside circle.
+        block:0 found 35287551 points inside circle.
+        block:4 found 35140804 points inside circle.
+        block:5 found 35136385 points inside circle.
+        block:1 found 35140941 points inside circle.
+        block:3 found 35138587 points inside circle.
+        block:2 found 35135303 points inside circle.
+        block:0 found 35287551 points inside circle.
+        Rolling the dice 268435200 times resulted in pi ~ 3.143844 and took 5.748173 seconds
+        Rolling the dice 268435200 times resulted in pi ~ 3.143844 and took 5.748177 seconds
+        Rolling the dice 268435200 times resulted in pi ~ 3.143844 and took 5.748252 seconds
+        Rolling the dice 268435200 times resulted in pi ~ 3.143844 and took 5.745323 seconds
+        Rolling the dice 268435200 times resulted in pi ~ 3.143844 and took 5.745330 seconds
+        Rolling the dice 268435200 times resulted in pi ~ 3.143844 and took 5.745312 seconds
+        [...]
+    srun -n 2 ./TestMonteCarloPi.exe 268435456
+        Rolling the dice 268435200 times resulted in pi ~ 3.143844 and took 2.031751 seconds
+        Rolling the dice 268435200 times resulted in pi ~ 3.143844 and took 2.073744 seconds
+
+    # New version from 2016-02-15 (one week later):
+    srun -n 8 ./TestMonteCarloPiV2.exe 268435456
+        Rolling the dice 268431360 times resulted in pi ~ 3.141607 and took 0.061998 seconds
+        Rolling the dice 268431360 times resulted in pi ~ 3.141607 and took 0.061954 seconds
+        Rolling the dice 268431360 times resulted in pi ~ 3.141607 and took 0.132801 seconds
+        Rolling the dice 268431360 times resulted in pi ~ 3.141607 and took 0.132788 seconds
+        Rolling the dice 268431360 times resulted in pi ~ 3.141607 and took 0.132686 seconds
+        Rolling the dice 268431360 times resulted in pi ~ 3.141607 and took 0.132455 seconds
+        Rolling the dice 268431360 times resulted in pi ~ 3.141607 and took 0.061437 seconds
+        Rolling the dice 268431360 times resulted in pi ~ 3.141607 and took 0.061453 seconds
+
+    srun -n 2 ./TestMonteCarloPiV2.exe 268435456
+        Rolling the dice 268431360 times resulted in pi ~ 3.141607 and took 0.037814 seconds
+        Rolling the dice 268431360 times resulted in pi ~ 3.141607 and took 0.037851 seconds
+    srun -n 2 ./TestMonteCarloPiV2.exe 268435456
+        Rolling the dice 268431360 times resulted in pi ~ 3.141607 and took 0.037926 seconds
+        Rolling the dice 268431360 times resulted in pi ~ 3.141607 and took 0.037823 seconds
+    srun -n 2 ./TestMonteCarloPiV2.exe 268435456
+        Rolling the dice 268431360 times resulted in pi ~ 3.141607 and took 0.037808 seconds
+        Rolling the dice 268431360 times resulted in pi ~ 3.141607 and took 0.037825 seconds
+    srun -n 2 ./TestMonteCarloPiV2.exe 268435456
+        Rolling the dice 268431360 times resulted in pi ~ 3.141607 and took 0.037805 seconds
+        Rolling the dice 268431360 times resulted in pi ~ 3.141607 and took 0.037928 seconds
+    # Note that srun -n 8 is a bad idea, because the program can't make use of multi-GPU, meaning all parallelly started 4 tasks per node will try to access the same GPU thereby slowing eacht other down ! That is the factor 2 or 4 observed in the measurements above, because it seems at least the default stream is changed per process by the driver, so that kernels by different processes are executed truly parallel thereby reducing the visible ressources per process by half or quarter depending on how synchronized the kernel calls happen. actually one of the problems here is also that the requested 12288 threads are roughly half the amount the K80 can handle ( 26624 ). Need dynamic thread switching.
+
+
+    cd ~/scaromare/MontePi/singleNode/singleGpu/java
+    make MontePi.jar
+    srun java -jar MontePi.jar 268435456  # note automatically runs on all allocated cores
+        Run tasks with length 384Run tasks with length 384
+        Run tasks with length 384
+        Run tasks with length 384
+        Run tasks with length 384Run tasks with length 384Run tasks with length 384Run tasks with length 384
+        Rolling the dice 268435456 times resulted in pi ~ 3.141373321413994 and took 8.368191205 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141373321413994 and took 8.392661409 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141373321413994 and took 8.46673351 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141373321413994 and took 8.481066181 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141373321413994 and took 8.496006989 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141373321413994 and took 8.501032508 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141373321413994 and took 8.516641705 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141373321413994 and took 8.542055162 seconds
+
+    cd ~/scaromare/MontePi/singleNode/singleGpu/scala
+    make MontePiGPU.jar SCALA_ROOT=/sw/global/compilers/scala/2.10.4/lib/
+    srun scala MontePiGPU.jar 268435456
+        Run tasks with length 384Run tasks with length 384Run tasks with length 384
+        Run tasks with length 384
+        Run tasks with length 384
+        Run tasks with length 384Run tasks with length 384
+        Run tasks with length 384
+        Rolling the dice 268435456 times resulted in pi ~ 3.141373321413994 and took 7.828229219 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141373321413994 and took 7.828297338 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141373321413994 and took 7.883648064 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141373321413994 and took 7.890092215 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141373321413994 and took 7.904749816 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141373321413994 and took 7.99778208 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141373321413994 and took 7.997784763 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141373321413994 and took 8.036860353 seconds
+
+    cd ~/scaromare/MontePi/multiNode/multiCore
+    make SPARK_ROOT=~/spark-1.5.2-bin-hadoop2.6 SPARKCORE_JAR=~/spark-1.5.2-bin-hadoop2.6/lib/spark-assembly-1.5.2-hadoop2.6.0.jar SCALA_ROOT=$(dirname $(which scala))/../lib MontePi.jar
+    for (( i=1; i<=8; i++ )); do
+        spark-submit --total-executor-cores $i --class TestMonteCarloPi MontePi.jar 268435456 $i
+    done
+        Rolling the dice 268435456 times resulted in pi ~ 3.141687050461769  and took 3.099362277 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141659528017044  and took 1.577772359 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141833138249193  and took 1.252786687 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.14170278608799   and took 0.996919406 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.1415522811619647 and took 0.962875816 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.1417063197747814 and took 0.828312764 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141625874799683  and took 0.762817473 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.1416446417570114 and took 0.730583715 seconds
+      => vermutlich schneller als reine CPU, weil eigene RNG implementation statt java.util.random :S
+      ! BEWARE NOT RUN on allocated nodes, but on login node :S
+
+    cd ~/scaromare/MontePi/multiNode/multiGpu/scala
+    make SPARK_ROOT=~/spark-1.5.2-bin-hadoop2.6 SPARKCORE_JAR=~/spark-1.5.2-bin-hadoop2.6/lib/spark-assembly-1.5.2-hadoop2.6.0.jar SCALA_ROOT=$(dirname $(which scala))/../lib MontePi.jar
+    MASTER=$(srun -N 1 -n 1 hostname)
+    export SPARK_HOME=$HOME/spark-1.5.2-bin-hadoop2.6   # without trailing slash!
+    srun ../../start-cluster.sh $MASTER &
+
+    # Getting the number of spark slaves:
+    ${SPARK_HOME}bin/spark-shell --master spark://$MASTER:7077
+    scala> sc.getExecutorStorageStatus.length
+        res1: Int = 9
+    # should actually be only 8, but I guess the master/dispatcher is the 9th
+
+    for (( i=1; i<=8; i++ )); do
+        spark-submit --total-executor-cores $i --master spark://$MASTER:7077 --class TestMonteCarloPi MontePi.jar 268435456 $i
+    done
+        Rolling the dice 268435456 times resulted in pi ~ 3.141659140586853 and took 6.186065455 seconds
+            16/02/08 09:52:46 WARN TaskSetManager: Lost task 0.0 in stage 0.0 (TID 0, 172.24.36.106): java.lang.UnsatisfiedLinkError: /home/h0/s3495379/.rootbeer/rootbeer_x64.so.1: /home/h0/s3495379/.rootbeer/rootbeer_x64.so.1: file too short
+                at java.lang.ClassLoader$NativeLibrary.load(Native Method)
+                at java.lang.ClassLoader.loadLibrary1(ClassLoader.java:1957)
+                at java.lang.ClassLoader.loadLibrary0(ClassLoader.java:1882)
+                at java.lang.ClassLoader.loadLibrary(ClassLoader.java:1843)
+                at java.lang.Runtime.load0(Runtime.java:795)
+                at java.lang.System.load(System.java:1061)
+                at org.trifort.rootbeer.runtime.CUDALoader.doLoad(CUDALoader.java:93)
+                at org.trifort.rootbeer.runtime.CUDALoader.load(CUDALoader.java:85)
+                at org.trifort.rootbeer.runtime.Rootbeer.<clinit>(Rootbeer.java:15)
+                at MonteCarloPi.calc(Jasmin)
+                at TestMonteCarloPi$$anonfun$2.apply(TestMonteCarloPi.scala:49)
+                at TestMonteCarloPi$$anonfun$2.apply(TestMonteCarloPi.scala:35)
+                at scala.collection.Iterator$$anon$11.next(Iterator.scala:328)
+                at scala.collection.Iterator$class.foreach(Iterator.scala:727)
+                at scala.collection.AbstractIterator.foreach(Iterator.scala:1157)
+                at scala.collection.TraversableOnce$class.reduceLeft(TraversableOnce.scala:172)
+                at scala.collection.AbstractIterator.reduceLeft(Iterator.scala:1157)
+                at org.apache.spark.rdd.RDD$$anonfun$reduce$1$$anonfun$14.apply(RDD.scala:993)
+                at org.apache.spark.rdd.RDD$$anonfun$reduce$1$$anonfun$14.apply(RDD.scala:991)
+                at org.apache.spark.SparkContext$$anonfun$36.apply(SparkContext.scala:1943)
+                at org.apache.spark.SparkContext$$anonfun$36.apply(SparkContext.scala:1943)
+                at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:66)
+                at org.apache.spark.scheduler.Task.run(Task.scala:88)
+                at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:214)
+                at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+                at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+                at java.lang.Thread.run(Thread.java:724)
+
+            16/02/08 09:52:46 INFO TaskSetManager: Starting task 0.1 in stage 0.0 (TID 2, 172.24.36.106, PROCESS_LOCAL, 2170 bytes)
+            16/02/08 09:52:47 ERROR TaskSchedulerImpl: Lost executor 0 on 172.24.36.106: remote Rpc client disassociated
+        Rolling the dice 268435456 times resulted in pi ~ 3.141822889447212  and took 8.017860232  seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141529363175963  and took 8.743864138  seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.1415821611881256 and took 8.748691556  seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.1415841398447144 and took 10.713044752 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141620071852506  and took 12.732002164 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.1416003640115275 and took 18.427871619 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.1416835635900497 and took 13.940593223 seconds
+
+    cd ~/scaromare/MontePi/multiNode/multiCore
+    make SPARK_ROOT=~/spark-1.5.2-bin-hadoop2.6 SPARKCORE_JAR=~/spark-1.5.2-bin-hadoop2.6/lib/spark-assembly-1.5.2-hadoop2.6.0.jar SCALA_ROOT=$(dirname $(which scala))/../lib MontePi.jar
+    MASTER=$(srun -N 1 -n 1 hostname)
+    export SPARK_HOME=$HOME/spark-1.5.2-bin-hadoop2.6   # without trailing slash!
+    srun ../start-cluster.sh $MASTER &
+    for (( i=1; i<=8; i++ )); do
+        spark-submit --total-executor-cores $i --master spark://$MASTER:7077 --class TestMonteCarloPi MontePi.jar 268435456 $i
+    done
+        Rolling the dice 268435456 times resulted in pi ~ 3.141687050461769  and took 5.909821577 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141659528017044  and took 4.622025054 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141833138249192  and took 4.30328713  seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.14170278608799   and took 4.087555114 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.1415522811619647 and took 4.005339988 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.141706319774782  and took 7.199879468 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.1416258747996832 and took 5.161565417 seconds
+        Rolling the dice 268435456 times resulted in pi ~ 3.1416446417570114 and took 4.216373949 seconds
+
+    for (( i=1; i<=8; i++ )); do
+        spark-submit --total-executor-cores $i --master spark://$MASTER:7077 --class TestMonteCarloPi MontePi.jar 2684354560 $i
+    done
+        Rolling the dice 2684354560 times resulted in pi ~ 3.141620571911335  and took 27.537039718 seconds
+        Rolling the dice 2684354560 times resulted in pi ~ 3.1416199922561647 and took 15.371099031 seconds
+        Rolling the dice 2684354560 times resulted in pi ~ 3.1415883254787285 and took 11.743211564 seconds
+        Rolling the dice 2684354560 times resulted in pi ~ 3.1416028693318365 and took 12.511210979 seconds
+        Rolling the dice 2684354560 times resulted in pi ~ 3.141618198156357  and took 9.0011534    seconds
+        Rolling the dice 2684354560 times resulted in pi ~ 3.1416052313768943 and took 8.055076331 seconds
+        Rolling the dice 2684354560 times resulted in pi ~ 3.1416112448460116 and took 7.801965073 seconds
+        Rolling the dice 2684354560 times resulted in pi ~ 3.1416319221258164 and took 7.169949849 seconds
+
+    for (( i=1; i<=8; i++ )); do
+        spark-submit --total-executor-cores $i --master spark://$MASTER:7077 --class TestMonteCarloPi MontePi.jar 26843545600 $i
+    done
+        Rolling the dice 26843545600 times resulted in pi ~ 3.1416227248311044 and took 245.643929572 seconds
+        Rolling the dice 26843545600 times resulted in pi ~ 3.141621304005384  and took 124.448212615 seconds
+        Rolling the dice 26843545600 times resulted in pi ~ 3.14160402309677   and took 85.803172299 seconds
+        Rolling the dice 26843545600 times resulted in pi ~ 3.1416072534024715 and took 70.587185701 seconds
+        Rolling the dice 26843545600 times resulted in pi ~ 3.1415986296534535 and took 58.312203433 seconds
+        Rolling the dice 26843545600 times resulted in pi ~ 3.1416047989043    and took 50.005896038 seconds
+        Rolling the dice 26843545600 times resulted in pi ~ 3.141615167728307  and took 44.381242324 seconds
+        Rolling the dice 26843545600 times resulted in pi ~ 3.1416037344932555 and took 39.931813546 seconds
+
+
+srun -n2 ~/CUDA/MaxThreads.exe
+    Getting Device Informations. As this is the first command, it can take ca.30s, because the GPU must be initialized.
+
+    ================== Device Number 0 ==================
+    | Device name              : Tesla K80
+    | Computability            : 3.7
+    | PCI Bus ID               : 4
+    | PCI Device ID            : 0
+    | PCI Domain ID            : 0
+    |------------------- Architecture -------------------
+    | Number of SM             : 13
+    | Max Threads per SM       : 2048
+    | Max Threads per Block    : 1024
+    | Warp Size                : 32
+    | Clock Rate               : 0.823500 GHz
+    | Max Block Size           : (1024,1024,64)
+    | Max Grid Size            : (2147483647,65535,65535)
+    |  => Max conc. Threads    : 26624
+    |  => Warps per SM         : 64
+    | CUDA Cores per SM        : 192
+    | Spec. func. Cores per SM : 32
+    | Warp Schedulers per SM   : 4
+    | Instr. issues per Cycle  : 64
+    |  => Total CUDA-Cores     : 2496
+    |  => Peak-SP-FLOPs        : 2055.456055
+    |---------------------- Memory ----------------------
+    | Total Global Memory      : 12079136768 Bytes
+    | Total Constant Memory    : 65536 Bytes
+    | Shared Memory per Block  : 49152 Bytes
+    | L2 Cache Size            : 1572864 Bytes
+    | Registers per Block      : 65536
+    | Memory Bus Width         : 384 Bits
+    | Memory Clock Rate        : 2.505000 GHz
+    | Memory Pitch             : 2147483647
+    | Unified Addressing       : 1
+    |--------------------- Graphics ---------------------
+    | Compute mode             : Unknown
+    |---------------------- Other -----------------------
+    | Can map Host Memory      : true
+    | Can run Kernels conc.    : true
+    | Number of Asyn. Engines  : 2
+    | Can Copy and Kernel conc.: true
+    | ECC Enabled              : true
+    | Device is Integrated     : false
+    | Kernel Timeout Enabled   : false
+    | Uses TESLA Driver        : false
+    =====================================================
+
+    ================== Device Number 1 ==================
+    | Device name              : Tesla K80
+    | Computability            : 3.7
+    | PCI Bus ID               : 5
+    | PCI Device ID            : 0
+    | PCI Domain ID            : 0
+    |------------------- Architecture -------------------
+    | Number of SM             : 13
+    | Max Threads per SM       : 2048
+    | Max Threads per Block    : 1024
+    | Warp Size                : 32
+    | Clock Rate               : 0.823500 GHz
+    | Max Block Size           : (1024,1024,64)
+    | Max Grid Size            : (2147483647,65535,65535)
+    |  => Max conc. Threads    : 26624
+    |  => Warps per SM         : 64
+    | CUDA Cores per SM        : 192
+    | Spec. func. Cores per SM : 32
+    | Warp Schedulers per SM   : 4
+    | Instr. issues per Cycle  : 64
+    |  => Total CUDA-Cores     : 2496
+    |  => Peak-SP-FLOPs        : 2055.456055
+    |---------------------- Memory ----------------------
+    | Total Global Memory      : 12079136768 Bytes
+    | Total Constant Memory    : 65536 Bytes
+    | Shared Memory per Block  : 49152 Bytes
+    | L2 Cache Size            : 1572864 Bytes
+    | Registers per Block      : 65536
+    | Memory Bus Width         : 384 Bits
+    | Memory Clock Rate        : 2.505000 GHz
+    | Memory Pitch             : 2147483647
+    | Unified Addressing       : 1
+    |--------------------- Graphics ---------------------
+    | Compute mode             : Unknown
+    |---------------------- Other -----------------------
+    | Can map Host Memory      : true
+    | Can run Kernels conc.    : true
+    | Number of Asyn. Engines  : 2
+    | Can Copy and Kernel conc.: true
+    | ECC Enabled              : true
+    | Device is Integrated     : false
+    | Kernel Timeout Enabled   : false
+    | Uses TESLA Driver        : false
+    =====================================================
+
+    ================== Device Number 2 ==================
+    | Device name              : Tesla K80
+    | Computability            : 3.7
+    | PCI Bus ID               : 132
+    | PCI Device ID            : 0
+    | PCI Domain ID            : 0
+    |------------------- Architecture -------------------
+    | Number of SM             : 13
+    | Max Threads per SM       : 2048
+    | Max Threads per Block    : 1024
+    | Warp Size                : 32
+    | Clock Rate               : 0.823500 GHz
+    | Max Block Getting Device Informations. As this is the first command, it can take ca.30s, because the GPU must be initialized.
+
+    ================== Device Number 0 ==================
+    | Device name              : Tesla K80
+    | Computability            : 3.7
+    | PCI Bus ID               : 4
+    | PCI Device ID            : 0
+    | PCI Domain ID            : 0
+    |------------------- Architecture -------------------
+    | Number of SM             : 13
+    | Max Threads per SM       : 2048
+    | Max Threads per Block    : 1024
+    | Warp Size                : 32
+    | Clock Rate               : 0.823500 GHz
+    | Max Block Size           : (1024,1024,64)
+    | Max Grid Size            : (2147483647,65535,65535)
+    |  => Max conc. Threads    : 26624
+    |  => Warps per SM         : 64
+    | CUDA Cores per SM        : 192
+    | Spec. func. Cores per SM : 32
+    | Warp Schedulers per SM   : 4
+    | Instr. issues per Cycle  : 64
+    |  => Total CUDA-Cores     : 2496
+    |  => Peak-SP-FLOPs        : 2055.456055
+    |---------------------- Memory ----------------------
+    | Total Global Memory      : 12079136768 Bytes
+    | Total Constant Memory    : 65536 Bytes
+    | Shared Memory per Block  : 49152 Bytes
+    | L2 Cache Size            : 1572864 Bytes
+    | Registers per Block      : 65536
+    | Memory Bus Width         : 384 Bits
+    | Memory Clock Rate        : 2.505000 GHz
+    | Memory Pitch             : 2147483647
+    | Unified Addressing       : 1
+    |--------------------- Graphics ---------------------
+    | Compute mode             : Unknown
+    |---------------------- Other -----------------------
+    | Can map Host Memory      : true
+    | Can run Kernels conc.    : true
+    | Number of Asyn. Engines  : 2
+    | Can Copy and Kernel conc.: true
+    | ECC Enabled              : true
+    | Device is Integrated     : false
+    | Kernel Timeout Enabled   : false
+    | Uses TESLA Driver        : false
+    =====================================================
+
+    ================== Device Number 1 ==================
+    | Device name              : Tesla K80
+    | Computability            : 3.7
+    | PCI Bus ID               : 5
+    | PCI Device ID            : 0
+    | PCI Domain ID            : 0
+    |------------------- Architecture -------------------
+    | Number of SM             : 13
+    | Max Threads per SM       : 2048
+    | Max Threads per Block    : 1024
+    | Warp Size                : 32
+    | Clock Rate               : 0.823500 GHz
+    | Max Block Size           : (1024,1024,64)
+    | Max Grid Size            : (2147483647,65535,65535)
+    |  => Max conc. Threads    : 26624
+    |  => Warps per SM         : 64
+    | CUDA Cores per SM        : 192
+    | Spec. func. Cores per SM : 32
+    | Warp Schedulers per SM   : 4
+    | Instr. issues per Cycle  : 64
+    |  => Total CUDA-Cores     : 2496
+    |  => Peak-SP-FLOPs        : 2055.456055
+    |---------------------- Memory ----------------------
+    | Total Global Memory      : 12079136768 Bytes
+    | Total Constant Memory    : 65536 Bytes
+    | Shared Memory per Block  : 49152 Bytes
+    | L2 Cache Size            : 1572864 Bytes
+    | Registers per Block      : 65536
+    | Memory Bus Width         : 384 Bits
+    | Memory Clock Rate        : 2.505000 GHz
+    | Memory Pitch             : 2147483647
+    | Unified Addressing       : 1
+    |--------------------- Graphics ---------------------
+    | Compute mode             : Unknown
+    |---------------------- Other -----------------------
+    | Can map Host Memory      : true
+    | Can run Kernels conc.    : true
+    | Number of Asyn. Engines  : 2
+    | Can Copy and Kernel conc.: true
+    | ECC Enabled              : true
+    | Device is Integrated     : false
+    | Kernel Timeout Enabled   : false
+    | Uses TESLA Driver        : false
+    =====================================================
+
+    ================== Device Number 2 ==================
+    | Device name              : Tesla K80
+    | Computability            : 3.7
+    | PCI Bus ID               : 132
+    | PCI Device ID            : 0
+    | PCI Domain ID            : 0
+    |------------------- Architecture -------------------
+    | Number of SM             : 13
+    | Max Threads per SM       : 2048
+    | Max Threads per Block    : 1024
+    | Warp Size                : 32
+    | Clock Rate               : 0.823500 GHz
+    | Max Block Size           : (1024,1024,64)
+    | Max Grid Size            : (2147483647,65535,65535)
+    |  => Max conc. Threads    : 26624
+    |  => Warps per SM         : 64
+    | CUDA Cores per SM        : 192
+    | Spec. func. Cores per SM : 32
+    | Warp Schedulers per SM   : 4
+    | Instr. issues per Cycle  : 64
+    |  => Total CUDA-Cores     : 24961024
+    |  => Peak-SP-FLOPs        : 2055.456055
+    |---------------------- Memory ----------------------
+    | Total Global Memory      : 12079136768 Bytes
+    | Total Constant Memory    : 65536 Bytes
+    | Shared Memory per Block  : 49152 Bytes
+    | L2 Cache Size            : 1572864 Bytes
+    | Registers per Block      : 65536
+    | Memory Bus Width         : 384 Bits
+    | Memory Clock Rate        : 2.505000 GHz
+    | Memory Pitch             : 2147483647
+    | Unified Addressing       : 1
+    |--------------------- Graphics ---------------------
+    | Compute mode             : Unknown
+    |---------------------- Other -----------------------
+    | Can map Host Memory      : true
+    | Can run Kernels conc.    : true
+    | Number of Asyn. Engines  : 2
+    | Can Copy and Kernel conc.: true
+    | ECC Enabled              : true
+    | Device is Integrated     : false
+    | Kernel Timeout Enabled   : false
+    | Uses TESLA Driver        : false
+    =====================================================
+
+    ================== Device Number 3 ==================
+    | Device name              : Tesla K80
+    | Computability            : 3.7
+    | PCI Bus ID               : 133
+    | PCI Device ID            : 0
+    | PCI Domain ID            : 0
+    |------------------- Architecture -------------------
+    | Number of SM             : 13
+    | Max Threads per SM       : 2048
+    | Max Threads per Block    : 1024
+    | Warp Size                : 32
+    | Clock Rate               : 0.823500 GHz
+    | Max Block Size           : (1024,1024,64)
+    | Max Grid Size            : (2147483647,65535,65535)
+    |  => Max conc. Threads    : 26624
+    |  => Warps per SM         : 64
+    | CUDA Cores per SM        : 192
+    | Spec. func. Cores per SM : 32
+    | Warp Schedulers per SM   : 4
+    | Instr. issues per Cycle  : 64
+    |  => Total CUDA-Cores     : 2496
+    |  => Peak-SP-FLOPs        : 2055.456055
+    |---------------------- Memory ----------------------
+    | Total Global Memory      : 12079136768 Bytes
+    | Total Constant Memory    : 65536 Bytes
+    | Shared Memory per Block  : 49152 Bytes
+    | L2 Cache Size            : 1572864 Bytes
+    | Registers per Block      : 65536
+    | Memory Bus Width         : 384 Bits
+    | Memory Clock Rate        : 2.505000 GHz
+    | Memory Pitch             : 2147483647
+    | Unified Addressing       : 1
+    |--------------------- Graphics ---------------------
+    | Compute mode             : Unknown
+    |---------------------- Other -----------------------
+    | Can map Host Memory      : true
+    | Can run Kernels conc.    : true
+    | Number of Asyn. Engines  : 2
+    | Can Copy and Kernel conc.: true
+    | ECC Enabled              : true
+    | Device is Integrated     : false
+    | Kernel Timeout Enabled   : false
+    | Uses TESLA Driver        : false
+    =====================================================
+
+    Measuring number of concurrently running threads:
+      a) Start 1 thread (takes whole minThreadsPerBlock compute units) which sets a stop flag after a waiting for 100000 cycles (CLOCLS_PER_SEC)
+      b) Start 65536 threads in differing gridDim and blockDim configurations. Not all will be able to fit on the GPU. The threads atomically increment the value 'nRunningThreads' and then wait for the stop flag to be set
+      c) Get nRunningThreads sum and calculate derived values
+
+    Output Style: Started (nBlocks,nThreadsPerBlock) -> only (nRunningBlocks,nRunningThreads) actually ran concurrently. Excluding 1 thread in 1 block for setting the flag.
+
+    ( 65536,     1) -> (     0,     0)   [1 (maxThreads) = 0 (maxRunningThreads) + 1 (1 block)]
+    ( 32768,     2) -> (   207,   414)   [416 (maxThreads) = 414 (maxRunningThreads) + 2 (1 block)]
+    ( 16384,     4) -> (   207,   828)   [832 (maxThreads) = 828 (maxRunningThreads) + 4 (1 block)]
+    (  8192,     8) -> (   207,  1656)   [1664 (maxThreads) = 1656 (maxRunningThreads) + 8 (1 block)]
+    (  4096,    16) -> (   207,  3312)   [3328 (maxThreads) = 3312 (maxRunningThreads) + 16 (1 block)]
+    (  2048,    32) -> (   207,  6624)   [6656 (maxThreads) = 6624 (maxRunningThreads) + 32 (1 block)]
+    (  1024,    64) -> (   207, 13248)   [13312 (maxThreads) = 13248 (maxRunningThreads) + 64 (1 block)]
+    (   512,   128) -> (   207, 26496)   [26624 (maxThreads) = 26496 (maxRunningThreads) + 128 (1 block)]
+    (   256,   256) -> (   103, 26368)   [26624 (maxThreads) = 26368 (maxRunningThreads) + 256 (1 block)]
+    Maximum numbers of threads not rising anymore, signaling that the threads per block are sated. If the number of threads actually decreased, then this is because of the flagging-kernel which actually blocks 'minThreadsPerBlock' threads instead of only 1. Furthermore because of maxBlocksPerDevice we get all in all 1 block of threads less than actually possible. Thereby by increasing the threadsPerBlock we count less and less maxThreadsPerDevice.
+    (   128,   512) -> (    51, 26112)   [26624 (maxThreads) = 26112 (maxRunningThreads) + 512 (1 block)]
+    (    64,  1024) -> (    25, 25600)   [26624 (maxThreads) = 25600 (maxRunningThreads) + 1024 (1 block)]
+    (    32,  2048) -> (     0,     0)   [2048 (maxThreads) = 0 (maxRunningThreads) + 2048 (1 block)]
+    No threads ran. We have either tried to start more threadsPerBlock than supported! Finishing test.
+
+    ==================== Results =====================
+    | Maximum Threads per Block : 1024 <= x < 2048
+    | Block Size padded to      : 128 Threads
+    | Max Blocks  per Device    : 208
+    | Max Threads per Device    : 26624
+    | Assuming 13 Streaming Multiprocessors (SMX) as read with cudaGetDeviceProperties:
+    |  => Max Blocks  per SMX: 16
+    |  => Max Threads per SMX: 2048
+    ==================================================
+    Size           : (1024,1024,64)
+    | Max Grid Size            : (2147483647,65535,65535)
+    |  => Max conc. Threads    : 26624
+    |  => Warps per SM         : 64
+    | CUDA Cores per SM        : 192
+    | Spec. func. Cores per SM : 32
+    | Warp Schedulers per SM   : 4
+    | Instr. issues per Cycle  : 64
+    |  => Total CUDA-Cores     : 2496
+    |  => Peak-SP-FLOPs        : 2055.456055
+    |---------------------- Memory ----------------------
+    | Total Global Memory      : 12079136768 Bytes
+    | Total Constant Memory    : 65536 Bytes
+    | Shared Memory per Block  : 49152 Bytes
+    | L2 Cache Size            : 1572864 Bytes
+    | Registers per Block      : 65536
+    | Memory Bus Width         : 384 Bits
+    | Memory Clock Rate        : 2.505000 GHz
+    | Memory Pitch             : 2147483647
+    | Unified Addressing       : 1
+    |--------------------- Graphics ---------------------
+    | Compute mode             : Unknown
+    |---------------------- Other -----------------------
+    | Can map Host Memory      : true
+    | Can run Kernels conc.    : true
+    | Number of Asyn. Engines  : 2
+    | Can Copy and Kernel conc.: true
+    | ECC Enabled              : true
+    | Device is Integrated     : false
+    | Kernel Timeout Enabled   : false
+    | Uses TESLA Driver        : false
+    =====================================================
+
+    ================== Device Number 3 ==================
+    | Device name              : Tesla K80
+    | Computability            : 3.7
+    | PCI Bus ID               : 133
+    | PCI Device ID            : 0
+    | PCI Domain ID            : 0
+    |------------------- Architecture -------------------
+    | Number of SM             : 13
+    | Max Threads per SM       : 2048
+    | Max Threads per Block    : 1024
+    | Warp Size                : 32
+    | Clock Rate               : 0.823500 GHz
+    | Max Block Size           : (1024,1024,64)
+    | Max Grid Size            : (2147483647,65535,65535)
+    |  => Max conc. Threads    : 26624
+    |  => Warps per SM         : 64
+    | CUDA Cores per SM        : 192
+    | Spec. func. Cores per SM : 32
+    | Warp Schedulers per SM   : 4
+    | Instr. issues per Cycle  : 64
+    |  => Total CUDA-Cores     : 2496
+    |  => Peak-SP-FLOPs        : 2055.456055
+    |---------------------- Memory ----------------------
+    | Total Global Memory      : 12079136768 Bytes
+    | Total Constant Memory    : 65536 Bytes
+    | Shared Memory per Block  : 49152 Bytes
+    | L2 Cache Size            : 1572864 Bytes
+    | Registers per Block      : 65536
+    | Memory Bus Width         : 384 Bits
+    | Memory Clock Rate        : 2.505000 GHz
+    | Memory Pitch             : 2147483647
+    | Unified Addressing       : 1
+    |--------------------- Graphics ---------------------
+    | Compute mode             : Unknown
+    |---------------------- Other -----------------------
+    | Can map Host Memory      : true
+    | Can run Kernels conc.    : true
+    | Number of Asyn. Engines  : 2
+    | Can Copy and Kernel conc.: true
+    | ECC Enabled              : true
+    | Device is Integrated     : false
+    | Kernel Timeout Enabled   : false
+    | Uses TESLA Driver        : false
+    =====================================================
+
+    Measuring number of concurrently running threads:
+      a) Start 1 thread (takes whole minThreadsPerBlock compute units) which sets a stop flag after a waiting for 100000 cycles (CLOCLS_PER_SEC)
+      b) Start 65536 threads in differing gridDim and blockDim configurations. Not all will be able to fit on the GPU. The threads atomically increment the value 'nRunningThreads' and then wait for the stop flag to be set
+      c) Get nRunningThreads sum and calculate derived values
+
+    Output Style: Started (nBlocks,nThreadsPerBlock) -> only (nRunningBlocks,nRunningThreads) actually ran concurrently. Excluding 1 thread in 1 block for setting the flag.
+
+    ( 65536,     1) -> (     0,     0)   [1 (maxThreads) = 0 (maxRunningThreads) + 1 (1 block)]
+    ( 32768,     2) -> (   207,   414)   [416 (maxThreads) = 414 (maxRunningThreads) + 2 (1 block)]
+    ( 16384,     4) -> (   207,   828)   [832 (maxThreads) = 828 (maxRunningThreads) + 4 (1 block)]
+    (  8192,     8) -> (   207,  1656)   [1664 (maxThreads) = 1656 (maxRunningThreads) + 8 (1 block)]
+    (  4096,    16) -> (   207,  3312)   [3328 (maxThreads) = 3312 (maxRunningThreads) + 16 (1 block)]
+    (  2048,    32) -> (   207,  6624)   [6656 (maxThreads) = 6624 (maxRunningThreads) + 32 (1 block)]
+    (  1024,    64) -> (   207, 13248)   [13312 (maxThreads) = 13248 (maxRunningThreads) + 64 (1 block)]
+    (   512,   128) -> (   207, 26496)   [26624 (maxThreads) = 26496 (maxRunningThreads) + 128 (1 block)]
+    (   256,   256) -> (   103, 26368)   [26624 (maxThreads) = 26368 (maxRunningThreads) + 256 (1 block)]
+    Maximum numbers of threads not rising anymore, signaling that the threads per block are sated. If the number of threads actually decreased, then this is because of the flagging-kernel which actually blocks 'minThreadsPerBlock' threads instead of only 1. Furthermore because of maxBlocksPerDevice we get all in all 1 block of threads less than actually possible. Thereby by increasing the threadsPerBlock we count less and less maxThreadsPerDevice.
+    (   128,   512) -> (    51, 26112)   [26624 (maxThreads) = 26112 (maxRunningThreads) + 512 (1 block)]
+    (    64,  1024) -> (    25, 25600)   [26624 (maxThreads) = 25600 (maxRunningThreads) + 1024 (1 block)]
+    (    32,  2048) -> (     0,     0)   [2048 (maxThreads) = 0 (maxRunningThreads) + 2048 (1 block)]
+    No threads ran. We have either tried to start more threadsPerBlock than supported! Finishing test.
+
+    ==================== Results =====================
+    | Maximum Threads per Block : 1024 <= x < 2048
+    | Block Size padded to      : 128 Threads
+    | Max Blocks  per Device    : 208
+    | Max Threads per Device    : 26624
+    | Assuming 13 Streaming Multiprocessors (SMX) as read with cudaGetDeviceProperties:
+    |  => Max Blocks  per SMX: 16
+    |  => Max Threads per SMX: 2048
+    ==================================================
+
+
+
+===================== 2016-02-15 =====================
+
+In order to run code on multiple devices without communication between the processes I somehow need discern the processes. The easiest would be if I could give them a process parameter or two:
+
+    srun -n 1 -N 1 env | egrep ^SLURM_ | sort
+
+        SLURM_CHECKPOINT_IMAGE_DIR=/var/slurm/checkpoint
+        SLURM_CLUSTER_NAME=taurus2
+        SLURM_CPU_FREQ_REQ=Highm1
+        SLURM_CPUS_ON_NODE=4
+        SLURM_CPUS_PER_TASK=1
+        SLURM_DISTRIBUTION=cyclic
+        SLURM_GTIDS=0
+        SLURM_JOB_CPUS_PER_NODE=4(x2)
+        SLURM_JOB_ID=4275947
+        SLURM_JOBID=4275947
+        SLURM_JOB_NAME=bash
+        SLURM_JOB_NODELIST=taurusi[2093-2094]
+        SLURM_JOB_NUM_NODES=2
+        SLURM_JOB_PARTITION=gpu-interactive
+        SLURM_JOB_UID=1057660
+        SLURM_JOB_USER=s3495379
+        SLURM_LAUNCH_NODE_IPADDR=172.24.32.16
+        SLURM_LOCALID=0
+        SLURM_MEM_PER_CPU=300
+        SLURM_NNODES=1
+        SLURM_NODEID=0
+        SLURM_NODELIST=taurusi[2093-2094]
+        SLURM_NPROCS=1
+        SLURM_NTASKS=1
+        SLURM_NTASKS_PER_NODE=4
+        SLURM_PRIO_PROCESS=0
+        SLURM_PROCID=0
+        SLURM_SRUN_COMM_HOST=172.24.32.16
+        SLURM_SRUN_COMM_PORT=42834
+        SLURM_STEP_ID=11
+        SLURM_STEPID=11
+        SLURM_STEP_LAUNCHER_PORT=42834
+        SLURM_STEP_NODELIST=taurusi2093
+        SLURM_STEP_NUM_NODES=1
+        SLURM_STEP_NUM_TASKS=1
+        SLURM_STEP_RESV_PORTS=15570-15571
+        SLURM_STEP_TASKS_PER_NODE=1
+        SLURM_SUBMIT_DIR=/home/h0/s3495379
+        SLURM_SUBMIT_HOST=tauruslogin4
+        SLURM_TASK_PID=3153
+        SLURM_TASKS_PER_NODE=1
+        SLURM_TOPOLOGY_ADDR_PATTERN=switch.switch.switch.node
+        SLURM_TOPOLOGY_ADDR=root_virt.root_island_admin.isw138.taurusi2093
+
+    cat > tmp.slurm <<"EOF"
+#!/bin/bash
+nGpusPerNode=4
+iGpuToUse=$((SLURM_PROCID % nGpusPerNode ))
+echo $(hostname) Process ID: $SLURM_PROCID
+echo GPU device to use: $iGpuToUse
+singleNode/singleGpu/cpp/TestMonteCarloPiV2.exe 2684354560 $iGpuToUse
+EOF
+    chmod u+x tmp.slurm
+    srun tmp.slurm
+
+        taurusi2094 Process ID = 6
+        taurusi2094 Process ID = 5
+        taurusi2094 Process ID = 4
+        taurusi2094 Process ID = 7
+        taurusi2093 Process ID = 0
+        taurusi2093 Process ID = 1
+        taurusi2093 Process ID = 2
+        taurusi2093 Process ID = 3
+
+    cat > tmp.slurm <<"EOF"
+#!/bin/bash
+nGpusPerNode=4
+iGpuToUse=$((SLURM_PROCID % nGpusPerNode ))
+echo $(hostname) Process ID: $SLURM_PROCID
+echo GPU device to use: $iGpuToUse
+java -jar singleNode/multiGpu/java/MontePi.jar 2684354560 $iGpuToUse
+EOF
+
+    srun tmp.slurm
+        taurusi2107 Process ID: 1
+        GPU device to use: 1
+        taurusi2107 Process ID: 3
+        taurusi2107 Process ID: 2
+        GPU device to use: 3
+        GPU device to use: 2
+        taurusi2107 Process ID: 0
+        GPU device to use: 0
+        taurusi2108 Process ID: 4
+        GPU device to use: 0
+        taurusi2108 Process ID: 7
+        GPU device to use: 3
+        taurusi2108 Process ID: 5
+        GPU device to use: 1
+        taurusi2108 Process ID: 6
+        GPU device to use: 2
+        Do 100825 dice rolls in 16384 threads and 100824 dice rolls in 10240 threads
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (32,1,1) blocks with each (256,1,1) threads on GPU device 2
+        Do 100825 dice rolls in 16384 threads and 100824 dice rolls in 10240 threads
+        Do 100825 dice rolls in 16384 threads and 100824 dice rolls in 10240 threads
+        Do 100825 dice rolls in 16384 threads and 100824 dice rolls in 10240 threads
+        Try to find grid config for 26624 threads
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (32,1,1) blocks with each (256,1,1) threads on GPU device 1
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (32,1,1) blocks with each (256,1,1) threads on GPU device 3
+        Run a total of 26624 threads in (32,1,1) blocks with each (256,1,1) threads on GPU device 0
+        Rolling the dice 2684354560 times resulted in pi ~ 3.142893692850358 and took 3.080639438 seconds
+        Rolling the dice 2684354560 times resulted in pi ~ 3.142893692850358 and took 3.30474137 seconds
+        Rolling the dice 2684354560 times resulted in pi ~ 3.142893692850358 and took 3.306515613 seconds
+        Rolling the dice 2684354560 times resulted in pi ~ 3.142893692850358 and took 3.309488848 seconds
+        Do 100825 dice rolls in 16384 threads and 100824 dice rolls in 10240 threads
+        Do 100825 dice rolls in 16384 threads and 100824 dice rolls in 10240 threads
+        Do 100825 dice rolls in 16384 threads and 100824 dice rolls in 10240 threads
+        Do 100825 dice rolls in 16384 threads and 100824 dice rolls in 10240 threads
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (32,1,1) blocks with each (256,1,1) threads on GPU device 0
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (32,1,1) blocks with each (256,1,1) threads on GPU device 1
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (32,1,1) blocks with each (256,1,1) threads on GPU device 2
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (32,1,1) blocks with each (256,1,1) threads on GPU device 3
+        Rolling the dice 2684354560 times resulted in pi ~ 3.142893692850358 and took 3.82358761 secondsRolling the dice 2684354560 times resulted in pi ~ 3.142893692850358 and took 3.873006656 secondsRolling the dice 2684354560 times resulted in pi ~ 3.142893692850358 and took 3.84519946 seconds
+        Rolling the dice 2684354560 times resulted in pi ~ 3.142893692850358 and took 3.786157183 seconds
+
+Overhead on Taurus seems to be worse than on Home-PC:
+    srun -n 1 -N 1 java -jar MontePi.jar 2684354560 0
+        Rolling the dice 2684354560 times resulted in pi ~ 3.142893692850358 and took 2.32002824 seconds
+    srun -n 1 -N 1 java -jar MontePi.jar 26843545600 0
+        Rolling the dice 26843545600 times resulted in pi ~ 3.141387795955019 and took 4.625681774 seconds
+    srun -n 1 -N 1 java -jar MontePi.jar 268435456000 0
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+        Rolling the dice 268435456000 times resulted in pi ~ 3.14147768224769 and took 26.744837703 seconds
+
+Multi-GPU doesn't seem to work, because the time needed scales with number of proccess
+    srun -n 2 -N 1 java -jar MontePi.jar 26843545600 0
+        Do 1008247 dice rolls in 4096 threads and 1008246 dice rolls in 22528 threads
+        Do 1008247 dice rolls in 4096 threads and 1008246 dice rolls in 22528 threads
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+        Rolling the dice 26843545600 times resulted in pi ~ 3.141387795955019 and took 6.267817184 seconds
+        [CUDAContext.c] Create context on device 0 ( cuDevice = 0 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 0 )
+        Rolling the dice 26843545600 times resulted in pi ~ 3.141387795955019 and took 7.251467244 seconds
+        [CUDAContext.c] Create context on device 0 ( cuDevice = 0 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 0 )
+    srun -n 4 -N 1 java -jar MontePi.jar 26843545600 0
+        Do 1008247 dice rolls in 4096 threads and 1008246 dice rolls in 22528 threads
+        Do 1008247 dice rolls in 4096 threads and 1008246 dice rolls in 22528 threads
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+        Do 1008247 dice rolls in 4096 threads and 1008246 dice rolls in 22528 threads
+        Do 1008247 dice rolls in 4096 threads and 1008246 dice rolls in 22528 threads
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+        Try to find grid config for 26624 threads
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+        Rolling the dice 26843545600 times resulted in pi ~ 3.141387795955019 and took 11.839156903 seconds
+        [CUDAContext.c] Create context on device 0 ( cuDevice = 0 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 0 )
+        Rolling the dice 26843545600 times resulted in pi ~ 3.141387795955019 and took 11.913858499 seconds
+        [CUDAContext.c] Create context on device 0 ( cuDevice = 0 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 0 )
+        Rolling the dice 26843545600 times resulted in pi ~ 3.141387795955019 and took 11.964973148 seconds
+        [CUDAContext.c] Create context on device 0 ( cuDevice = 0 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 0 )
+        Rolling the dice 26843545600 times resulted in pi ~ 3.141387795955019 and took 12.770361478 seconds
+        [CUDAContext.c] Create context on device 0 ( cuDevice = 0 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 0 )
+
+    srun -n 4 -N 1 tmp.slurm
+        taurusi2107 Process ID: 2
+        GPU device to use: 2
+        taurusi2107 Process ID: 0
+        GPU device to use: 0
+        taurusi2107 Process ID: 1
+        GPU device to use: 1
+        taurusi2107 Process ID: 3
+        GPU device to use: 3
+        Do 100825 dice rolls in 16384 threads and 100824 dice rolls in 10240 threads
+        Do 100825 dice rolls in 16384 threads and 100824 dice rolls in 10240 threads
+        Try to find grid config for 26624 threads
+        Do 100825 dice rolls in 16384 threads and 100824 dice rolls in 10240 threads
+        Do 100825 dice rolls in 16384 threads and 100824 dice rolls in 10240 threads
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 3
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 2
+        Try to find grid config for 26624 threads
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 1Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+
+        Rolling the dice 2684354560 times resulted in pi ~ 3.142893692850358 and took 3.209886705 seconds
+        [CUDAContext.c] Create context on device 1 ( cuDevice = 1 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 1 )
+        Rolling the dice 2684354560 times resulted in pi ~ 3.142893692850358 and took 3.314613215 seconds
+        [CUDAContext.c] Create context on device 3 ( cuDevice = 3 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 3 )
+        Rolling the dice 2684354560 times resulted in pi ~ 3.142893692850358 and took 3.312913494 seconds
+        [CUDAContext.c] Create context on device 2 ( cuDevice = 2 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 2 )
+        Rolling the dice 2684354560 times resulted in pi ~ 3.142893692850358 and took 3.304967588 seconds
+        [CUDAContext.c] Create context on device 0 ( cuDevice = 0 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 0 )
+
+    srun -n 4 -N 1 tmp.slurm
+        taurusi2107 Process ID: 2
+        GPU device to use: 2
+        taurusi2107 Process ID: 3
+        GPU device to use: 3
+        taurusi2107 Process ID: 0
+        GPU device to use: 0
+        taurusi2107 Process ID: 1
+        GPU device to use: 1
+        Do 1008247 dice rolls in 4096 threads and 1008246 dice rolls in 22528 threads
+        Do 1008247 dice rolls in 4096 threads and 1008246 dice rolls in 22528 threads
+        Do 1008247 dice rolls in 4096 threads and 1008246 dice rolls in 22528 threads
+        Do 1008247 dice rolls in 4096 threads and 1008246 dice rolls in 22528 threads
+        Try to find grid config for 26624 threads
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 3Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 2
+
+        Try to find grid config for 26624 threads
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 1
+
+        Rolling the dice 26843545600 times resulted in pi ~ 3.141387795955019 and took 5.306977321 seconds
+        [CUDAContext.c] Create context on device 0 ( cuDevice = 0 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 0 )
+        Rolling the dice 26843545600 times resulted in pi ~ 3.141387795955019 and took 5.363503065 seconds
+        [CUDAContext.c] Create context on device 1 ( cuDevice = 1 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 1 )
+        Rolling the dice 26843545600 times resulted in pi ~ 3.141387795955019 and took 5.481591752 seconds
+        [CUDAContext.c] Create context on device 3 ( cuDevice = 3 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 3 )
+        Rolling the dice 26843545600 times resulted in pi ~ 3.141387795955019 and took 5.486044913 seconds
+        [CUDAContext.c] Create context on device 2 ( cuDevice = 2 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 2 )
+
+    srun -n 4 -N 1 tmp.slurm
+        taurusi2107 Process ID: 3
+        GPU device to use: 3
+        taurusi2107 Process ID: 0
+        GPU device to use: 0
+        taurusi2107 Process ID: 2
+        GPU device to use: 2
+        taurusi2107 Process ID: 1
+        GPU device to use: 1
+        Do 10082462 dice rolls in 14336 threads and 10082461 dice rolls in 12288 threads
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 3
+        Do 10082462 dice rolls in 14336 threads and 10082461 dice rolls in 12288 threads
+        Do 10082462 dice rolls in 14336 threads and 10082461 dice rolls in 12288 threads
+        Do 10082462 dice rolls in 14336 threads and 10082461 dice rolls in 12288 threads
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 1
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 2
+        Rolling the dice 268435456000 times resulted in pi ~ 3.14147768224769 and took 27.018285041 seconds
+        [CUDAContext.c] Create context on device 3 ( cuDevice = 3 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 3 )
+        Rolling the dice 268435456000 times resulted in pi ~ 3.14147768224769 and took 27.158489381 seconds
+        [CUDAContext.c] Create context on device 2 ( cuDevice = 2 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 2 )
+        Rolling the dice 268435456000 times resulted in pi ~ 3.14147768224769 and took 27.567313262 seconds
+        [CUDAContext.c] Create context on device 1 ( cuDevice = 1 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 1 )
+        Rolling the dice 268435456000 times resulted in pi ~ 3.14147768224769 and took 27.676594911 seconds
+        [CUDAContext.c] Create context on device 0 ( cuDevice = 0 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 0 )
+
+    srun -n 4 -N 1 java -jar MontePi.jar 268435456000 0
+        Do 10082462 dice rolls in 14336 threads and 10082461 dice rolls in 12288 threads
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+        Do 10082462 dice rolls in 14336 threads and 10082461 dice rolls in 12288 threads
+        Do 10082462 dice rolls in 14336 threads and 10082461 dice rolls in 12288 threadsDo 10082462 dice rolls in 14336 threads and 10082461 dice rolls in 12288 threads
+
+        Try to find grid config for 26624 threads
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+        Try to find grid config for 26624 threadsTry to find grid config for 26624 threads
+
+        Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+
+        Rolling the dice 268435456000 times resulted in pi ~ 3.14147768224769 and took 100.656855578 seconds
+        [CUDAContext.c] Create context on device 0 ( cuDevice = 0 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 0 )
+        Rolling the dice 268435456000 times resulted in pi ~ 3.14147768224769 and took 101.773673729 seconds
+        [CUDAContext.c] Create context on device 0 ( cuDevice = 0 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 0 )
+        Rolling the dice 268435456000 times resulted in pi ~ 3.14147768224769 and took 101.795779001 seconds
+        [CUDAContext.c] Create context on device 0 ( cuDevice = 0 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 0 )
+        Rolling the dice 268435456000 times resulted in pi ~ 3.14147768224769 and took 101.80003329 seconds
+        [CUDAContext.c] Create context on device 0 ( cuDevice = 0 )
+        [CUDAContext.c] Launch kernel on ( cuDevice = 0 )
+
+salloc -p gpu-interactive --nodes=8 --ntasks-per-node=4 --cpus-per-task=1 --gres=gpu:4 --time=3:00:00
