@@ -26,9 +26,66 @@
 \section{Einführung}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Was ist das Ziel der Arbeit/des Vortrags
-%   Verfügbarmachen von
-% Übersicht des Vortrags
+
+\begin{frame}
+    \frametitle{GPU-Beschleuniger zum Hochleistungsrechnen}
+    % Bild K20x und AmdOpteron ? damit man sofort sieht, um was es auf der Folie geht?
+    %  - https://commons.wikimedia.org/wiki/File:AMD_Opteron_2212_IMGP1795.jpg
+    %  - http://images.nvidia.com/content/tesla/images/tesla-3-quater.png
+    %
+    % sagen:
+    %   - Mittlerweile ist GPU an vielen Stellen schon Mainstream im Cluster-
+    %     Computing geworden. Beispielhafter Beweis: die aktuelle Top 3 Titan XK7:
+    %         18 688 AMD Opteron 6274 (16 Kerne)
+    %         18 688 Nvidia Tesla K20X (90% der Rechenlast)
+    %       https://www.olcf.ornl.gov/titan/
+    %     und viele andere haben auch schon oder wollen aufrüsten
+    %     Top 8 will dieses Jahr mit 4500 Pascal GPUs (16nm HBM2) aufrüsten
+    %       http://nvidianews.nvidia.com/news/nvidia-pascal-gpus-to-double-speed-of-europe-s-fastest-supercomputer
+    %     https://www.top500.org/lists/2016/06/
+    %     http://on-demand.gputechconf.com/supercomputing/2012/presentation/SB005-Bland-Titan-Oak-Ridge-National-Labs.pdf
+    %
+    \begin{columns}
+        \begin{column}
+            \begin{center}
+                \includegraphics[height=0.1\textheight]{tesla-3-quater.png}
+            \end{center}
+            \textcolor{gray}{\scriptsize{NVIDIA}}
+        \end{column}\begin{column}
+            \begin{center}
+                \includegraphics[height=0.1\textheight]{AMD_Opteron_2212_IMGP1795.jpg}
+            \ent{center}
+            \textcolor{gray}{\scriptsize{Rainer Knäpper, Free Art License (\url{artlibre.org/licence/lal/en/})}}
+        \end{column}
+    \begin{columns}
+    \begin{itemize}{Aktueller (Juni 2016) Platz 3 Titan XK7 in der Top 500:}
+        \item 18 688 AMD Opteron 6274 (16 Kerne) (140\,TDPFLOPS)
+        \item 18 688 Nvidia Tesla K20X (1.3\,TDPFLOPS)  % (90% der Rechenlast)
+    \end{itemize}
+    % Ist eigtl. eher general knowledge, aber kann ja nicht schaden, als kleiner Einstieg, außer wenn ich dadurch ein Halbwissen zur Schau stelle.
+    \begin{itemize}{General Purpose Graphical Processing Units(GPGPU) im Vergleich Prozessoren.}
+        \item[+] Kosteneffektiv in Anschaffung
+        \item[+] sehr gute Leistungsaufnahme pro GFlops
+        \item[-] nur für bestimmte Anwendungen geeignet
+            % sagen:
+            %  - niedrig Latenz, streaming (in Bezug auf Speicehrzugriffe)
+            %    (wenige random access)
+            %  - eher für compute-bound (auf CPU) Probleme geeignet
+        \item[+] hohe Speicherbandbreiten
+        \item[-] niedrige Speicherlatenzen
+        \item[+] Massiv parallel (3840 CUDA cores gegen 24 cores Xeon E7-8890-v4 (AVX2)
+            % (Broadwell 14nm) http://ark.intel.com/products/91317/Intel-Xeon-Processor-E5-2699-v4-55M-Cache-2_20-GHz
+            % http://ark.intel.com/de/products/93790/Intel-Xeon-Processor-E7-8890-v4-60M-Cache-2_20-GHz
+            % http://www.cpu-world.com/info/id_model/Intel-server-conventions.html
+            %   E7: Mission-critical
+            %   v4: Broadwell
+            % Broadwell AVX2 (256-Bits => 8 floats) (FMA*2) => entspricht also 24*8*2 CUDA-Cores = 384 -> Faktor 10 langsamer (meist nochmal Faktor 2 wegen kleiner Taktfrequenz von GPUs). Faktor 10,5 stimmt gut mit empirischen Messungen überein.
+        \item[-] \textbf{zusätzliche Komplexität beim Programmieren}
+    \end{itemize}
+    % sagen:
+    %  - Ziel dieser Belegarbeit ist es den letzten Punkt zu tilgen, indem man Berechnungen auf GPUs in das Spark-Framework einbringt (in nächsten Folien dann klar machen, dass die high-level Befehle in Spark sehr praktisch sind, um die GPU-Programmierung zu verstecken (map reduce abstraktion))
+\end{frame}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -37,27 +94,134 @@
 
 % Following:
 %  - https://www.toptal.com/spark/introduction-to-apache-spark
-%  - "Learning Spark"
+%  - "Learning Spark" book
 
 \begin{frame}
-MapReduce Paper Google:
- -
-Hadoop: Core MapReduce + verteiltes Dateisystem(HDFS,NFS,...)
-
-% Sagen:
-%  - 2009 als Forschungsprojekt am UC Berkely Lab angefangen
-%  - 2013 Transfer zur Apache Software Foundation
-Nachfolger zu Hadoop MapReduce. Geschrieben in Scala.
-Vorteile gegenüber von Hadoop MapReduce:
-  + Kann in-memory arbeiten, was Hadoop nicht anbot
-  + komplexere Funktionen auch on-disk schneller als Hadoop!
-  + interaktive Konsole zum schnellen Prototyping
-  + Stellt viele Komplexbefehle zur Verfügung
-    % vereinfachtere Programmierung gegenüber simplen MapReduce
-    %   -> siehe nächste Folie
-  + hohe Anwendbarkeit: Aus vielen Sprachen heraus nutzbar: Scala, Java, Python, SQL.
-  + Im Gegensatz zu zu Hadoop MapReduce auch lokales Dateisystem nutzbar (Hadoop erzwingt HDFS)
+    \frametitle{Spark Übersicht}
+    % Sagen:
+    %  - 2009 als Forschungsprojekt am UC Berkely Lab angefangen
+    %  - 2013 Transfer zur Apache Software Foundation
+    %  - GraySort Gewinner 5.11.2014: Apache Spark von Reynold Xin (Databricks Inc.)
+    %     => 3x schneller bei 1/10 Knoten und 1/5 Datendurchsatz als alter Hadoop MapReduce-Gewinner
+    %     => ab da wsl. richtig an Fahrt gewonnen
+    Nachfolger zu Hadoop MapReduce. Geschrieben in Scala.
+    % (Hadoop: Core MapReduce + verteiltes Dateisystem(HDFS,NFS,...))
+    \begin{itemize}{Vorteile gegenüber von Hadoop MapReduce:}
+        \item[+] Kann im Arbeitsspeicher arbeiten % , was Hadoop nicht anbot
+        \item[+] Stellt viele Komplexbefehle zur Verfügung
+        \item[+] iterative Algorithmen schneller als Hadoop wegen cache/persist-Funktionen
+            % auch auf der Festplatte schneller als Hadoop MapReduce! % WARUM?!
+            % http://stackoverflow.com/questions/26870537/spark-what-is-the-difference-between-cache-and-persist
+            % cache only memory <-> persist can specify, e.g. disk
+        \item[+] interaktive Konsole % zum schnellen Prototyping
+        % vereinfachtere Programmierung gegenüber simplen MapReduce
+        %   -> siehe nächste Folie
+        \item[+] Unterstützung für: Scala, Java, Python, \ldots
+        \item[+] Im Gegensatz zu zu Hadoop MapReduce auch lokales Dateisystem nutzbar % (Hadoop erzwingt HDFS), HDFS u.a. auch in Spark möglich
+    \end{itemize}
 \end{frame}
+
+
+\begin{frame}
+    \frametitle{Spark Anwendungen}
+    % - datenanalyse, -visualisierung, prognosemodelle (z.B. "you also might like these products ...")
+    \includegraphics[width=0.8\linewidth]{spark-libraries.png}
+    % sagen:
+    %   - Spark SQL:
+    %       - allow access to RDDs using SQL queries über einen SQL Kontext:
+    %           val schemaString = "name age"
+    %           ...
+    %           val rowRDD = people.map(_.split(",")).map(p => Row(p(0), p(1).trim))
+    %           val peopleDataFrame = sqlContext.createDataFrame(rowRDD, schema)
+    %           val results = sqlContext.sql("SELECT name FROM people")
+    %       http://spark.apache.org/docs/latest/sql-programming-guide.html#programmatically-specifying-the-schema
+    %
+    %   - Spark Streaming: Echtzeitdatenanalyse (z.B. Themen / häufigste Wörter in den letzten 10k Tweets). oder Kombination mit MLib möglich (Streaming Linear Regression)
+    %     Data fitting während daten gestreamt werden (ich stelle mir z.B. least square fitting von einem physikalischen Experiment vor, z.B. v(t) fitting auf v(t)=v0+g*t fitting, um die Fallbeschleunigung g zu bestimmen, während gemessen wird. (Minimalbeispiel, denkbarer wäre wohl irgendetwas am LHC, mit ihren Terabyte an Daten pro Sekunde) -> Vorteil, dass die Daten nicht gespeichert werden müssen, was vlt. gar nicht möglich wäre:
+    %           http://spark.apache.org/docs/latest/mllib-linear-methods.html#streaming-linear-regression
+    %
+    %   - MlLib: statistiken (mittelwert, standardabweichung, ...), korrelaton, (lineare) regression, k-means, stochastic(online) gradient descent ...
+    %       http://spark.apache.org/mllib/
+    %       http://spark.apache.org/docs/latest/ml-guide.html
+    %       http://spark.apache.org/docs/latest/mllib-optimization.html
+    %     Primitiven für Machinenlernen, aber keine highlevel abstraktion wie z.B. Keras, wo das Training in einer Zeile geht:
+    %            model.fit( X_train, y_train,
+    %                       nb_epoch=1000, batch_size=100,
+    %                       verbose=1, validation_split=0.2,
+    %                       callbacks=[EarlyStopping( monitor='val_loss',
+    %                                                 patience=25, mode='min'),
+    %                       WeightLogger()] )
+    %               www.thoughtly.co/blog/deep-learning-lesson-3/
+    %       (verstehe ich das so richtig ???)
+    %       http://www.kdnuggets.com/2015/12/spark-deep-learning-training-with-sparknet.html
+    %
+    %   - GraphX
+    %       Graphdatentyp + Algorithmen drauf wie
+    %           PageRank: Berechnung der Relevanz / Popularität aller Knoten in einem Graphen aus den Wertungen ihrer jeweiligen Kanten
+    %           subgraph ...
+    %       http://spark.apache.org/docs/latest/graphx-programming-guide.html#graph_algorithms
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Spark auf Github}
+    \url{github.com/apache/spark.git master}\\
+    % sagen:
+    %   - anhaltende >aktive< Entwicklung (nicht wie Rootbeer ...)
+    %   - 2012 nur 20k Code, nun 1 Millionen Zeilen -> betonen, um zu zeigen, dass es ein komplexes Projekt ist, für dass ein Mitwirken (GPU Plugin) möglicherweise den Rahmen einer Belegarbeit sprengt ... :)"
+    %   - über tausend (1203 an 2016-07-06) Beitragende / Programmierer (210 in den letzten 30 Tagen)
+    %   - 33 417 commits
+    \includegraphics[width=\linewidth]{spark-openhub.png}\\
+    \textcolor{gray}{\scriptsize{\url{
+        https://www.openhub.net/p/apache-spark
+    }}}
+    % git://github.com/apache/spark.git master
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{MapReduce Programmiermodell}
+    % nicht sicher in welchen Zitationsstil ich das hier machen soll, oder einfach nur freihand?
+    - 2008: Paper ''MapReduce: Simplified Data Processing on Large Clusters'' von Jeffrey Dean und Sanjay Ghemawat (Google Inc.)
+    %@article{
+    %    author     = {Dean, Jeffrey and Ghemawat, Sanjay},
+    %    title      = {MapReduce: Simplified Data Processing on Large Clusters},
+    %    journal    = {Commun. ACM},
+    %    issue_date = {January 2008},
+    %    volume     = {51},
+    %    number     = {1},
+    %    month      = jan,
+    %    year       = {2008},
+    %    issn       = {0001-0782},
+    %    pages      = {107--113},
+    %    numpages   = {7},
+    %    url        = {http://doi.acm.org/10.1145/1327452.1327492},
+    %    doi        = {10.1145/1327452.1327492},
+    %    acmid      = {1327492},
+    %    publisher  = {ACM},
+    %    address    = {New York, NY, USA},
+    %}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Resilient Distributed Datasets (RDDs)}
+    \begin{itemize}
+        \item zu bearbeitende Daten liegen in RDD-Objekten
+        % sagen:
+        %  - sind eine Abstraktion
+        \item Methoden zur Verarbeitung der Daten
+              \includegraphics[scale=1.0]{rdd-disting-filter.png}
+              \textcolor{gray}{\scriptsize{\url{
+                 https://spark.apache.org/docs/0.8.1/api/core/org/apache/spark/rdd/RDD.html
+              }}}
+              % Bild soll für Programmierer zeigen, dass es wirklich nicht viel mehr als eine Klassenabstraktion ist, indem es Methoden dieser Klasse zeigt
+        \item distributed
+        \item resilient
+    \end{itemize}
+    % https://spark.apache.org/docs/1.5.2/api/scala/index.html#org.apache.spark.SparkContext
+\end{frame}
+
 
 %%%%NH: Nimm gleich das Monte Carlo Pi Beispiel statt wordcount
 \begin{frame}
@@ -92,39 +256,6 @@ Vorteile gegenüber von Hadoop MapReduce:
     \begin{lstlisting}{language=shell}
         $SPARK_ROOT/bin/spark-shell --master local[*]
     \end{lstlisting}
-\end{frame}
-
-%%%%NH: Bin mir nicht sicher, ob die Folie zu Graysort wirklich relevant ist, da du in deinem Framework ja das Sortieren nicht untersuchst/optimierst. (Insb. ist es für GPU computing eher ungeeignet, da du viele Host-GPU transfers hast => shuffle intensiv)
-\begin{frame}
-GraySort Gewinner 5.11.2014: Apache Spark von Reynold Xin (Databricks Inc.)
-  % https://databricks.com/blog/2014/10/10/spark-petabyte-sort.html
-  %  https://databricks.com/blog/2014/11/05/spark-officially-sets-a-new-record-in-large-scale-sorting.html
-  % Sagen:
-  %  - nur kurzzeitig, abgelöst von TritonSort, aktuell FuxiSort:
-  %     - (Alibaba Cloud Computing Inc) mittels Apsara(distributed FS Pangu + distribution computation framework Fuxi, written in C/C++)
-  %  - 206 nodes a 32 virtuelle cores (Amazon Elastic Compute Cloud - EC2) vs. HadoopRecord 2100 nodes a 24 cores (physisch)
-  %  - GraySort sortiert mindestens 100TB, das heißt auf große Daten ausgelegt
-  - \begin{tabular}{c|c}
-    Apache Spark                &   Hadoop               \\
-    \hline
-    \SI{100}{\tera\byte}        & \SI{102.5}{\tera\byte} \\
-    \SI{1406}{\second}          & \SI{4238}{\second}     \\
-    207 Amazon EC2 i2.8xlarge Nodes
-      - 32 vCores (2.5Ghz Intel Xeon E5-2670 v2) % 8 cores, 16 SMT
-      - 244GB memory
-      - 8 \times \SI{800}{\giga\byte} SSD
-    Summe: \SI{1324.8}{\tera\byte} mit \SI{618}{\giga\byte\per\second}
-    &
-    2100 Nodes
-      - 2 \times \SI{2.3}{\giga\hertz} hexcore Xeon E5-2630
-      - 64 GB RAM
-      - 12 \times \SI{3}{\tera\byte} disks
-    Summe: \SI{75600}{\tera\byte} mit \approx \SI{3150}{\giga\byte\per\second} Durchsatz
-  % http://sortbenchmark.org/
-  % https://databricks.com/blog/2014/11/05/spark-officially-sets-a-new-record-in-large-scale-sorting.html
-  => 3x schneller bei 1/10 Knoten und 1/5 Datendurchsatz
-  % Sagen:
-  %     Autoren ahbena uch erste Sortierung mit 1 Petabyte an Daten auf einen öffentlcihen cloud damit gemacht. (16h 3800 nodes)
 \end{frame}
 
 % Was ist Spark, warum will ich es nehmen
