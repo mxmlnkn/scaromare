@@ -45,34 +45,30 @@
     %     https://www.top500.org/lists/2016/06/
     %     http://on-demand.gputechconf.com/supercomputing/2012/presentation/SB005-Bland-Titan-Oak-Ridge-National-Labs.pdf
     %
-    \begin{columns}
-        \begin{column}
-            \begin{center}
-                \includegraphics[height=0.1\textheight]{tesla-3-quater.png}
-            \end{center}
-            \textcolor{gray}{\scriptsize{NVIDIA}}
-        \end{column}\begin{column}
-            \begin{center}
-                \includegraphics[height=0.1\textheight]{AMD_Opteron_2212_IMGP1795.jpg}
-            \ent{center}
-            \textcolor{gray}{\scriptsize{Rainer Knäpper, Free Art License (\url{artlibre.org/licence/lal/en/})}}
-        \end{column}
-    \begin{columns}
-    \begin{itemize}{Aktueller (Juni 2016) Platz 3 Titan XK7 in der Top 500:}
+    \begin{columns}\begin{column}{0.5\linewidth}
+        \centerline{\includegraphics[height=0.1\textheight]{tesla-3-quater.png}}
+        \textcolor{gray}{\scriptsize{NVIDIA}}
+    \end{column}\begin{column}{0.5\linewidth}
+        \centerline{\includegraphics[height=0.1\textheight]{AMD_Opteron_2212_IMGP1795.jpg}}
+        \textcolor{gray}{\scriptsize{Rainer Knäpper, Free Art License (\url{artlibre.org/licence/lal/en/})}}
+    \end{column}\end{columns}
+    Aktueller (Juni 2016) Platz 3 Titan XK7 in der Top 500:
+    \begin{itemize}
         \item 18 688 AMD Opteron 6274 (16 Kerne) (140\,TDPFLOPS)
         \item 18 688 Nvidia Tesla K20X (1.3\,TDPFLOPS)  % (90% der Rechenlast)
     \end{itemize}
     % Ist eigtl. eher general knowledge, aber kann ja nicht schaden, als kleiner Einstieg, außer wenn ich dadurch ein Halbwissen zur Schau stelle.
-    \begin{itemize}{General Purpose Graphical Processing Units(GPGPU) im Vergleich Prozessoren.}
+    General Purpose Graphical Processing Units(GPGPU) im Vergleich Prozessoren:
+    \begin{itemize}
         \item[+] Kosteneffektiv in Anschaffung
         \item[+] sehr gute Leistungsaufnahme pro GFlops
-        \item[-] nur für bestimmte Anwendungen geeignet
+        \item[–] nur für bestimmte Anwendungen geeignet
             % sagen:
             %  - niedrig Latenz, streaming (in Bezug auf Speicehrzugriffe)
             %    (wenige random access)
             %  - eher für compute-bound (auf CPU) Probleme geeignet
         \item[+] hohe Speicherbandbreiten
-        \item[-] niedrige Speicherlatenzen
+        \item[–] niedrige Speicherlatenzen
         \item[+] Massiv parallel (3840 CUDA cores gegen 24 cores Xeon E7-8890-v4 (AVX2)
             % (Broadwell 14nm) http://ark.intel.com/products/91317/Intel-Xeon-Processor-E5-2699-v4-55M-Cache-2_20-GHz
             % http://ark.intel.com/de/products/93790/Intel-Xeon-Processor-E7-8890-v4-60M-Cache-2_20-GHz
@@ -80,7 +76,7 @@
             %   E7: Mission-critical
             %   v4: Broadwell
             % Broadwell AVX2 (256-Bits => 8 floats) (FMA*2) => entspricht also 24*8*2 CUDA-Cores = 384 -> Faktor 10 langsamer (meist nochmal Faktor 2 wegen kleiner Taktfrequenz von GPUs). Faktor 10,5 stimmt gut mit empirischen Messungen überein.
-        \item[-] \textbf{zusätzliche Komplexität beim Programmieren}
+        \item[–] \textbf{zusätzliche Komplexität beim Programmieren}
     \end{itemize}
     % sagen:
     %  - Ziel dieser Belegarbeit ist es den letzten Punkt zu tilgen, indem man Berechnungen auf GPUs in das Spark-Framework einbringt (in nächsten Folien dann klar machen, dass die high-level Befehle in Spark sehr praktisch sind, um die GPU-Programmierung zu verstecken (map reduce abstraktion))
@@ -106,7 +102,8 @@
     %     => ab da wsl. richtig an Fahrt gewonnen
     Nachfolger zu Hadoop MapReduce. Geschrieben in Scala.
     % (Hadoop: Core MapReduce + verteiltes Dateisystem(HDFS,NFS,...))
-    \begin{itemize}{Vorteile gegenüber von Hadoop MapReduce:}
+    Vorteile gegenüber von Hadoop MapReduce:
+    \begin{itemize}
         \item[+] Kann im Arbeitsspeicher arbeiten % , was Hadoop nicht anbot
         \item[+] Stellt viele Komplexbefehle zur Verfügung
         \item[+] iterative Algorithmen schneller als Hadoop wegen cache/persist-Funktionen
@@ -125,7 +122,7 @@
 \begin{frame}
     \frametitle{Spark Anwendungen}
     % - datenanalyse, -visualisierung, prognosemodelle (z.B. "you also might like these products ...")
-    \includegraphics[width=0.8\linewidth]{spark-libraries.png}
+    \centerline{\includegraphics[width=0.8\linewidth]{spark-libraries.png}}
     % sagen:
     %   - Spark SQL:
     %       - allow access to RDDs using SQL queries über einen SQL Kontext:
@@ -171,7 +168,7 @@
     %   - 2012 nur 20k Code, nun 1 Millionen Zeilen -> betonen, um zu zeigen, dass es ein komplexes Projekt ist, für dass ein Mitwirken (GPU Plugin) möglicherweise den Rahmen einer Belegarbeit sprengt ... :)"
     %   - über tausend (1203 an 2016-07-06) Beitragende / Programmierer (210 in den letzten 30 Tagen)
     %   - 33 417 commits
-    \includegraphics[width=\linewidth]{spark-openhub.png}\\
+    \centerline{\includegraphics[width=0.9\linewidth]{spark-openhub.png}}
     \textcolor{gray}{\scriptsize{\url{
         https://www.openhub.net/p/apache-spark
     }}}
@@ -211,99 +208,152 @@
         % sagen:
         %  - sind eine Abstraktion
         \item Methoden zur Verarbeitung der Daten
-              \includegraphics[scale=1.0]{rdd-disting-filter.png}
+              \includegraphics[width=\linewidth]{rdd-disting-filter.png}\\
               \textcolor{gray}{\scriptsize{\url{
                  https://spark.apache.org/docs/0.8.1/api/core/org/apache/spark/rdd/RDD.html
               }}}
               % Bild soll für Programmierer zeigen, dass es wirklich nicht viel mehr als eine Klassenabstraktion ist, indem es Methoden dieser Klasse zeigt
-        \item distributed
-        \item resilient
+        \item distributed:
+        \item resilient: opake Neuberechnung der Teildaten bei Absturz eines Knotens
     \end{itemize}
     % https://spark.apache.org/docs/1.5.2/api/scala/index.html#org.apache.spark.SparkContext
 \end{frame}
 
 
 %%%%NH: Nimm gleich das Monte Carlo Pi Beispiel statt wordcount
+%\begin{frame}[fragile]
+%    Ermittlung der häufigsten Wörter in einem Text:
+%
+%    \begin{lstlisting}[language=scala]
+%        sc.
+%          textFile("./*").
+%          flatMap( line => line.split(" ") ).
+%          map( word => (word, 1) ).
+%          reduceByKey( (a, b) => a + b ).
+%          sortBy( _._2, false /*descending*/ ).
+%          take(500).
+%          foreach( println )
+%    \end{lstlisting}
+%
+%    % Vergleich Hadoop MapReduce word count:
+%    %   https://hadoop.apache.org/docs/current/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html#Example:_WordCount_v1.0
+%    % https://hadooptutorial.wikispaces.com/Sorting+feature+of+MapReduce
+%    % mit Spark version:
+%    %
+%
+%    % Top 4:
+%    %  (ich,57766)
+%    %  (die,47869)
+%    %  (und,47663)
+%    %  (das,38866)
+%\end{frame}
+
 \begin{frame}
-    Ermittlung der häufigsten Wörter in einem Text:
-
-    \begin{lstlisting}[language=java]   % scala
-        sc.
-          textFile("./*").
-          flatMap( line => line.split(" ") ).
-          map( word => (word, 1) ).
-          reduceByKey( (a, b) => a + b ).
-          sortBy( _._2, false /*descending*/ ).
-          take(500).
-          foreach( println )
-    \end{lstlisting}
-
-    % Vergleich Hadoop MapReduce word count:
-    %   https://hadoop.apache.org/docs/current/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html#Example:_WordCount_v1.0
-    % https://hadooptutorial.wikispaces.com/Sorting+feature+of+MapReduce
-    % mit Spark version:
-    %
-
-    % Top 4:
-    %  (ich,57766)
-    %  (die,47869)
-    %  (und,47663)
-    %  (das,38866)
+    \frametitle{Monte-Carlo-Integration}
+    % sagen:
+    %   - kurze Monte-Carlo-Simulation erklären
+    %   - mag sinnlos erscheinen für das Beispiel, hat aber Anwendung für komplexere Probleme
+    %   - und für höherdimensionale Integration, da der Fehler auf das Integral trotz hoher Dimension mit 1/sqrt(N) sinkt
+    %       anstatt in 1D O(dx) =O(1/N), 2D: O(dx*dx * N) (*N wegen Anzahl an Integrationsminifläche, die an dem Rand liegen, welcher 1D ist, d.h. der Umfang (Fraktale mal ausgenommen ...)) => O(1/N**2*N) = O(1/N) man bemerke, dass N die Anzahl an Subintervallen in EINER Dimension, sei also M=O(N^2) die Anzahl an Subvolumen => 2D: O( 1/sqrt(M) ) (für 2D Monte-Carlo-Pi also gleich schnell wie simplestes Integrationsverfahren) -> aber für nD -> O( 1 / n-th root M ) viel langsamer als O( 1 / sqrt(M) ) !
+    %       nicht sicher ob Mathematik erwähnen, finde den Fakt ziemlich cool, aber wohl off-topic -> falls ich nicht auf 30min komme
+    \begin{columns}\begin{column}{0.35\linewidth}
+        \centerline{\includegraphics[width=1.1\linewidth]{monte-carlo-pi-quarter-sphere.pdf}}
+        % eigener plot:
+        %   #!/usr/bin/python
+        %
+        %   from matplotlib.pyplot import *
+        %   from numpy import *
+        %
+        %   fig = figure( figsize=(6,6) )
+        %   ax = fig.add_subplot( 111,
+        %       aspect='equal',
+        %
+        %       xlim=[0,1],
+        %       ylim=[0,1]
+        %   )
+        %   x = random.rand(100)
+        %   y = random.rand(100)
+        %   inside = x*x + y*y < 1.0
+        %   ax.plot( x[inside], y[inside], 'r.', markersize=16 )
+        %   ax.plot( x[logical_not( inside )], y[logical_not( inside )], 'b.', markersize=16 )
+        %   x = linspace(0,1,1000)
+        %   ax.plot(x, sqrt( 1 - x*x ), 'k-', linewidth=2 )
+        %
+        %   for tick in ax.xaxis.get_major_ticks():
+        %         tick.label.set_fontsize(18)
+        %   for tick in ax.yaxis.get_major_ticks():
+        %         tick.label.set_fontsize(18)
+        %   tight_layout()
+        %   fig.savefig( "monte-carlo-pi-quarter-sphere.pdf" )
+        %
+        %   show()
+    \end{column}\begin{column}{0.65\linewidth}
+        \centerline{\includegraphics[width=1.1\linewidth]{monte-carlo-pi-error-scaling.pdf}}
+        % eigener Plot: python plot.py -e ./raw-logs/cpp-pin-237890291.log 'Messung für Seed 237890291' ./raw-logs/cpp-pin-684168515.log 'Messung für Seed 684168515'
+    \end{column}\end{columns}
 \end{frame}
 
-\begin{frame}
-    \frametitle{Spark Monte-Carlo Pi-Berechnung}
-    \begin{lstlisting}{language=shell}
-        $SPARK_ROOT/bin/spark-shell --master local[*]
-    \end{lstlisting}
+%\begin{frame}[fragile]
+%    \frametitle{Implementation Monte-Carlo-Pi-Berechnung}
+%    \begin{lstlisting}[language=scala]
+%        def calcQuarterPi (
+%            nIterations : Long,
+%            rSeed       : Long
+%        ) : Double =
+%        {
+%            var seed      = rSeed
+%            var nHits     = 0l
+%            val randMax   = 0x7FFFFFFF
+%            val randMagic = 950706376l
+%
+%            var i = 0; while ( i < nIterations )
+%            {
+%                seed = ( ( randMagic * seed ) % randMax ).toInt
+%                val x = seed
+%                seed = ( ( randMagic * seed ) % randMax ).toInt
+%                val y = seed
+%                if ( 1l*x*x + 1l*y*y < 1l*randMax*randMax )
+%                    nHits += 1
+%                i += 1
+%            }
+%            /* double can hold up to integer 2**53 exactly */
+%            return nHits.toDouble / nIterations
+%        }
+%    \end{lstlisting}
+%\end{frame}
+
+% http://tex.stackexchange.com/questions/130109/cant-insert-code-in-my-beamer-slide
+\begin{frame}[fragile]
+    % Beispiel für wie "einfach" die Parallelisierung mit Spark ist, wobei
+    % die calcQuarterPi-Funktion erst später erklärt/gezeigt wird
+    \frametitle{Spark starten}
+    \begin{lstlisting}[language=bash]
+"$SPARK_ROOT"/bin/spark-shell --master local[*]
+\end{lstlisting}\vspace{-1.5\baselineskip}
+    \begin{lstlisting}[language=scala]
+val seed0 = 87541459l
+val nPartitions = 100
+val nIterationsPerPartition = 1e6.toLong
+val quarterPis = sc.
+  parallelize( 0 until nPartitions ).
+  map( iRank => ( {
+    val seed  = ( seed0 + ( iRank.toDouble / nPartitions * Integer.MAX_VALUE ).toLong ) % Integer.MAX_VALUE
+    calcQuarterPi( nIterationsPerPartition, seed ) ).
+  cache
+quarterPis.take(4).foreach( x => print( x + " " ) )
+println( "pi = " + 4 * quarterPis.reduce(_+_) / nPartitions )
+\end{lstlisting}\vspace{-1.5\baselineskip}
+    % Scala Bug / Feature, the normal for loop: (erwähnen, falls sich einer wundert, warum ich while statt for nehme ... -.-
+    %    for ( i <- 0 to 2147483647 ) x+=1
+    % will fail with:
+    % java.lang.IllegalArgumentException: 0 to 2147483647 by 1: seqs cannot contain more than Int.MaxValue elements.
+    % http://stackoverflow.com/questions/9888706/why-is-the-scala-for-loop-and-internals-numericrange-restricted-to-int-size-an
+    \textbf{Output:}
+    \begin{lstlisting}
+0.7852178 0.7852558 0.7855507 0.78554
+pi = 3.1415955324
+\end{lstlisting}\vspace{-1.5\baselineskip}
 \end{frame}
-
-% Was ist Spark, warum will ich es nehmen
-% Wie funktioniert Spark ( RDD, Reduce, Slurm )
-% Ein Beispiel mit Spark ( Monte Carlo und/oder word count -> chat log :) )
-
-% \begin{frame}
-% \begin{lstlisting}[language=bash]
-% jobid=$(sbatch "$@" --output="$SPARK_LOGS/%j.out" --error="$SPARK_LOGS/%j.err" $HOME/scaromare/start_spark_slurm.sh)
-% jobid=${jobid##Submitted batch job }
-%
-%
-% function startSpark() {
-%     export SPARK_LOGS=$HOME/spark/logs
-%     mkdir -p "$SPARK_LOGS"
-%     if [ ! -d "$SPARK_LOGS" ]; then return 1; fi
-%     jobid=$(sbatch "$@" --output="$SPARK_LOGS/%j.out" --error="$SPARK_LOGS/%j.err" $HOME/scaromare/start_spark_slurm.sh)
-%     jobid=${jobid##Submitted batch job }
-%     echo "Job ID : $jobid"
-%     # looks like: 16/05/13 20:44:59 INFO MasterWebUI: Started MasterWebUI at http://172.24.36.19:8080
-%     echo -n "Waiting for Job to run and Spark to start.."
-%     MASTER_WEBUI=''
-%     while [ -z "$MASTER_WEBUI" ]; do
-%         echo -n "."
-%         sleep 1s
-%         if [ -f $HOME/spark/logs/$jobid.err ]; then
-%             MASTER_WEBUI=$(sed -nE 's|.*Started MasterWebUI at (http://[0-9.:]*)|\1|p' $HOME/spark/logs/$jobid.err)
-%         fi
-%     done
-%     echo "OK"
-%     export MASTER_WEBUI
-%     export MASTER_ADDRESS=$(cat ~/spark/logs/${jobid}_spark_master)
-%     function sparkSubmit() {
-%         ~/spark-1.5.2-bin-hadoop2.6/bin/spark-submit --master $MASTER_ADDRESS $@
-%     }
-%     cat "$SPARK_LOGS"/$jobid.*
-%     echo "MASTER_WEBUI   : $MASTER_WEBUI"
-%     echo "MASTER_ADDRESS : $MASTER_ADDRESS"
-% }
-% export -f startSpark
-%
-% \end{frame}
-
-%%%%NH: Was willst du mit dem folgenden sagen? Wie Spark auf einer GPU Partition gestartet wird? Lieber später diskutieren ...
-startSpark --time=04:00:00 --nodes=$((nodes+1)) --partition=gpu2 --gres=gpu:$gpusPerNode --cpus-per-task=$coresPerNode
-sparkSubmit ~/scaromare/MontePi/singleNode/singleGpu/multiGpuTestSpark/MontePi.jar \
-                 $((nPerSlice*nSlices)) $nSlices $gpusPerNode 2>/dev/null |
-                 tee tmp.log | tee -a "$fname-gpu.log"
 
 
 
@@ -312,188 +362,132 @@ sparkSubmit ~/scaromare/MontePi/singleNode/singleGpu/multiGpuTestSpark/MontePi.j
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%NH: hier eine Einführung Rootbeer (Paper referenzieren + kurz erklären -> insb. mit Übersetzung in 3 adress code etc. ..)
 
-\begin{frame}
-%%%%NH: die folgenden Punkte finde ich gut, aber lieber am Schluss des Results-Kapitel einfügen. Kannst ja auch deine contributions+deren Effekt rootbeer erwähnen.
-%%%%NH: multi gpu fähigkeiten von rb erwähnen
-
-% sagen:
-%  - Leider wurde die meiste Bearbeitungszeit für diesen Beleg vom Lösen von Bugs beansprucht, sodass ich nicht darauf verzichten kann, zumindest einige davon zu erwähnen, auf dass sie jemanden helfen mögen, der einen ähnlichen Ansatz wie ich verfolgen möchte
-Rootbeer zu beachten:
-  - Bei dem Versuch Rootbeer mit Java 8 zu benutzen, kommt es zu
-        java.lang.NullPointerException
-            at soot.rbclassload.RootbeerClassLoader.loadHierarchySootClasses(RootbeerClassLoader.java:963)
-    Nur Java 6 ist offiziell unterstützt, aber Java 7 scheint auch zu funktionieren
-    % https://github.com/pcpratts/rootbeer1/issues/175 - Issues with jre1.8
-  - GCC 4.9 nur unterstützt (wegen CUDA-Compiler)
-  - Kaum neue Commits auf Github seit Juni 2015
-    % https://github.com/pcpratts/rootbeer1/commits/master
-  - Die option '-computecapability=sm_30' ist Pflicht, da seit CUDA 7.0 die Standardarchitektur "compute_12" nicht mehr unterstützt wird (korrekt nun "sm_12")
-        nvcc fatal   : Unsupported gpu architecture 'compute_12'
-    % https://github.com/pcpratts/rootbeer1/issues/180 - CUDA 7.0: nvcc fatal: Unsupported gpu architecture 'compute_12'
-  - Automatische Kernel-Konfiguration hat einen Bug, der standardmäßig immer so viele Kernel startet wie gleichzeitig auf einem Shared Multiprozessor laufen können.
-    % return new ThreadConfig( block_shaper.getMaxThreadsPerBlock(), 1, 1,
-    %                          block_shaper.getMaxBlocksPerProc(), 1,
-    % https://github.com/pcpratts/rootbeer1/issues/168
-  - Bug wo Rootbeer hat standardmäßig versucht den gesamten freien Speicher minus den benötigten zu alloziieren versuchte
-    % sagen:
-    %  - verhinderte multi-GPU, weil ein Kontext schon so gut wie den gesamten Speicher für sich beanspruchen wollte.
-    %  - nur ein Problem mit multiple Rootbeer.jar
-    % https://github.com/mxmlnkn/rootbeer1/commit/0d9699a40b06a7e5efee7213ca7fb215d6ef1377
-    % https://github.com/mxmlnkn/rootbeer1/commit/cc2318673077a52f13a8c4b4d294fbd39e639ca5
-    % /media/d/Studium/9TH SEMESTER/scaromare/MontePi/multiNode/multiGpu/scala$ /opt/spark-1.5.2/bin/spark-submit --master local[4] --class TestMonteCarloPi MontePi.jar 268435456 2
-    %   16/01/22 03:27:59 ERROR Executor: Exception in task 1.0 in stage 0.0 (TID 1)
-    %rg.trifort.rootbeer.runtime.CudaErrorException: CUDA_ERROR_OUT_OF_MEMORY: Error in cuMemAlloc: gpu_object_mem
-    %   at org.trifort.rootbeer.runtime.CUDAContext.nativeBuildState(Native Method)
-    %   at org.trifort.rootbeer.runtime.CUDAContext.access$1100(CUDAContext.java:17)
-    %   at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:315)
-    %   at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:308)
-    %   at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:128)
-    %   at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-    %   at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
-    %   at java.lang.Thread.run(Thread.java:745)
-  - die ausführbare jar für Spark darf kein Leerzeichen im Pfad enthalten:
-    % $SPARK_ROOT/bin/spark-submit --master $MASTER_ADDRESS ./src/sort.py "$(pwd)"/data/The_Complete_Works_of_Willia.txt
-    %   java.io.FileNotFoundException: Added file file:/media/f/Studium/9TH%20SEMESTER/scaromare/spark-gpu/src/sort.py does not exist.
-    %      at org.apache.spark.SparkContext.addFile(SparkContext.scala:1365)
-%  - Alignement Bug in Speicherserialisierung
-%       https://github.com/mxmlnkn/rootbeer1/commit/cc2318673077a52f13a8c4b4d294fbd39e639ca5
-  - Zu kompilierende jar an Rootbeer >muss< auf .jar enden
-    % normalerweise sollte die Dateiendung unter Linux egal sein, gibt Magic Bytes und Co
-    % #Warning: the following soot-classpath entry is not a supported archive file (must be .zip, .jar or .apk): MontePiGPU.jar.tmp
-\end{frame}
 
 \begin{frame}
 Scala GPU:
-  - ScalaCL ( "ScalaCL is not production-ready!" )
+  - ScalaCL ( ''ScalaCL is not production-ready!'' )
   - BIDMach
   - Firepile
-  - Rootbeer (
-\end{frame}
-
-\begin{frame}
-Run on Taurus:
-    module load java/jdk1.7.0_25 scala/2.10.4 cuda/7.0.28
-    # manuelle Installation von maven, ant, spark, zipmerge
-    % für spark wurden precompiled binaries genommen, weil es bei der Kompilation auch Probleme gab, die nicht behoben werden konnten
-    export PATH="$PATH:$HOME/spark-1.5.2-bin-hadoop2.6/bin/:$HOME/spark-1.5.2-bin-hadoop2.6/sbin/:$HOME/programs/bin"
+  - Rootbeer
 \end{frame}
 
 \begin{frame}
     \frametitle{Rootbeer Funktionsweise}
-    3.) Rootbeer constructor
-    3.1.) CUDALoader constructor
-    3.2.) CUDALoader.load
-          Load shared libraries with fixed absolute paths mostly ...
-              m_libCudas.add("/usr/lib64/libcuda.so");
-              m_libCudas.add("/usr/lib/x86_64-linux-gnu/libcudart.so.5.0");
-              m_rootbeerRuntimes.add(RootbeerPaths.v().getRootbeerHome()+"rootbeer_x64.so.1");
-              m_rootbeerCudas.add(RootbeerPaths.v().getRootbeerHome()+"rootbeer_cuda_x64.so.1");
-    4.) Rootbeer.getDevices
-          Class c = Class.forName("org.trifort.rootbeer.runtime.CUDARuntime");
-          Constructor<IRuntime> ctor = c.getConstructor();
-          m_cudaRuntime = ctor.newInstance();
-          m_cards.addAll( m_cudaRuntime.getGpuDevices() );
-    4.1.) CUDA_Runtime.c
-            status = cuDeviceGet(&device, i);
-            cuDeviceGetAttribute(...)
-            [...]
-    5.) GPUDevice.createContext -> CUDAContext -> native initializeDriver
-            https://de.wikipedia.org/wiki/Java_Native_Interface
-        ./csrc/org/trifort/rootbeer/runtime/CUDAContext.c:JNIEXPORT void JNICALL Java_org_trifort_rootbeer_runtime_CUDAContext_initializeDriver
-            only saves function pointers to context.java
-    6.) Rootber.run
-    6.1.) Context context = createDefaultContext(); // skipped for multi-GPU
-    6.2.) context.setThreadConfig(thread_config);
-    6.3.) context.setKernel(work.get(0));
-    6.4.) context.setUsingHandles(true);
-    6.5.) context.buildState();
-            gpuEvent.setValue(GpuEventCommand.NATIVE_BUILD_STATE);
-                GpuEventHandler.onEvent
-                    nativeBuildState( ..., gpuDevice.getDeviceId(), ... )
-                        Java_org_trifort_rootbeer_runtime_CUDAContext_nativeBuildState in CUDAContext.c
-    6.6.) context.run(work)
-            context.runAsync(work)
-                gpuEvent.setValue(GpuEventCommand.NATIVE_RUN_LIST);
-                    GpuEventHandler.onEvent
-                        writeBlocksTemplate();
-                        runGpu();
-                            cudaRun(nativeContext, objectMemory, b2i(!usingHandles), stats);
-                        readBlocksTemplate();
-          private native void cudaRun(long nativeContext, Memory objectMem, int usingKernelTemplates, StatsRow stats);
-
-Rootbeer-Paper:
-        1) serialize state to GPU memory
-        2) define the kernel code that the GPU will execute
-        3) control the kernel
-        4) deserialize state back to CPU memory
-      -> "serialize"?
-      => Rootbeer does these things automatically in contrast to CUDA- and OpenCL- Java language bindings
-      supports:
-        1) single and multi-dimensional arrays of primitive and reference types
-        2) composite objects
-        3) instance and static fields
-        4) dynamic memory allocation
-        5) inner classes
-        6) synchronized methods and monitors
-        7) strings
-        8) exceptions that are thrown or caught on the GPU
-    Introduction
-      - focus on NVidia because of recursion
-      - Without Rootbeer, using Java language bindings, a developer must carefully convert complex graphs of Java objects into arrays of basic types.
-      - Without Rootbeer, a developer must write separate code in another language to specify what the GPU execution will do
-      - Rootbeer also has a native debugging mode where the GPU code is executed on a multi-core CPU inside a C++ debugger.
-    Programming Interface:
-        public interface Kernel {
-            void gpuMethod();
-        }
-      - get data onto GPU by settings private members
-      - byte code from gpuMethod is cross-compiled with CUDA
-        List<Kernel> jobs = new ArrayList<Kernel>();
-        int[] ret = new int[ arrays.size() ];
-        for( int i = 0; i < arrays.size(); ++i )
-        {
-            jobs.add( new ArraySum( arrays.get(i), ret, i ) );
-        }
-        Rootbeer rootbeer = new Rootbeer();
-        rootbeer.runAll(jobs);
-      - compile to jar
-      - run Rootbeer on jar
-        java -jar Rootbeer.jar InputJar.jar OutputJar.jar
-    High Level Processing Overview:
-      - jar -[extract]-> .class
-            -[read with Soot]-> Jimple:
-         . search for Kernel implementations
-         . find all types, methods, fields meant for GPU
-            -[generated CUDA code]-> .cu
-            -[call nvcc]-> .cubin
-         . Generate byte code for serialization
-         . insert compiled interface which serialzes and calls cubin
-           -> convert back to bytecode
-        -[pack into jar]-> jar
-    High Performance (De)Serialization in Java
-        1) Java Native interface (JNI)  247 ms
-        2) Reflection                   173 ms
-        3) Purve Java                     5 ms
-      - "custom Java Bytecode that reads fields and places the results into a Java byte array"
-          -> scheint komplett zerstreut im Speicher zu liegen ...
-       -> JNI call cudaMemcpy
-    Representing Java Objects on the GPU
-      - static + instance memory
-         |              |
-         + simple C-Array with differing offsets (must be primitive type)
-                        +
-            set of object with 16B header:
-                Reserved for Garbage Collector 10 bytes (future work)
-                Derived Type                    1 byte
-                Created on GPU flag             1 byte  (malloc from kernel)
-                Object Monitor State            4 bytes
-    CUDA Code Generation:
-      - Future: better serialization + shared memory
-    Related Work:
-      - jCUDA, jocl, JavaCL -> require serialization of object graphs to primitive arrays
-      - JikesRVM to auto-detect parallelism runtime
-      - Peter Calvert’s annotations like OpenMP -> not well-working for all cases ...
-      Aparapi very similar, but less full-featured
+     ...
+%    3.) Rootbeer constructor
+%    3.1.) CUDALoader constructor
+%    3.2.) CUDALoader.load
+%          Load shared libraries with fixed absolute paths mostly ...
+%              m_libCudas.add("/usr/lib64/libcuda.so");
+%              m_libCudas.add("/usr/lib/x86_64-linux-gnu/libcudart.so.5.0");
+%              m_rootbeerRuntimes.add(RootbeerPaths.v().getRootbeerHome()+"rootbeer_x64.so.1");
+%              m_rootbeerCudas.add(RootbeerPaths.v().getRootbeerHome()+"rootbeer_cuda_x64.so.1");
+%    4.) Rootbeer.getDevices
+%          Class c = Class.forName("org.trifort.rootbeer.runtime.CUDARuntime");
+%          Constructor<IRuntime> ctor = c.getConstructor();
+%          m_cudaRuntime = ctor.newInstance();
+%          m_cards.addAll( m_cudaRuntime.getGpuDevices() );
+%    4.1.) CUDA_Runtime.c
+%            status = cuDeviceGet(&device, i);
+%            cuDeviceGetAttribute(...)
+%            [...]
+%    5.) GPUDevice.createContext -> CUDAContext -> native initializeDriver
+%            https://de.wikipedia.org/wiki/Java_Native_Interface
+%        ./csrc/org/trifort/rootbeer/runtime/CUDAContext.c:JNIEXPORT void JNICALL Java_org_trifort_rootbeer_runtime_CUDAContext_initializeDriver
+%            only saves function pointers to context.java
+%    6.) Rootber.run
+%    6.1.) Context context = createDefaultContext(); // skipped for multi-GPU
+%    6.2.) context.setThreadConfig(thread_config);
+%    6.3.) context.setKernel(work.get(0));
+%    6.4.) context.setUsingHandles(true);
+%    6.5.) context.buildState();
+%            gpuEvent.setValue(GpuEventCommand.NATIVE_BUILD_STATE);
+%                GpuEventHandler.onEvent
+%                    nativeBuildState( ..., gpuDevice.getDeviceId(), ... )
+%                        Java_org_trifort_rootbeer_runtime_CUDAContext_nativeBuildState in CUDAContext.c
+%    6.6.) context.run(work)
+%            context.runAsync(work)
+%                gpuEvent.setValue(GpuEventCommand.NATIVE_RUN_LIST);
+%                    GpuEventHandler.onEvent
+%                        writeBlocksTemplate();
+%                        runGpu();
+%                            cudaRun(nativeContext, objectMemory, b2i(!usingHandles), stats);
+%                        readBlocksTemplate();
+%          private native void cudaRun(long nativeContext, Memory objectMem, int usingKernelTemplates, StatsRow stats);
+%
+%Rootbeer-Paper:
+%        1) serialize state to GPU memory
+%        2) define the kernel code that the GPU will execute
+%        3) control the kernel
+%        4) deserialize state back to CPU memory
+%      -> "serialize"?
+%      => Rootbeer does these things automatically in contrast to CUDA- and OpenCL- Java language bindings
+%      supports:
+%        1) single and multi-dimensional arrays of primitive and reference types
+%        2) composite objects
+%        3) instance and static fields
+%        4) dynamic memory allocation
+%        5) inner classes
+%        6) synchronized methods and monitors
+%        7) strings
+%        8) exceptions that are thrown or caught on the GPU
+%    Introduction
+%      - focus on NVidia because of recursion
+%      - Without Rootbeer, using Java language bindings, a developer must carefully convert complex graphs of Java objects into arrays of basic types.
+%      - Without Rootbeer, a developer must write separate code in another language to specify what the GPU execution will do
+%      - Rootbeer also has a native debugging mode where the GPU code is executed on a multi-core CPU inside a C++ debugger.
+%    Programming Interface:
+%        public interface Kernel {
+%            void gpuMethod();
+%        }
+%      - get data onto GPU by settings private members
+%      - byte code from gpuMethod is cross-compiled with CUDA
+%        List<Kernel> jobs = new ArrayList<Kernel>();
+%        int[] ret = new int[ arrays.size() ];
+%        for( int i = 0; i < arrays.size(); ++i )
+%        {
+%            jobs.add( new ArraySum( arrays.get(i), ret, i ) );
+%        }
+%        Rootbeer rootbeer = new Rootbeer();
+%        rootbeer.runAll(jobs);
+%      - compile to jar
+%      - run Rootbeer on jar
+%        java -jar Rootbeer.jar InputJar.jar OutputJar.jar
+%    High Level Processing Overview:
+%      - jar -[extract]-> .class
+%            -[read with Soot]-> Jimple:
+%         . search for Kernel implementations
+%         . find all types, methods, fields meant for GPU
+%            -[generated CUDA code]-> .cu
+%            -[call nvcc]-> .cubin
+%         . Generate byte code for serialization
+%         . insert compiled interface which serialzes and calls cubin
+%           -> convert back to bytecode
+%        -[pack into jar]-> jar
+%    High Performance (De)Serialization in Java
+%        1) Java Native interface (JNI)  247 ms
+%        2) Reflection                   173 ms
+%        3) Purve Java                     5 ms
+%      - "custom Java Bytecode that reads fields and places the results into a Java byte array"
+%          -> scheint komplett zerstreut im Speicher zu liegen ...
+%       -> JNI call cudaMemcpy
+%    Representing Java Objects on the GPU
+%      - static + instance memory
+%         |              |
+%         + simple C-Array with differing offsets (must be primitive type)
+%                        +
+%            set of object with 16B header:
+%                Reserved for Garbage Collector 10 bytes (future work)
+%                Derived Type                    1 byte
+%                Created on GPU flag             1 byte  (malloc from kernel)
+%                Object Monitor State            4 bytes
+%    CUDA Code Generation:
+%      - Future: better serialization + shared memory
+%    Related Work:
+%      - jCUDA, jocl, JavaCL -> require serialization of object graphs to primitive arrays
+%      - JikesRVM to auto-detect parallelism runtime
+%      - Peter Calvert’s annotations like OpenMP -> not well-working for all cases ...
+%      Aparapi very similar, but less full-featured
 \end{frame}
 
 %%%%NH: gibt es beschränkungen, welche funktionen implementiert werden können oder ist die geschichte turing-vollständig?
@@ -504,39 +498,109 @@ Rootbeer-Paper:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\begin{frame}
-    \frametitle{Zuordnung der Grafikkarten zu Partitionen}
-    - momentan eher gehackter Ansatz, mit manuell geschriebenen Distributor und der Beobachtung, dass Partition in einer bestimmten Weise auf Knoten gemappt werden:
-    % startSpark --time=04:00:00 --nodes=5 --partition=west --gres= --cpus-per-task=12
-    % spark-shell --master=$MASTER_ADDRESS
-    % scala> import java.net.InetAddress
-    % scala> sc.parallelize( 1 to 5*12, 5*12 ).map( (x) => { Thread.sleep(10); x+" : "+InetAddress.getLocalHost().getHostName() } ).collect().foreach( println )
-    Partition Hostname
-         1 : taurusi3164
-         2 : taurusi3165
-         3 : taurusi3167
-         4 : taurusi3166
-         5 : taurusi3164
-         6 : taurusi3165
-         7 : taurusi3167
-         8 : taurusi3166
-         9 : taurusi3164
-        10 : taurusi3165
-        11 : taurusi3167
-        12 : taurusi3166
-        13 : taurusi3164
-        14 : taurusi3165
-        15 : taurusi3167
-        16 : taurusi3166
-     also interleaved:
-        Partion mod (nKnoten=4) = 1 -> taurusi3164
-        Partion mod (nKnoten=4) = 2 -> taurusi3165
+\begin{frame}[fragile]
+    \begin{lstlisting}[language=bash]
+        jobid=$(sbatch "$@" --output="$SPARK_LOGS/%j.out" --error="$SPARK_LOGS/%j.err" $HOME/scaromare/start_spark_slurm.sh)
+        jobid=${jobid##Submitted batch job }
+
+
+        function startSpark() {
+            export SPARK_LOGS=$HOME/spark/logs
+            mkdir -p "$SPARK_LOGS"
+            if [ ! -d "$SPARK_LOGS" ]; then return 1; fi
+            jobid=$(sbatch "$@" --output="$SPARK_LOGS/%j.out" --error="$SPARK_LOGS/%j.err" $HOME/scaromare/start_spark_slurm.sh)
+            jobid=${jobid##Submitted batch job }
+            echo "Job ID : $jobid"
+            # looks like: 16/05/13 20:44:59 INFO MasterWebUI: Started MasterWebUI at http://172.24.36.19:8080
+            echo -n "Waiting for Job to run and Spark to start.."
+            MASTER_WEBUI=''
+            while [ -z "$MASTER_WEBUI" ]; do
+                echo -n "."
+                sleep 1s
+                if [ -f $HOME/spark/logs/$jobid.err ]; then
+                    MASTER_WEBUI=$(sed -nE 's|.*Started MasterWebUI at (http://[0-9.:]*)|\1|p' $HOME/spark/logs/$jobid.err)
+                fi
+            done
+            echo "OK"
+            export MASTER_WEBUI
+            export MASTER_ADDRESS=$(cat ~/spark/logs/${jobid}_spark_master)
+            function sparkSubmit() {
+                ~/spark-1.5.2-bin-hadoop2.6/bin/spark-submit --master $MASTER_ADDRESS $@
+            }
+            cat "$SPARK_LOGS"/$jobid.*
+            echo "MASTER_WEBUI   : $MASTER_WEBUI"
+            echo "MASTER_ADDRESS : $MASTER_ADDRESS"
+        }
+        export -f startSpark
+
+startSpark --time=04:00:00 --nodes=$((nodes+1)) --partition=gpu2 --gres=gpu:$gpusPerNode --cpus-per-task=$coresPerNode
+sparkSubmit ~/scaromare/MontePi/singleNode/singleGpu/multiGpuTestSpark/MontePi.jar \
+                 $((nPerSlice*nSlices)) $nSlices $gpusPerNode 2>/dev/null |
+                 tee tmp.log | tee -a "$fname-gpu.log"
+    \end{lstlisting}[language=bash]
+\end{frame}
+
+
+\begin{frame}[fragile]
+    \frametitle{Rootbeer-Erfahrungen}
+    %%%%NH: die folgenden Punkte finde ich gut, aber lieber am Schluss des Results-Kapitel einfügen. Kannst ja auch deine contributions+deren Effekt rootbeer erwähnen.
+    %%%%NH: multi gpu fähigkeiten von rb erwähnen
+
+    % sagen:
+    %  - Leider wurde die meiste Bearbeitungszeit für diesen Beleg vom Lösen von Bugs beansprucht, sodass ich nicht darauf verzichten kann, zumindest einige davon zu erwähnen, auf dass sie jemanden helfen mögen, der einen ähnlichen Ansatz wie ich verfolgen möchte
+    \begin{itemize}
+        \item Bei dem Versuch Rootbeer mit Java 8 zu benutzen, kommt es zu
+              \begin{lstlisting}
+                  java.lang.NullPointerException
+                      at soot.rbclassload.RootbeerClassLoader.loadHierarchySootClasses(RootbeerClassLoader.java:963)
+              \end{lstlisting}
+              Nur Java 6 ist offiziell unterstützt, aber Java 7 scheint auch zu funktionieren
+              % https://github.com/pcpratts/rootbeer1/issues/175 - Issues with jre1.8
+        \item GCC 4.9 nur unterstützt (wegen CUDA-Compiler)
+        \item Kaum neue Commits auf Github seit Juni 2015
+              % https://github.com/pcpratts/rootbeer1/commits/master
+        \item Die option \lstinline!-computecapability=sm_30! ist Pflicht, da seit CUDA 7.0 die Standardarchitektur \lstinline!compute_12! nicht mehr unterstützt wird (korrekt nun \lstinline!sm_12!)
+              \begin{lstlisting}
+                  nvcc fatal   : Unsupported gpu architecture 'compute_12'
+              \end{lstlisting}
+              % https://github.com/pcpratts/rootbeer1/issues/180 - CUDA 7.0: nvcc fatal: Unsupported gpu architecture 'compute_12'
+        \item Automatische Kernel-Konfiguration hat einen Bug, der standardmäßig immer so viele Kernel startet wie gleichzeitig auf einem Shared Multiprozessor laufen können.
+              % return new ThreadConfig( block_shaper.getMaxThreadsPerBlock(), 1, 1,
+              %                          block_shaper.getMaxBlocksPerProc(), 1,
+              % https://github.com/pcpratts/rootbeer1/issues/168
+        \item Bug wo Rootbeer hat standardmäßig versucht den gesamten freien Speicher minus den benötigten zu alloziieren versuchte
+              % sagen:
+              %  - verhinderte multi-GPU, weil ein Kontext schon so gut wie den gesamten Speicher für sich beanspruchen wollte.
+              %  - nur ein Problem mit multiple Rootbeer.jar
+              % https://github.com/mxmlnkn/rootbeer1/commit/0d9699a40b06a7e5efee7213ca7fb215d6ef1377
+              % https://github.com/mxmlnkn/rootbeer1/commit/cc2318673077a52f13a8c4b4d294fbd39e639ca5
+              % /media/d/Studium/9TH SEMESTER/scaromare/MontePi/multiNode/multiGpu/scala$ /opt/spark-1.5.2/bin/spark-submit --master local[4] --class TestMonteCarloPi MontePi.jar 268435456 2
+              %   16/01/22 03:27:59 ERROR Executor: Exception in task 1.0 in stage 0.0 (TID 1)
+              %rg.trifort.rootbeer.runtime.CudaErrorException: CUDA_ERROR_OUT_OF_MEMORY: Error in cuMemAlloc: gpu_object_mem
+              %   at org.trifort.rootbeer.runtime.CUDAContext.nativeBuildState(Native Method)
+              %   at org.trifort.rootbeer.runtime.CUDAContext.access$1100(CUDAContext.java:17)
+              %   at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:315)
+              %   at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:308)
+              %   at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:128)
+              %   at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+              %   at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+              %   at java.lang.Thread.run(Thread.java:745)
+        \item die ausführbare jar für Spark darf kein Leerzeichen im Pfad enthalten:
+              % $SPARK_ROOT/bin/spark-submit --master $MASTER_ADDRESS ./src/sort.py "$(pwd)"/data/The_Complete_Works_of_Willia.txt
+              %   java.io.FileNotFoundException: Added file file:/media/f/Studium/9TH%20SEMESTER/scaromare/spark-gpu/src/sort.py does not exist.
+              %      at org.apache.spark.SparkContext.addFile(SparkContext.scala:1365)
+          %  - Alignement Bug in Speicherserialisierung
+          %       https://github.com/mxmlnkn/rootbeer1/commit/cc2318673077a52f13a8c4b4d294fbd39e639ca5
+        \item Zu kompilierende jar an Rootbeer >muss< auf .jar enden
+              % normalerweise sollte die Dateiendung unter Linux egal sein, gibt Magic Bytes und Co
+              % #Warning: the following soot-classpath entry is not a supported archive file (must be .zip, .jar or .apk): MontePiGPU.jar.tmp
+      \end{itemize}
 \end{frame}
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Performanceanalyse}
+\section{Ergebnisse}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%NH: hardware auf der du deine tests durchgeführt hast beschreiben
@@ -544,7 +608,7 @@ Rootbeer-Paper:
 %%%%NH: spannend wäre, ob bottlenecks in der implementierung => allg. profiling von spark/rootbeer code // hast du bottlenecks entdeckt?
 
 \begin{frame}
-    Einkernleistungsanalysen: %%%%NH: was bedeutet 1 Kern: 1 Core? 1 Node? 1 GPU?
+    \frametitle{Leistungsanalyse auf einem CPU-Kern}
     % Erstellt  mit:
     %   ssh taurus
     %   # Rootbeer commit ef79eaddc7956bf9bb3b9bd4d287e377e3949075
@@ -570,7 +634,7 @@ Rootbeer-Paper:
     %   ~/scaromare/MontePi/benchmarkImpl.sh
     %   cd scaromare/MontePi/
     %   python plot.py --workload-log 2016-07-02_01-18-12/results.log
-    \includegraphics[width=0.8\linewidth]{benchmarks-workload-scaling.pdf}
+    \centerline{\includegraphics[width=0.9\linewidth]{benchmarks-workload-scaling.pdf}}
     % sagen:
     %   - benchmarkImpl.sh misst mittels 'time' Linuxshellbefehls
     %   - overhead ist riesig, für GPU vs CPU und für Java vs. C++ -> relativ große Probleme rentieren sich nur
@@ -579,14 +643,41 @@ Rootbeer-Paper:
 
 %%%%NH: multi gpu, multi node single gpu, multi node multi gpu, ...
 
-\begin{frame}
-Profiling von Rootbeer ohne Spark mit dem NVIDIA Visual Profiler:
-    srun -p gpu-interactive --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --gres=gpu:2 --time=1:30:00 --mem-per-cpu=6000 --x11=first nvvp
-    Executable: /sw/global/tools/java/jdk1.7.0_25/bin/java
-    Working Directory: ... ???
-    Arguments: -jar ./MontePi.jar 2684354560
-       -> works :3
+\begin{frame}[fragile]
+    \frametitle{Profiling von Rootbeer ohne Spark mit dem NVIDIA Visual Profiler}
+    \begin{lstlisting}[language=bash]
+srun -p gpu-interactive --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --gres=gpu:2 --time=1:30:00 --mem-per-cpu=6000 --x11=first nvvp
+Executable: /sw/global/tools/java/jdk1.7.0_25/bin/java
+Working Directory: ...
+Arguments: -jar ./MontePi.jar 2684354560
+\end{lstlisting}
  -> BILDER!
+\end{frame}
+
+
+\begin{frame}[fragile]
+    \frametitle{Spark auf Taurus über Slurm starten}
+    \begin{lstlisting}[language=bash]
+        module load java/jdk1.7.0_25 scala/2.10.4 cuda/7.0.28
+        # manuelle Installation von maven, ant, spark, zipmerge
+        % für spark wurden precompiled binaries genommen, weil es bei der Kompilation auch Probleme gab, die nicht behoben werden konnten
+        export PATH="$PATH:$HOME/spark-1.5.2-bin-hadoop2.6/bin/:$HOME/spark-1.5.2-bin-hadoop2.6/sbin/:$HOME/programs/bin"
+    \end{lstlisting}
+    ...
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Benchmark Spark auf CPU}
+    % "warum haben sie die neue Version nicht gebenchmarkt?" -> wegen Rootbeerproblemen -> deshalb rootbeer folie vor dieser
+    \centerline{\includegraphics[width=0.9\linewidth]{cluster-strong-scaling-cpu.pdf}}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Benchmark Spark mit Rootbeer (alte Ergebnisse)}
+    % "warum haben sie die neue Version nicht gebenchmarkt?" -> wegen Rootbeerproblemen -> deshalb rootbeer folie vor dieser
+    \centerline{\includegraphics[width=0.9\linewidth]{cluster-strong-scaling-gpu.pdf}}
 \end{frame}
 
 
@@ -601,10 +692,49 @@ Profiling von Rootbeer ohne Spark mit dem NVIDIA Visual Profiler:
 \begin{frame}
 	\frametitle{Zusammenfassung}
 	\begin{itemize}
-		\item ...
+		\item Kombination aus GPGPU mittels Rootbeer und Spark ausgetestet
+            % -> das haben wir gelernt?
+        \item Mehrere Bugfixes für Rootbeer geschrieben
+            % -> und gelernt, dass man Ein-Mann-Projekte vlt.e her meiden sollte ... wenn man sie nicht eingenhändig weiterentwickeln will
+        % \item Leider erfolglos
 	\end{itemize}
+    \textbf{Ausblick:}
+    \begin{itemize}
+        \item Codereview von Rootbeer oder andere GPU-API ist nötig
+        %  java.lang.ClassCastException: MonteCarloPiKernel cannot be cast to [J
+        %      at MonteCarloPiKernel.org_trifort_readFromHeapRefFields_MonteCarloPiKernel0(Jasmin)
+        %      at MonteCarloPiKernelSerializer.doReadFromHeap(Jasmin)
+        %      at org.trifort.rootbeer.runtime.Serializer.readFromHeap(Serializer.java:155)
+        %      at org.trifort.rootbeer.runtime.CUDAContext.readBlocksList(CUDAContext.java:452)
+        %      at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:332)
+        %      at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:308)
+        %      at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:128)
+        %      at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+        %      at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+        %      at java.lang.Thread.run(Thread.java:724)
+        %
+        % java.lang.NullPointerException
+        %     at org.trifort.rootbeer.runtime.Serializer.checkWriteCache(Serializer.java:91)
+        %     at org.trifort.rootbeer.runtime.Serializer.writeToHeap(Serializer.java:117)
+        %     at MonteCarloPiKernel.org_trifort_writeToHeapRefFields_MonteCarloPiKernel0(Jasmin)
+        %     at MonteCarloPiKernelSerializer.doWriteToHeap(Jasmin)
+        %     at org.trifort.rootbeer.runtime.Serializer.writeToHeap(Serializer.java:127)
+        %     at org.trifort.rootbeer.runtime.Serializer.writeToHeap(Serializer.java:44)
+        %     at org.trifort.rootbeer.runtime.CUDAContext.writeBlocksList(CUDAContext.java:500)
+        %     at org.trifort.rootbeer.runtime.CUDAContext.access$1400(CUDAContext.java:24)
+        %     at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:419)
+        %     at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:373)
+        %     at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:128)
+        %     at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+        %     at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+        %     at java.lang.Thread.run(Thread.java:724)
+
+       \item heterogene Berechnungen auf CPU + GPU % sagen: sollten sehr einfach möglich sein, da Rootbeer asynchron unterstützt (although I don't think there is somehting like: peek yet), und da gpuMethod von Host aufrufbar ist ( wäre riesen Vorteil von Rootbeer, dass der Spark-Nutzer kein CUDA oder ähnliches schreiben muss ... durch den Vorteil fallen Alternativen mehr oder minder alle raus )  ( so heterogen kann aber nur einen CPU core pro GPU nutzen.. häufig aber mehr cores als CPUs :S... wäre also doch bisschen mehr dahinter. Außerdem kann man glaube nicht mehr spark partitionen auf einen Knoten starten, als er CPU cores hat, d.h. einige Partitionen müssten CPU+GPU starten, während andere nur CPU starten.. Weiteres Problem ist, dass man nicht weiß, wie lange das jeweils dauert. Wenn man CPU+GPU vom selben Programm startet, dann kann man sehr kleine Arbeitslasten an die CPU senden und dann immer in einer Schleife schauen, ob die GPU schon fertig ist. Aber die Partitionen, die nur CPU haben werden immer eher oder später fertig sein. ... wird möglicherweise doch schwieriger als gedacht ...)
+       \item Erweiterung von Rootbeer um neue Features wie NVIDIA NVLink
+       \item Implementation direkt in Spark würde z.B. cache/persist auf GPUs erlauben, um Host-GPU-Transfers zu sparen
+                % glaube cache/persist erkläre ich bei Spark irgendwann oben.
+    \end{itemize}
 \end{frame}
 
-%\appendix
 
 \end{document}
