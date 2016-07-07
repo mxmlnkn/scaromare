@@ -46,17 +46,17 @@
     %     http://on-demand.gputechconf.com/supercomputing/2012/presentation/SB005-Bland-Titan-Oak-Ridge-National-Labs.pdf
     %
     \begin{columns}\begin{column}{0.5\linewidth}
-        \centerline{\includegraphics[height=0.15\textheight]{tesla-3-quater.png}}
+        \centerline{\includegraphics[height=0.3\textheight]{tesla-3-quater.png}}
         %\textcolor{gray}{\scriptsize{NVIDIA}}
     \end{column}\begin{column}{0.5\linewidth}
-        \centerline{\includegraphics[height=0.15\textheight]{AMD_Opteron_2212_IMGP1795.jpg}}
+        \centerline{\includegraphics[height=0.3\textheight]{AMD_Opteron_2212_IMGP1795.jpg}}
         %\textcolor{gray}{\scriptsize{Rainer Knäpper, Free Art License (\url{artlibre.org/licence/lal/en/})}}
     \end{column}\end{columns}
-    Platz 3 Titan XK7 in der Top 500 (Juni 2016):
-    \begin{itemize}
-        \item 18 688 AMD Opteron 6274 (16 Kerne) zu je 140\,TFLOPS(DP)
-        \item 18 688 Nvidia Tesla K20X zu je 1.3\,TFLOPS(DP)  % (90% der Rechenlast)
-    \end{itemize}
+    %Platz 3 Titan XK7 in der Top 500 (Juni 2016):
+    %\begin{itemize}
+    %    \item 18 688 AMD Opteron 6274 (16 Kerne) zu je 140\,TFLOPS(DP)
+    %    \item 18 688 Nvidia Tesla K20X zu je 1.3\,TFLOPS(DP)  % (90% der Rechenlast)
+    %\end{itemize}
     % Ist eigtl. eher general knowledge, aber kann ja nicht schaden, als kleiner Einstieg, außer wenn ich dadurch ein Halbwissen zur Schau stelle.
     General Purpose Graphical Processing Units (GPGPU) im Vergleich zu Prozessoren:
     \begin{itemize}
@@ -67,9 +67,9 @@
             %  - niedrig Latenz, streaming (in Bezug auf Speicehrzugriffe)
             %    (wenige random access)
             %  - eher für compute-bound (auf CPU) Probleme geeignet
-        \item[+] hohe Speicherbandbreiten
-        \item[–] hohe Speicherlatenzen
-        \item[+] massiv parallel %(3840 CUDA cores gegen 24 cores Xeon E7-8890-v4 (AVX2)
+        %\item[+] hohe Speicherbandbreiten
+        %\item[–] hohe Speicherlatenzen
+        %\item[+] massiv parallel %(3840 CUDA cores gegen 24 cores Xeon E7-8890-v4 (AVX2)
             % (Broadwell 14nm) http://ark.intel.com/products/91317/Intel-Xeon-Processor-E5-2699-v4-55M-Cache-2_20-GHz
             % http://ark.intel.com/de/products/93790/Intel-Xeon-Processor-E7-8890-v4-60M-Cache-2_20-GHz
             % http://www.cpu-world.com/info/id_model/Intel-server-conventions.html
@@ -200,6 +200,40 @@ def filter(f: (T) (*$\Rightarrow$*) Boolean): RDD[T]
     % hat nettes webinterface mit logs und zustand ...
 \end{frame}
 
+
+\begin{frame}[fragile]
+    \frametitle{Spark auf Taurus über Slurm starten}
+    %\begin{itemize}
+    %    \item Manuelle Installation von maven, ant, spark, zipmerge
+    %    % für spark wurden precompiled binaries genommen, weil es bei der Kompilation auch Probleme gab, die nicht behoben werden konnten
+    %\end{itemize}
+    % This does similar things as vanilla $SPARK_ROOT/sbin/start-master.sh but slurm compatible, e.g. not in daemon-mode
+\begin{lstlisting}[language=bash]
+sbatch --output="$SPARK_LOGS/%j.out" --error="$SPARK_LOGS/%j.err" $HOME/scaromare/start_spark_slurm.sh --time=04:00:00 --nodes=$((nodes+1)) --partition=gpu2 --gres=gpu:$gpusPerNode --cpus-per-task=$coresPerNode
+~/spark-1.5.2-bin-hadoop2.6/bin/spark-submit --master $MASTER_ADDRESS ~/scaromare/MontePi/multiNode/multiGpu/scala/MontePi.jar ...
+\end{lstlisting}\vspace{-1.5\baselineskip}
+    \lstinline!start_spark_slurm.sh!:
+    \begin{lstlisting}[language=bash,xleftmargin=0pt,linewidth=1.05\linewidth,basicstyle=\scriptsize]
+export SPARK_WORKER_CORES=$SLURM_CPUS_PER_TASK
+if [ $SLURM_PROCID -eq 0 ]; then # if master start driver
+  "$SPARK_ROOT/bin/spark-class" org.apache.spark.deploy.master.Master --ip $(hostname) --port $SPARK_MASTER_PORT --webui-port $SPARK_MASTER_WEBUI_PORT
+else
+  "$SPARK_ROOT/bin/spark-class" org.apache.spark.deploy.worker.Worker $MASTER_NODE
+fi
+\end{lstlisting}
+% This section will be run when started by sbatch
+%  export SPARK_ROOT=$HOME/spark-1.5.2-bin-hadoop2.6/
+%  export SPARK_JAVA_OPTS+="-XX:+UseParallelGC -XX:MaxPermSize=5G"
+%  export SPARK_MEM=$SPARK_DAEMON_MEMORY
+%  export SPARK_WORKER_DIR=$HOME/spark/logs
+%  export SPARK_LOCAL_DIRS=$(mktemp)
+%  export SPARK_MASTER_PORT=7077
+%  export SPARK_MASTER_WEBUI_PORT=8080
+\end{frame}
+
+\begin{frame}
+    \centerline{\includegraphics[width=0.9\linewidth]{spark-main-view.png}}
+\end{frame}
 
 \begin{frame}
     \frametitle{Spark Anwendungen}
@@ -438,10 +472,10 @@ pi = 3.1415955324
 \begin{frame}
     \frametitle{Rootbeer}
     \begin{itemize}
-        \item 1000x starred auf github
+        %\item 1000x starred auf github
         \item $\approx$ 30k Codezeilen hauptsächlich Java und ein wenig C % (für bidnings, https://www.openhub.net/p/rootbeer1/analyses/latest/languages_summary )
         \item leider kaum Aktivität auf Github seit Juni 2015 % 1 Jahr
-        \item ''Rootbeer is pre-production beta. If Rootbeer works for you, please let me know.''
+        %\item ''Rootbeer is pre-production beta. If Rootbeer works for you, please let me know.''
         \item Unterstütze Java Features:
         \begin{itemize}
             \item Arrays jeden Types und Dimension
@@ -468,6 +502,7 @@ pi = 3.1415955324
 \begin{frame}
     \frametitle{Rootbeer Funktionsweise}
     \begin{enumerate}
+        \item Der Anwender implementiert das Kernel-Interface, insbesondere \lstinline!gpuMethod!
         \item Lese alle Felder aus benötigten Objekten in ein Java Byte Array
         \item Sende Byte Array an GPU
         \item Konvertiere Java-Bytecode mit Soot nach Jimple % simplifizierte java source code version, die maximal drei Bestandteile pro Befehl hat -> Dreiaddressencode -> 15 Operationen vs. Java Bytecode mit 200, also z.B. a = b*c
@@ -475,6 +510,7 @@ pi = 3.1415955324
         \item Java-Methoden werden in simple Device-Funktionen umgewandelt % mit ersten Argument this und Name aus Klassenname+Methodenname
         \item Kompiliere den generierten CUDA-Code mit nvcc
         \item Packe die modifizierte Klassen und den kompilierten nativen Code zu einer jar
+        \item Bei der Ausführung entpacke CUDA-Binaries in temporäres Verzeichnis und führe sie aus
     \end{enumerate}
     %    3.) Rootbeer constructor
     %    3.1.) CUDALoader constructor
@@ -748,7 +784,7 @@ runWaitEvent.take()
               %      at org.apache.spark.SparkContext.addFile(SparkContext.scala:1365)
           %  - Alignement Bug in Speicherserialisierung
           %       https://github.com/mxmlnkn/rootbeer1/commit/cc2318673077a52f13a8c4b4d294fbd39e639ca5
-        \item Flüchtiger Fehler \begin{lstlisting}
+        \item \textbf{Flüchtiger Fehler} \begin{lstlisting}
 java.lang.ClassCastException: MonteCarloPiKernel cannot be cast to [J
   at MonteCarloPiKernel.org_trifort_readFromHeapRefFields_MonteCarloPiKernel0(Jasmin)
   at MonteCarloPiKernelSerializer.doReadFromHeap(Jasmin)
@@ -829,62 +865,6 @@ salloc -p gpu2-interactive --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --gre
 %%%%NH: multi gpu, multi node single gpu, multi node multi gpu, ...
 
 
-\begin{frame}[fragile]
-    \frametitle{Spark auf Taurus über Slurm starten}
-    %\begin{itemize}
-    %    \item Manuelle Installation von maven, ant, spark, zipmerge
-    %    % für spark wurden precompiled binaries genommen, weil es bei der Kompilation auch Probleme gab, die nicht behoben werden konnten
-    %\end{itemize}
-    % This does similar things as vanilla $SPARK_ROOT/sbin/start-master.sh but slurm compatible, e.g. not in daemon-mode
-    \begin{lstlisting}[language=bash]
-function startSpark() {
-  jobid=$(sbatch "$@" --output="$SPARK_LOGS/%j.out" --error="$SPARK_LOGS/%j.err" $HOME/scaromare/start_spark_slurm.sh)
-  # wait for job to start
-  export MASTER_ADDRESS=$(cat ~/spark/logs/${jobid}_spark_master)
-}
-\end{lstlisting}\vspace{-1.5\baselineskip}
-\begin{lstlisting}[language=bash]
-startSpark --time=04:00:00 --nodes=$((nodes+1)) --partition=gpu2 --gres=gpu:$gpusPerNode --cpus-per-task=$coresPerNode
-~/spark-1.5.2-bin-hadoop2.6/bin/spark-submit --master $MASTER_ADDRESS ~/scaromare/MontePi/multiNode/multiGpu/scala/MontePi.jar $arguments
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]
-    \frametitle{\lstinline!start_spark_slurm.sh!}
-    \begin{lstlisting}[language=bash,xleftmargin=0pt,linewidth=1.05\linewidth,basicstyle=\scriptsize]
-if [ "$1" != 'sran' ]; then
-  script=/scratch/$USER/${SLURM_JOBID}_$(basename "$0")
-  cp "$0" "$script"
-  export SPARK_DAEMON_MEMORY=$(( $SLURM_MEM_PER_CPU * $SLURM_CPUS_PER_TASK / 2 ))m
-  export SPARK_WORKER_CORES=$SLURM_CPUS_PER_TASK
-  srun "$script" 'sran' "$@"
-else
-  module load scala/2.10.4 java/jdk1.7.0_25 cuda/7.0.28
-  if [ $SLURM_PROCID -eq 0 ]; then # if master start driver
-    . "$SPARK_ROOT/sbin/spark-config.sh"
-    . "$SPARK_ROOT/bin/load-spark-env.sh"
-    "$SPARK_ROOT/bin/spark-class" org.apache.spark.deploy.master.Master --ip $(hostname) --port $SPARK_MASTER_PORT --webui-port $SPARK_MASTER_WEBUI_PORT
-  else
-    # convert "host20[39-40]" to "host2039"
-    MASTER_NODE=spark://$(scontrol show hostname $SLURM_NODELIST | head -n 1):7077
-    "$SPARK_ROOT/bin/spark-class" org.apache.spark.deploy.worker.Worker $MASTER_NODE
-  fi
-fi
-\end{lstlisting}
-% This section will be run when started by sbatch
-%  export SPARK_ROOT=$HOME/spark-1.5.2-bin-hadoop2.6/
-%  export SPARK_JAVA_OPTS+="-XX:+UseParallelGC -XX:MaxPermSize=5G"
-%  export SPARK_MEM=$SPARK_DAEMON_MEMORY
-%  export SPARK_WORKER_DIR=$HOME/spark/logs
-%  export SPARK_LOCAL_DIRS=$(mktemp)
-%  export SPARK_MASTER_PORT=7077
-%  export SPARK_MASTER_WEBUI_PORT=8080
-\end{frame}
-
-\begin{frame}
-    \centerline{\includegraphics[width=0.9\linewidth]{spark-main-view.png}}
-\end{frame}
-
 \begin{frame}
     \frametitle{Benchmark Spark auf CPU}
     \centerline{\includegraphics[width=0.9\linewidth]{cluster-strong-scaling-cpu.pdf}}
@@ -892,52 +872,9 @@ fi
 
 
 \begin{frame}
-    \frametitle{Benchmark Spark mit Rootbeer (alte Ergebnisse)}
+    \frametitle{Benchmark Spark mit Rootbeer}
     % "warum haben sie die neue Version nicht gebenchmarkt?" -> wegen Rootbeerproblemen -> deshalb rootbeer folie vor dieser
     \centerline{\includegraphics[width=0.9\linewidth]{cluster-strong-scaling-gpu.pdf}}
-\end{frame}
-
-
-\begin{frame}[fragile]
-    \frametitle{ohne Cache-Befehl}
-    \begin{lstlisting}[numbers=none,language=bash]
-startSpark --time=04:00:00 --nodes=9 --partition=haswell --cpus-per-task=1 --gres=''
-spark-shell --master=$MASTER_ADDRESS
-\end{lstlisting}\vspace{-1.5\baselineskip}
-\begin{lstlisting}[numbers=none,xleftmargin=0pt,linewidth=1.1\linewidth]
-scala> import java.net.InetAddress
-scala> val ranks = sc.parallelize( 0 until 4 )
-    ranks: org.apache.spark.rdd.RDD[Int] = ParallelCollectionRDD[0] at parallelize at <console>:22
-scala> ranks.map( x => x + " : " + InetAddress.getLocalHost().getHostName() ).collect.foreach( println )
-    0 : taurusi4094
-    1 : taurusi4095
-    2 : taurusi4097
-    3 : taurusi4096
-scala> ranks.map( x => x + " : " + InetAddress.getLocalHost().getHostName() ).collect.foreach( println )
-    0 : taurusi4099
-    1 : taurusi4103
-    2 : taurusi4095
-    3 : taurusi4096
-\end{lstlisting}
-\end{frame}
-
-
-\begin{frame}[fragile]
-    \frametitle{mit Cache-Befehl}
-\begin{lstlisting}[numbers=none,xleftmargin=0pt,linewidth=1.1\linewidth]
-scala> val ranks = sc.parallelize( 0 until 4 ).cache
-    ranks: org.apache.spark.rdd.RDD[Int] = ParallelCollectionRDD[4] at parallelize at <console>:22
-scala> ranks.map( x => x + " : " + InetAddress.getLocalHost().getHostName() ).collect.foreach( println )
-    0 : taurusi4096
-    1 : taurusi4099
-    2 : taurusi4093
-    3 : taurusi4097
-scala> ranks.map( x => x + " : " + InetAddress.getLocalHost().getHostName() ).collect.foreach( println )
-    0 : taurusi4096
-    1 : taurusi4099
-    2 : taurusi4093
-    3 : taurusi4097
-\end{lstlisting}
 \end{frame}
 
 
@@ -989,7 +926,7 @@ scala> ranks.map( x => x + " : " + InetAddress.getLocalHost().getHostName() ).co
         %     at java.lang.Thread.run(Thread.java:724)
 
        \item heterogene Berechnungen auf CPU + GPU (Problem Lastbalancierung) % sagen: sollten sehr einfach möglich sein, da Rootbeer asynchron unterstützt (although I don't think there is somehting like: peek yet), und da gpuMethod von Host aufrufbar ist ( wäre riesen Vorteil von Rootbeer, dass der Spark-Nutzer kein CUDA oder ähnliches schreiben muss ... durch den Vorteil fallen Alternativen mehr oder minder alle raus )  ( so heterogen kann aber nur einen CPU core pro GPU nutzen.. häufig aber mehr cores als CPUs :S... wäre also doch bisschen mehr dahinter. Außerdem kann man glaube nicht mehr spark partitionen auf einen Knoten starten, als er CPU cores hat, d.h. einige Partitionen müssten CPU+GPU starten, während andere nur CPU starten.. Weiteres Problem ist, dass man nicht weiß, wie lange das jeweils dauert. Wenn man CPU+GPU vom selben Programm startet, dann kann man sehr kleine Arbeitslasten an die CPU senden und dann immer in einer Schleife schauen, ob die GPU schon fertig ist. Aber die Partitionen, die nur CPU haben werden immer eher oder später fertig sein. ... wird möglicherweise doch schwieriger als gedacht ...)
-       \item Erweiterung von Rootbeer um neue Features wie NVIDIA NVLink
+       %\item Erweiterung von Rootbeer um neue Features wie NVIDIA NVLink
        \item Implementation direkt in Spark würde z.B. cache/persist auf GPUs erlauben, um Host-GPU-Transfers zu sparen
                 % glaube cache/persist erkläre ich bei Spark irgendwann oben.
     \end{itemize}
