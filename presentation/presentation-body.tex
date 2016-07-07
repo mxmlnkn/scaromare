@@ -668,7 +668,7 @@ context.setKernel( work.get(0) )
 context.setUsingHandles( true )
 context.buildState()
 val runWaitEvent = context.runAsync( work )
-context.run( work );
+runWaitEvent.take()
 \end{lstlisting}\vspace{-1.5\baselineskip}
 \end{frame}
 
@@ -698,8 +698,8 @@ context.run( work );
               %        at soot.rbclassload.RootbeerClassLoader.loadHierarchySootClasses(RootbeerClassLoader.java:963)
               %\end{lstlisting}
               % https://github.com/pcpratts/rootbeer1/issues/175 - Issues with jre1.8
-        \item nur bis GCC 4.9 unterstützt % (wegen CUDA-Compiler)
-        \item die Option \lstinline!-computecapability=sm_30! muss angegeben werden, da seit CUDA 7.0 die Standardarchitektur \lstinline!compute_12! nicht mehr unterstützt wird (korrekt nun \lstinline!sm_12!)
+        \item Nur bis GCC 4.9 unterstützt % (wegen CUDA-Compiler)
+        \item Die Option \lstinline!-computecapability=sm_30! muss angegeben werden, da seit CUDA 7.0 die Standardarchitektur \lstinline!compute_12! nicht mehr unterstützt wird (korrekt nun \lstinline!sm_12!)
               %\begin{lstlisting}
               %    nvcc fatal   : Unsupported gpu architecture 'compute_12'
               %\end{lstlisting}
@@ -708,7 +708,7 @@ context.run( work );
               % return new ThreadConfig( block_shaper.getMaxThreadsPerBlock(), 1, 1,
               %                          block_shaper.getMaxBlocksPerProc(), 1,
               % https://github.com/pcpratts/rootbeer1/issues/168
-        \item Bug wo Rootbeer hat standardmäßig versucht den gesamten freien Speicher minus den benötigten zu alloziieren versuchte
+        \item Rootbeer hat standardmäßig versucht den gesamten freien Speicher zu alloziieren versuchte
               % sagen:
               %  - verhinderte multi-GPU, weil ein Kontext schon so gut wie den gesamten Speicher für sich beanspruchen wollte.
               %  - nur ein Problem mit multiple Rootbeer.jar
@@ -725,17 +725,37 @@ context.run( work );
               %   at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
               %   at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
               %   at java.lang.Thread.run(Thread.java:745)
-        \item die ausführbare jar für Spark darf kein Leerzeichen im Pfad enthalten:
+        \item Zu kompilierende jar an Rootbeer >muss< auf .jar enden
+              % normalerweise sollte die Dateiendung unter Linux egal sein, gibt Magic Bytes und Co
+              % #Warning: the following soot-classpath entry is not a supported archive file (must be .zip, .jar or .apk): MontePiGPU.jar.tmp
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Bemerkungen und Hinweise}
+    %%%%NH: die folgenden Punkte finde ich gut, aber lieber am Schluss des Results-Kapitel einfügen. Kannst ja auch deine contributions+deren Effekt rootbeer erwähnen.
+    %%%%NH: multi gpu fähigkeiten von rb erwähnen
+    % sagen:
+    %  - Leider wurde die meiste Bearbeitungszeit für diesen Beleg vom Lösen von Bugs beansprucht, sodass ich nicht darauf verzichten kann, zumindest einige davon zu erwähnen, auf dass sie jemanden helfen mögen, der einen ähnlichen Ansatz wie ich verfolgen möchte
+    \begin{itemize}
+        \item Profiling mit NVIDIA nvvp möglich. (Executable: java, Argumente: \lstinline!-jar ./MontePi.jar!)
+        \item \lstinline!ERROR STATUS:716 : Error in cuCtxSynchronize! wenn man den Konfigurationsordner löscht oder woanders kompiliert als man ausführt
+        % https://github.com/pcpratts/rootbeer1/issues/185
+        \item Shared Libraries werden nach \lstinline!~/.rootbeer/! entpackt, was aber auf Taurus shared ist $\rightarrow$ Bugfix: entpacke nach \lstinline!~/.rootbeer/<hostname>/<pid>-<nanotimestamp>/!
+        %\item Lokale Dateien aus denen RDDs erstellt werden dürfen kein Leerzeichen im Pfad enthalten
               % $SPARK_ROOT/bin/spark-submit --master $MASTER_ADDRESS ./src/sort.py "$(pwd)"/data/The_Complete_Works_of_Willia.txt
               %   java.io.FileNotFoundException: Added file file:/media/f/Studium/9TH%20SEMESTER/scaromare/spark-gpu/src/sort.py does not exist.
               %      at org.apache.spark.SparkContext.addFile(SparkContext.scala:1365)
           %  - Alignement Bug in Speicherserialisierung
           %       https://github.com/mxmlnkn/rootbeer1/commit/cc2318673077a52f13a8c4b4d294fbd39e639ca5
-        \item Zu kompilierende jar an Rootbeer >muss< auf .jar enden
-              % normalerweise sollte die Dateiendung unter Linux egal sein, gibt Magic Bytes und Co
-              % #Warning: the following soot-classpath entry is not a supported archive file (must be .zip, .jar or .apk): MontePiGPU.jar.tmp
-        \item Profiling mit NVIDIA nvvp möglich. (Executable: java, Argumente: \lstinline!-jar ./MontePi.jar!)
-      \end{itemize}
+        \item Flüchtiger Fehler \begin{lstlisting}
+java.lang.ClassCastException: MonteCarloPiKernel cannot be cast to [J
+  at MonteCarloPiKernel.org_trifort_readFromHeapRefFields_MonteCarloPiKernel0(Jasmin)
+  at MonteCarloPiKernelSerializer.doReadFromHeap(Jasmin)
+  at org.trifort.rootbeer.runtime.Serializer.readFromHeap(Serializer.java:155)
+  ...
+\end{lstlisting}
+    \end{itemize}
 \end{frame}
 
 
@@ -743,9 +763,27 @@ context.run( work );
 \section{Ergebnisse}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-
-
+\begin{frame}
+    \frametitle{Testsystem: Taurus Insel 2 Phase 2}
+    \begin{tabularx}{0.9\linewidth}{r|Y}
+        Knoten          & 64 \\
+        Hostnamen       & taurusi2[045-108] \\
+        Prozessor       & 2x Intel(R) Xeon(R) CPU E5-2680 v3 (12 Kerne) @ 2.50GHz, MultiThreading deaktiviert, AVX2 insbesondere FMA3, 2x 537.6\,GSPFLOPS \\
+        GPU 			& 4x NVIDIA Tesla K80 \\
+        Arbeitsspeicher & \SI{64}{\gibi\byte} \\
+        Festplatte      & \SI{128}{\gibi\byte} SSD
+    \end{tabularx}\\
+    \textbf{Tesla K80:}
+    \begin{tabular}{r|c}
+        Chip       & GK210 \\
+        Takt       & \SI{0.560}{\giga\hertz} \\
+        CUDA-Kerne & 4992 \\
+        Speicher Bandbreite & $2\times\SI{240}{\giga\byte\per\second}$              \\
+    %	\begin{minipage}{2.5cm}\begin{flushright}Theoretische\\Spitzenleistung\end{flushright}\end{minipage} & 3935\,GSPFLOPS, 1312\,GDPFLOPS
+    %					& 5591\,GSPFLOPS, 1864\,GDPFLOPS \\
+        Theoretische Spitzenleistung & 5591\,GSPFLOPS
+    \end{tabular}
+\end{frame}
 
 %%%%NH: hardware auf der du deine tests durchgeführt hast beschreiben
 %%%%NH: nochmal kurz den benchmark + motivation beschreiben  (use case => machine learning in labs). auch erwähnen, dass du eine cuda implementation erstellt hast ..
@@ -844,6 +882,10 @@ fi
 \end{frame}
 
 \begin{frame}
+    \centerline{\includegraphics[width=0.9\linewidth]{spark-main-view.png}}
+\end{frame}
+
+\begin{frame}
     \frametitle{Benchmark Spark auf CPU}
     \centerline{\includegraphics[width=0.9\linewidth]{cluster-strong-scaling-cpu.pdf}}
 \end{frame}
@@ -855,6 +897,48 @@ fi
     \centerline{\includegraphics[width=0.9\linewidth]{cluster-strong-scaling-gpu.pdf}}
 \end{frame}
 
+
+\begin{frame}[fragile]
+    \frametitle{ohne Cache-Befehl}
+    \begin{lstlisting}[numbers=none,language=bash]
+startSpark --time=04:00:00 --nodes=9 --partition=haswell --cpus-per-task=1 --gres=''
+spark-shell --master=$MASTER_ADDRESS
+\end{lstlisting}\vspace{-1.5\baselineskip}
+\begin{lstlisting}[numbers=none,xleftmargin=0pt,linewidth=1.1\linewidth]
+scala> import java.net.InetAddress
+scala> val ranks = sc.parallelize( 0 until 4 )
+    ranks: org.apache.spark.rdd.RDD[Int] = ParallelCollectionRDD[0] at parallelize at <console>:22
+scala> ranks.map( x => x + " : " + InetAddress.getLocalHost().getHostName() ).collect.foreach( println )
+    0 : taurusi4094
+    1 : taurusi4095
+    2 : taurusi4097
+    3 : taurusi4096
+scala> ranks.map( x => x + " : " + InetAddress.getLocalHost().getHostName() ).collect.foreach( println )
+    0 : taurusi4099
+    1 : taurusi4103
+    2 : taurusi4095
+    3 : taurusi4096
+\end{lstlisting}
+\end{frame}
+
+
+\begin{frame}[fragile]
+    \frametitle{mit Cache-Befehl}
+\begin{lstlisting}[numbers=none,xleftmargin=0pt,linewidth=1.1\linewidth]
+scala> val ranks = sc.parallelize( 0 until 4 ).cache
+    ranks: org.apache.spark.rdd.RDD[Int] = ParallelCollectionRDD[4] at parallelize at <console>:22
+scala> ranks.map( x => x + " : " + InetAddress.getLocalHost().getHostName() ).collect.foreach( println )
+    0 : taurusi4096
+    1 : taurusi4099
+    2 : taurusi4093
+    3 : taurusi4097
+scala> ranks.map( x => x + " : " + InetAddress.getLocalHost().getHostName() ).collect.foreach( println )
+    0 : taurusi4096
+    1 : taurusi4099
+    2 : taurusi4093
+    3 : taurusi4097
+\end{lstlisting}
+\end{frame}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -875,7 +959,7 @@ fi
 	\end{itemize}
     \textbf{Ausblick:}
     \begin{itemize}
-        \item Codereview von Rootbeer oder andere GPU-API ist nötig
+        \item Codereview von Rootbeer oder Nutzung anderer GPU-API ist nötig
         %  java.lang.ClassCastException: MonteCarloPiKernel cannot be cast to [J
         %      at MonteCarloPiKernel.org_trifort_readFromHeapRefFields_MonteCarloPiKernel0(Jasmin)
         %      at MonteCarloPiKernelSerializer.doReadFromHeap(Jasmin)
@@ -904,7 +988,7 @@ fi
         %     at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
         %     at java.lang.Thread.run(Thread.java:724)
 
-       \item heterogene Berechnungen auf CPU + GPU % sagen: sollten sehr einfach möglich sein, da Rootbeer asynchron unterstützt (although I don't think there is somehting like: peek yet), und da gpuMethod von Host aufrufbar ist ( wäre riesen Vorteil von Rootbeer, dass der Spark-Nutzer kein CUDA oder ähnliches schreiben muss ... durch den Vorteil fallen Alternativen mehr oder minder alle raus )  ( so heterogen kann aber nur einen CPU core pro GPU nutzen.. häufig aber mehr cores als CPUs :S... wäre also doch bisschen mehr dahinter. Außerdem kann man glaube nicht mehr spark partitionen auf einen Knoten starten, als er CPU cores hat, d.h. einige Partitionen müssten CPU+GPU starten, während andere nur CPU starten.. Weiteres Problem ist, dass man nicht weiß, wie lange das jeweils dauert. Wenn man CPU+GPU vom selben Programm startet, dann kann man sehr kleine Arbeitslasten an die CPU senden und dann immer in einer Schleife schauen, ob die GPU schon fertig ist. Aber die Partitionen, die nur CPU haben werden immer eher oder später fertig sein. ... wird möglicherweise doch schwieriger als gedacht ...)
+       \item heterogene Berechnungen auf CPU + GPU (Problem Lastbalancierung) % sagen: sollten sehr einfach möglich sein, da Rootbeer asynchron unterstützt (although I don't think there is somehting like: peek yet), und da gpuMethod von Host aufrufbar ist ( wäre riesen Vorteil von Rootbeer, dass der Spark-Nutzer kein CUDA oder ähnliches schreiben muss ... durch den Vorteil fallen Alternativen mehr oder minder alle raus )  ( so heterogen kann aber nur einen CPU core pro GPU nutzen.. häufig aber mehr cores als CPUs :S... wäre also doch bisschen mehr dahinter. Außerdem kann man glaube nicht mehr spark partitionen auf einen Knoten starten, als er CPU cores hat, d.h. einige Partitionen müssten CPU+GPU starten, während andere nur CPU starten.. Weiteres Problem ist, dass man nicht weiß, wie lange das jeweils dauert. Wenn man CPU+GPU vom selben Programm startet, dann kann man sehr kleine Arbeitslasten an die CPU senden und dann immer in einer Schleife schauen, ob die GPU schon fertig ist. Aber die Partitionen, die nur CPU haben werden immer eher oder später fertig sein. ... wird möglicherweise doch schwieriger als gedacht ...)
        \item Erweiterung von Rootbeer um neue Features wie NVIDIA NVLink
        \item Implementation direkt in Spark würde z.B. cache/persist auf GPUs erlauben, um Host-GPU-Transfers zu sparen
                 % glaube cache/persist erkläre ich bei Spark irgendwann oben.
