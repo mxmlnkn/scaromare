@@ -1,0 +1,2 @@
+Verteilte GPGPU-Berechnungen mit Spark:
+In diesem Vortrag wird ein Ansatz für das Rechnen auf Grafikkarten aus dem Spark-Framework heraus mittels des Java GPU Compilers Rootbeer vorgestellt. Zuerst werden Spark und Rootbeer vorgestellt, dann wird auf die eigene Implementierung eines Monte-Carlo-Algorithmus als Beispiel für einen rechenintensiven Algorithmus und die dabei aufgetretenen Probleme in Verbindung mit Spark eingegangen. Zuletzt werden die durchgeführten Leistungsanalysen ausgewertet.

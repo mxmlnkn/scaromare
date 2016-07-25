@@ -53,7 +53,10 @@
 *.mtc
 *.mtc1
 *.out
+*.snm
 *.synctex.gz
+*.nav
+*.vrb
 
 Geany
 *.geany
