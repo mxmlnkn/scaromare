@@ -64,7 +64,8 @@ object TestMonteCarloPi
          */
         val dataSet = sc.
             parallelize( ( 0 until nExecutors ).zipWithIndex ).
-            partitionBy( new ExactPartitioner( nExecutors, nExecutors ) )
+            partitionBy( new ExactPartitioner( nExecutors, nExecutors ) ).
+            cache   // important or else slices could end up on different host on each run
         val hostGpus = dataSet.
             map( x => {
                 // force only 1 GPU to use
