@@ -25,7 +25,7 @@ MonteCarloPiKernel.class: MonteCarloPiKernel.java $(ROOTBEER_JAR)
 
 gpu.jar: MonteCarloPiKernel.class
 	jar -cvf gputmp.jar $^
-	java -jar $(ROOTBEER_JAR) gputmp.jar $@ -64bit -computecapability=sm_30
+	java -jar $(ROOTBEER_JAR) -64bit -nofatjar gputmp.jar $@ 
 
 
 Distribute.class: Distribute.scala

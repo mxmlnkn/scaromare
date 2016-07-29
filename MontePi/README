@@ -8,12 +8,16 @@ Run with
 
 
 startSpark --time=15:00:00 --nodes=2 --partition=gpu2 --cpus-per-task=2 --gres='gpu:2'
+squeue -u $USER
+     JOBID   PARTITION NAME     ST      TIME  NODES NODELIST(REASON)
+     7660143 gpu2      start_sp R   14:49:09      2 taurusi[2093-2094]
 makeOptsSpark=(                                                      \
     "SPARK_ROOT=$HOME/spark-1.5.2-bin-hadoop2.6"                     \
     "SPARK_JAR=$SPARK_ROOT/lib/spark-assembly-1.5.2-hadoop2.6.0.jar" \    
     "SPARKCORE_JAR=$SPARK_JAR"                                       \
     "SCALA_ROOT=$(dirname $(which scala))/../lib"                    \
 )
+( cd "$HOME/scaromare/rootbeer1/" && ( cd csrc && ./compile_linux_x64 ) && ant clean && 'rm' -f dist/Rootbeer1.jar Rootbeer.jar && ant jar && ./pack-rootbeer ) && make clean && make -B && java -jar Count.jar
 folder=$HOME/scaromare/MontePi/multiNode/multiGpu/scala
 make -C "$folder" -B ${makeOptsSpark[@]} MontePi.jar
 sparkSubmit "$folder/MontePi.jar" 268435456 2 2 2>&1 | sed '/ INFO /d'
@@ -47,4 +51,38 @@ sparkSubmit "$folder/MontePi.jar" 268435456 2 2 2>&1 | sed '/ INFO /d'
         [taurusi2094, Rank 1, GPU 0] 134217728 iterations -> pi = 3.1383594274520874
 
     Using 2 slices and 2 GPUs. Rolling the dice 268435456 times resulted in pi ~ 3.135031670331955 and took 4.549351536 seconds
+
+
+
+Here is the backtrace using the latest rootbeer commit bc254b78715706b4834668bf4c25c791326e2d53:
+
+Found these hosts with each these number of GPUs : 
+    taurusi2094 : 2 (43849.729703936GFlops)
+Found 2 GPUs in total.
+GPUs per host actually to be used : 
+    (taurusi2094,4.3849729703936E13) : 2
+0
+These are the seed ranges for each partition of MonteCarloPi:
+    0 -> (7135068,4611686018434522971)
+    1 -> (4611686018434522971,7135065)
+16/07/29 01:41:03 WARN TaskSetManager: Lost task 1.0 in stage 12.0 (TID 18, 172.24.36.103): java.lang.ClassCastException: MonteCarloPiKernel cannot be cast to [J
+	at MonteCarloPiKernel.org_trifort_readFromHeapRefFields_MonteCarloPiKernel0(Jasmin)
+	at MonteCarloPiKernelSerializer.doReadFromHeap(Jasmin)
+	at org.trifort.rootbeer.runtime.Serializer.readFromHeap(Serializer.java:188)
+	at org.trifort.rootbeer.runtime.CUDAContext.readBlocksList(CUDAContext.java:709)
+	at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:461)
+	at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:403)
+	at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:128)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:724)
+
+Results per Slice : 
+    [taurusi2094, Rank 0, GPU 0] 134217728 iterations -> pi = 3.1317039132118225
+    [taurusi2094, Rank 1, GPU 0] 134217728 iterations -> pi = 3.1383594274520874
+
+Using 2 slices and 2 GPUs. Rolling the dice 268435456 times resulted in pi ~ 3.135031670331955 and took 4.316952021 seconds
+
+
+Notes: On the first run no exception was thrown! The values vor pi didn't change between different runs, so I guess no serialisation error there.
 
