@@ -1,0 +1,402 @@
+[MonteCarloPi.scala:<constructor>] Using the following GPUs : [MonteCarloPi.scala:<constructor>] Using the following GPUs : 0, 
+0, 
+[MonteCarloPi.scala:<constructor>] MonteCarloPi constructor took 0.998009735 seconds
+[MonteCarloPi.scala:<constructor>] MonteCarloPi constructor took 0.989386723 seconds
+0
+0
+[MonteCarloPi.scala:calc] Running MonteCarlo on 1 GPUs with these maximum kernel configurations : 
+[MonteCarloPi.scala:calc]     [MonteCarloPi.scala:calc] Running MonteCarlo on 1 GPUs with these maximum kernel configurations : 
+[MonteCarloPi.scala:calc]     26624 26624 
+
+[MonteCarloPi.scala:calc] with each these workloads / number of iterations :
+[MonteCarloPi.scala:calc]     [MonteCarloPi.scala:calc] with each these workloads / number of iterations :
+[MonteCarloPi.scala:calc]     134217728 
+134217728 
+[MonteCarloPi.scala:calc] These are the seeds for the first 4 kernels:
+[MonteCarloPi.scala:calc] These are the seeds for the first 4 kernels:
+[MonteCarloPi.scala:calc]   GPU 0 which runs 26624 kernels and a total of 134217728 iterations: 
+[MonteCarloPi.scala:calc]   GPU 0 which runs 26624 kernels and a total of 134217728 iterations: 
+[MonteCarloPi.scala:calc]     MonteCarloPiKernel( iKernel:0, seed:7135067, nIterations:5042 )
+[MonteCarloPi.scala:calc]     MonteCarloPiKernel( iKernel:0, seed:7135068, nIterations:5042 )
+[MonteCarloPi.scala:calc]     MonteCarloPiKernel( iKernel:1, seed:653629133, nIterations:5042 )
+[MonteCarloPi.scala:calc]     MonteCarloPiKernel( iKernel:1, seed:653629132, nIterations:5042 )
+[MonteCarloPi.scala:calc]     MonteCarloPiKernel( iKernel:26622, seed:1328663900, nIterations:5041 )
+[MonteCarloPi.scala:calc]     MonteCarloPiKernel( iKernel:26623, seed:667899740, nIterations:5041 )
+[MonteCarloPi.scala:calc]     MonteCarloPiKernel( iKernel:26622, seed:1328663899, nIterations:5041 )
+[MonteCarloPi.scala:calc]     MonteCarloPiKernel( iKernel:26623, seed:667899739, nIterations:5041 )
+[MonteCarloPi.scala:runOnDevice] [Host:taurusi2094,GPU:0] Total Thread Count = 26624, KernelConfig = (104,1,1) blocks with each (256,1,1) threads
+[MonteCarloPi.scala:runOnDevice] [Host:taurusi2094,GPU:0] Total Thread Count = 26624, KernelConfig = (104,1,1) blocks with each (256,1,1) threads
+[CUDAContext.java] execute NATIVE_BUILD_STATE
+[CUDAContext.java] execute NATIVE_BUILD_STATE
+[MonteCarloPi.scala:runOnDevice] runOnDevice configuration took 0.371717502 seconds
+[CUDAContext.java:runAsync] Putting NATIVE_RUN_LIST into queue
+[CUDAContext.java] execute NATIVE_RUN_LIST
+[CUDAContext.java:writeBlocksList] m_objectMemory  current address: 0
+[CUDAContext.java:writeBlocksList] m_handlesMemory current address: 0
+
+[MonteCarloPi.scala:runOnDevice] context.run( work ) took 6.7701E-5 seconds
+[MonteCarloPi.scala:calc] Ran Kernels asynchronously on all GPUs. Took 0.560402681 seconds
+[CUDAContext.java:writeBlocksList] m_objectMemory  current address: 112
+[CUDAContext.java:writeBlocksList] m_handlesMemory current address: 0
+
+[MonteCarloPi.scala:runOnDevice] runOnDevice configuration took 0.38186582 seconds
+[CUDAContext.java:runAsync] Putting NATIVE_RUN_LIST into queue
+[MonteCarloPi.scala:runOnDevice] context.run( work ) took 2.5773E-5 seconds
+[MonteCarloPi.scala:calc] Ran Kernels asynchronously on all GPUs. Took 0.562600381 seconds
+[CUDAContext.java] execute NATIVE_RUN_LIST
+[CUDAContext.java:writeBlocksList] m_objectMemory  current address: 0
+[CUDAContext.java:writeBlocksList] m_handlesMemory current address: 0
+
+[CUDAContext.java:writeBlocksList] m_objectMemory  current address: 112
+[CUDAContext.java:writeBlocksList] m_handlesMemory current address: 0
+
+[MonteCarloPi.scala:calc] This is the list of kernel ranks for this host (one line per GPU) : 
+[MonteCarloPi.scala:calc] This is the list of kernel ranks for this host (one line per GPU) : 
+[MonteCarloPi.scala:calc]     0 1 2 3 4 5 6 7 8 9 ...
+[MonteCarloPi.scala:calc]     0 1 2 3 4 5 6 7 8 9 ...
+[MonteCarloPi.scala:calc] Taking from GpuFuture now (Wait for asynchronous tasks).
+[MonteCarloPi.scala:calc] Taking from GpuFuture now (Wait for asynchronous tasks).
+[CUDAContext.java:writeBlocksList] work.size                      : 26624
+[CUDAContext.java:writeBlocksList] m_objectMemory  current address: 2556144
+[CUDAContext.java:writeBlocksList] m_handlesMemory current address: 106496
+
+[CUDAContext.java:writeBlocksList] m_objectMemory  current address: 2556144
+[CUDAContext.java:writeBlocksList] m_handlesMemory current address: 106496
+
+[CUDAContext.java:writeBlocksList] After writing here are the first 256 Bytes of m_objectMemory (69238784 B = 66 MiB 32 kiB 0 B ) :
+0000 : 05 00 00 00  05 00 00 00  01 00 00 00  ff ff ff [CUDAContext.java:writeBlocksList] work.size                      : 26624
+[CUDAContext.java:writeBlocksList] m_objectMemory  current address: 2130096
+[CUDAContext.java:writeBlocksList] m_handlesMemory current address: 106496
+
+[CUDAContext.java:writeBlocksList] m_objectMemory  current address: 2130096
+[CUDAContext.java:writeBlocksList] m_handlesMemory current address: 106496
+
+ff [CUDAContext.java:writeBlocksList] After writing here are the first 256 Bytes of m_objectMemory (69238784 B = 66 MiB 32 kiB 0 B ) :
+
+0000 : 0016 : 05 ff 00 ff 00 ff 00  ff  ff ff ff ff  ff ff ff ff  ff ff ff ff 
+0032 : ff ff ff ff  ff ff ff ff  ff ff ff ff  ff ff ff ff 
+0048 : ff ff ff ff  ff ff ff ff  ff ff ff ff  ff 05 ff 00 ff 00 ff 
+00  0064 : 01 ff 00 ff 00 ff 00  ff  ff 00 ff 00 ff 00 ff 
+00  0016 : 00 ff 00 ff 00 ff 00  ff  00 ff 00 ff 00 ff 00 
+ff  0080 : ff 00 ff 00 ff 00 ff  00  ff 43 ff 2f ff 00 ff 
+00  0032 : 20 ff 00 ff 00 ff 00  ff  00 ff 00 ff 00 ff 00 ff  
+ff 0096 : ff ff ff ff ff  ff ff ff  ff 00 ff 00 ff 
+00 0048 : 00  00 00 00 00  00 00 00 00 
+0112 : 02 00 00 00  c9 0c 00 00  40 00 00 ff 00  ff 00 ff 00 ff  00 ff 00 
+ff 0128 : ff ff ff  ff ff ff ff ff  ff 00 ff  00 ff 00 ff 00  ff 00 ff 
+00 0064 : 00 ff 00  ff 00 ff 00 ff  00 00 00 
+00 0144 : 00 0b 00  00 00 00 00 00  00 0d 00  34 00 00 00 00  00 5b 00 
+df 0080 : 6c 00 00  00 00 00 00 00  00 43 40 
+2f 0160 : 00 b2 00  13 20 00 00 00  00 00 00  00 00 00 00 00  00 00 00 
+00 0096 : 00 ff 00  ff 00 ff 00 ff  00 00 00 00 00  00 
+0176 : 00 00 00 00  cc 0c 00 00  20 40 03 00  00 68 00 00 
+0192 : ff ff ff ff  00 00 00 00  00 00 00 00  00 00 00 00 
+0208 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0224 : 00 00 00 00  00 00 00 00 00  00 00 00  00 00 00 00  00 00 00 00 
+0240 : 00 00 00 00 00 00 
+0112 : 02 00 00 00  c9 0c 00 00  40 00 00 00  00 00 00 00 
+0128 : ff ff ff ff  00 00 00 00  00 00 00 00  00 00 00 00 
+0144 : 0b 00 00 00  0d 34 00 00  5c df 6c 00  00 00 00 00 
+0160 : b2 13 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0176 : 00 00 00 00  cc 0c 00 00  20 40 03 00  00 68 00 00 
+0192 : ff ff ff ff  00 00 00 00  00 00 00 00  00 00 00 00 
+0208 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0224 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0240 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0256 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0272 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0288 : 00 00 00 00  00 00 00 00 00  00 00 00 00  00 00 00 00 
+0304 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0320 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0336 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0352 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 00 
+00 
+0256 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0272 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0288 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0304 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0320 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0336 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0352 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0368 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0384 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0400 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0416 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0432 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0448 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0464 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0480 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0496 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0512 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0528 : 00 00 00 00  00 00 00 00  00 00 0368 : 00 00 00 00  00 00 00  00 00 00 00 00 
+00 0544 : 00  00 00 00 00 00 00 00  00  00 00 00 00 00 00 00  00 
+00 0384 : 00 00 00 00 00  00 00 00  00 00 00 00 00 
+00 0560 : 00  00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 00 
+ 0400 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 
+00  0576 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 
+00  0416 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 
+00  0592 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 
+00  0432 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 
+00  0608 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 
+00  0448 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 
+00  0624 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 
+00  0464 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 
+00  0640 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 
+00  0480 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 
+00 0656 :  00 00 00 00 00 00 00  00  00 00 00 00 00 00 00  00 
+00 0496 : 00 00 00 00 00  00 00 00  00 00 00 00 00 
+00 0672 : 00  00 00 00 00 00 00 00 00   00 00 00 00 00 00 00 
+00  0512 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 
+00  0688 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 
+00  0528 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 
+00  0704 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 
+00  0544 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 
+00  0720 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00  00 00 00 00  00 00 00 00 
+0736 : 00 00 00 00  00 00 00 
+00 0560 : 00  00 00 00 00 00 00 00 00   00 00 00 00 00 00 00 
+00 0752 :  00 00 00 00 00 00 00  00  00 00 00 00 00 00 00  00 
+00 0576 : 00 00 00 00 00  00 00 00  00 00 00 00 00 
+00 0768 : 00  00 00 00 00 00 00 00 00   00 00 00 00 00 00 00 
+00  0592 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 00  
+00 0784 : 00 00 00 00 00  00 00 00  00 00 00 00 00 
+00 0608 : 00  00 00 00 00 00 00 00  00  00 00 00 00 00 00 00  00 
+00 0800 : 00 00 00 00 00  00 00 00  00 00 00 00 00 
+00 0624 : 00  00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 00 
+ 0816 : 00 00 00 00 00 00 00  00 00 00 00 
+0640 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0656 : 00 00 00  00 00 00  00 00 00 00 00 00  00  00 00 00 00 00 00 00 00   00 00 00 00 00 00 00 
+00 
+0672 : 0832 : 00 00 00 00 00 00 00  00  00 00 00 00 00 00 00  00  00 00 00 00 00 00 00  00  00 00 00 00 00 00 00 
+00 
+0688 : 0848 : 00 00 00 00 00 00 00  00  00 00 00 00  00 00 00 00  00 00 00 00 
+0704 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0720 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0736 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0752 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0768 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0784 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0800 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0816 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0832 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0848 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0864 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0880 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0896 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0912 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0928 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0944 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0960 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0976 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0992 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+1008 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+[CUDAContext.java:runGpu] execute cudaRun()
+00 00 00 00  00 00 00 00  00 00 00 00 
+0864 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0880 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0896 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0912 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0928 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0944 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0960 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0976 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0992 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+1008 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+[CUDAContext.java:runGpu] execute cudaRun()
++-------------- [nativeBuildState] --------------
+|                     rCubinLength =      66952
+|                    rThreadCountX =        256
+|                    rThreadCountY =          1
+|                    rThreadCountZ =          1
+|                     rBlockCountX =        104
+|                     rBlockCountY =          1
+|                      rNumThreads =      26624
+|                     rCacheConfig =          0
+|                     rDeviceIndex =          0
+| s->using_kernel_templates_offset =         20
+|
+|                s->cpu_object_mem = 0x2b4240209010 (size:   69238784 B =      67616 KiB)
+|               s->cpu_handles_mem = 0x2b422c05cea0 (size:     106496 B =        104 KiB)
+|            s->cpu_exceptions_mem = 0x2b422c0abc40 (size:     106496 B =        104 KiB)
+|                 s->cpu_class_mem = 0x2b422c0f0d70 (size:       1024 B =          1 KiB)
+|
+|                s->gpu_info_space = 0x1907fc0000 (size:          4 B =          0 KiB)
+|                s->gpu_object_mem = 0x19081c0000 (size:   69238784 B =      67616 KiB)
+|               s->gpu_handles_mem = 0x190c3e0000 (size:     106496 B =        104 KiB)
+|                 s->gpu_class_mem = 0x1907fc0200 (size:       1024 B =          1 KiB)
+|                  s->gpu_heap_end = 0x1907fc0600 (size:          4 B =          0 KiB)
+|            s->gpu_exceptions_mem = 0x190c3fa000 (size:          4 B =          0 KiB)
+|
++-------------- [nativeBuildState] --------------
+|                     rCubinLength =      66952
+|                    rThreadCountX =        256
+|                    rThreadCountY =          1
+|                    rThreadCountZ =          1
+|                     rBlockCountX =        104
+|                     rBlockCountY =          1
+|                      rNumThreads =      26624
+|                     rCacheConfig =          0
+|                     rDeviceIndex =          0
+| s->using_kernel_templates_offset =         20
+|
+|                s->cpu_object_mem = 0x2b423c000010 (size:   69238784 B =      67616 KiB)
+|               s->cpu_handles_mem = 0x2b41e42d7240 (size:     106496 B =        104 KiB)
+|            s->cpu_exceptions_mem = 0x2b41e4049c00 (size:     106496 B =        104 KiB)
+|                 s->cpu_class_mem = 0x2b41e4041e20 (size:       1024 B =          1 KiB)
+|
+|                s->gpu_info_space = 0x190c5e0000 (size:          4 B =          0 KiB)
+|                s->gpu_object_mem = 0x190c6e0000 (size:   69238784 B =      67616 KiB)
+|               s->gpu_handles_mem = 0x1910900000 (size:     106496 B =        104 KiB)
+|                 s->gpu_class_mem = 0x190c5e0200 (size:       1024 B =          1 KiB)
+|                  s->gpu_heap_end = 0x190c5e0600 (size:          4 B =          0 KiB)
+|            s->gpu_exceptions_mem = 0x191091a000 (size:          4 B =          0 KiB)
+|
+[cudaRun] heap_end_long = 2556144
++-------------- [nativeBuildState] --------------
+|                     heap_end_int =     159759
+|          deviceGlobalFreePointer = 0x1907dc0100 (size:          4 B =          0 KiB)
+|                     deviceMLocal = 0x1907dc0000 (size:         24 B =          0 KiB)
+|
+[cudaRun] heap_end_long = 2130096
++-------------- [nativeBuildState] --------------
+|                     heap_end_int =     133131
+|          deviceGlobalFreePointer = 0x19080c0100 (size:          4 B =          0 KiB)
+|                     deviceMLocal = 0x19080c0000 (size:         24 B =          0 KiB)
+|
+[MonteCarloPi.scala:<constructor>] Using the following GPUs : 0, 
+[MonteCarloPi.scala:<constructor>] MonteCarloPi constructor took 0.551825487 seconds
+0
+[MonteCarloPi.scala:calc] Running MonteCarlo on 1 GPUs with these maximum kernel configurations : 
+[MonteCarloPi.scala:calc]     26624 
+[MonteCarloPi.scala:calc] with each these workloads / number of iterations :
+[MonteCarloPi.scala:calc]     134217728 
+[MonteCarloPi.scala:calc] These are the seeds for the first 4 kernels:
+[MonteCarloPi.scala:calc]   GPU 0 which runs 26624 kernels and a total of 134217728 iterations: 
+[MonteCarloPi.scala:calc]     MonteCarloPiKernel( iKernel:0, seed:7135067, nIterations:5042 )
+[MonteCarloPi.scala:calc]     MonteCarloPiKernel( iKernel:1, seed:653629133, nIterations:5042 )
+[MonteCarloPi.scala:calc]     MonteCarloPiKernel( iKernel:26622, seed:1328663899, nIterations:5041 )
+[MonteCarloPi.scala:calc]     MonteCarloPiKernel( iKernel:26623, seed:667899739, nIterations:5041 )
+[MonteCarloPi.scala:runOnDevice] [Host:taurusi2094,GPU:0] Total Thread Count = 26624, KernelConfig = (104,1,1) blocks with each (256,1,1) threads
+[CUDAContext.java] execute NATIVE_BUILD_STATE
+[MonteCarloPi.scala:runOnDevice] runOnDevice configuration took 0.214854788 seconds
+[CUDAContext.java:runAsync] Putting NATIVE_RUN_LIST into queue
+[MonteCarloPi.scala:runOnDevice] context.run( work ) took 3.1343E-5 seconds
+[MonteCarloPi.scala:calc] Ran Kernels asynchronously on all GPUs. Took 0.228847894 seconds
+[MonteCarloPi.scala:calc] This is the list of kernel ranks for this host (one line per GPU) : 
+[MonteCarloPi.scala:calc]     0 1 2 3 4 5 6 7 8 9 ...
+[MonteCarloPi.scala:calc] Taking from GpuFuture now (Wait for asynchronous tasks).
+[CUDAContext.java] execute NATIVE_RUN_LIST
+[CUDAContext.java:writeBlocksList] m_objectMemory  current address: 0
+[CUDAContext.java:writeBlocksList] m_handlesMemory current address: 0
+
+[CUDAContext.java:writeBlocksList] m_objectMemory  current address: 112
+[CUDAContext.java:writeBlocksList] m_handlesMemory current address: 0
+
+[CUDAContext.java:writeBlocksList] work.size                      : 26624
+[CUDAContext.java:writeBlocksList] m_objectMemory  current address: 2130096
+[CUDAContext.java:writeBlocksList] m_handlesMemory current address: 106496
+
+[CUDAContext.java:writeBlocksList] m_objectMemory  current address: 2130096
+[CUDAContext.java:writeBlocksList] m_handlesMemory current address: 106496
+
+[CUDAContext.java:writeBlocksList] After writing here are the first 256 Bytes of m_objectMemory (69238784 B = 66 MiB 32 kiB 0 B ) :
+0000 : 05 00 00 00  05 00 00 00  01 00 00 00  ff ff ff ff 
+0016 : ff ff ff ff  ff ff ff ff  ff ff ff ff  ff ff ff ff 
+0032 : ff ff ff ff  ff ff ff ff  ff ff ff ff  ff ff ff ff 
+0048 : ff ff ff ff  ff ff ff ff  ff ff ff ff  ff ff ff ff 
+0064 : ff ff ff ff  00 00 00 00  00 00 00 00  00 00 00 00 
+0080 : 00 00 00 00  43 2f 00 00  20 00 00 00  00 00 00 00 
+0096 : ff ff ff ff  00 00 00 00  00 00 00 00  00 00 00 00 
+0112 : 02 00 00 00  c9 0c 00 00  40 00 00 00  00 00 00 00 
+0128 : ff ff ff ff  00 00 00 00  00 00 00 00  00 00 00 00 
+0144 : 0b 00 00 00  0d 34 00 00  5b df 6c 00  00 00 00 40 
+0160 : b2 13 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0176 : 00 00 00 00  cc 0c 00 00  20 40 03 00  00 68 00 00 
+0192 : ff ff ff ff  00 00 00 00  00 00 00 00  00 00 00 00 
+0208 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0224 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0240 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0256 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0272 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0288 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0304 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0320 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0336 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0352 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0368 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0384 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0400 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0416 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0432 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0448 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0464 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0480 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0496 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0512 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0528 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0544 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0560 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0576 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0592 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0608 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0624 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0640 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0656 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0672 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0688 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0704 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0720 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0736 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0752 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0768 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0784 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0800 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0816 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0832 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0848 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0864 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0880 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0896 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0912 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0928 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0944 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0960 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0976 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+0992 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+1008 : 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00 
+[CUDAContext.java:runGpu] execute cudaRun()
++-------------- [nativeBuildState] --------------
+|                     rCubinLength =      66952
+|                    rThreadCountX =        256
+|                    rThreadCountY =          1
+|                    rThreadCountZ =          1
+|                     rBlockCountX =        104
+|                     rBlockCountY =          1
+|                      rNumThreads =      26624
+|                     rCacheConfig =          0
+|                     rDeviceIndex =          0
+| s->using_kernel_templates_offset =         20
+|
+|                s->cpu_object_mem = 0x2b4260000010 (size:   69238784 B =      67616 KiB)
+|               s->cpu_handles_mem = 0x2b422c117710 (size:     106496 B =        104 KiB)
+|            s->cpu_exceptions_mem = 0x2b422c1bfa60 (size:     106496 B =        104 KiB)
+|                 s->cpu_class_mem = 0x2b422c0e9230 (size:       1024 B =          1 KiB)
+|
+|                s->gpu_info_space = 0x1914ae0000 (size:          4 B =          0 KiB)
+|                s->gpu_object_mem = 0x1914be0000 (size:   69238784 B =      67616 KiB)
+|               s->gpu_handles_mem = 0x1918e00000 (size:     106496 B =        104 KiB)
+|                 s->gpu_class_mem = 0x1914ae0200 (size:       1024 B =          1 KiB)
+|                  s->gpu_heap_end = 0x1914ae0600 (size:          4 B =          0 KiB)
+|            s->gpu_exceptions_mem = 0x1918e1a000 (size:          4 B =          0 KiB)
+|
+[cudaRun] heap_end_long = 2130096
++-------------- [nativeBuildState] --------------
+|                     heap_end_int =     133131
+|          deviceGlobalFreePointer = 0x19148e0100 (size:          4 B =          0 KiB)
+|                     deviceMLocal = 0x19148e0000 (size:         24 B =          0 KiB)
+|
+[MonteCarloPi.scala:calc] synchronize (take) i.e. kernels took 1.698362346 seconds
+[MonteCarloPi.scala:calc] iterations actually done : 134217728
+[MonteCarloPi.scala:calc] Closing contexts now.
+[MonteCarloPi.scala:calc] synchronize (take) i.e. kernels took 1.002601443 seconds
+[MonteCarloPi.scala:calc] iterations actually done : 134217728
+[MonteCarloPi.scala:calc] Closing contexts now.
