@@ -123,9 +123,11 @@ object TestMonteCarloPi
         }
         val nSlices = nGpusToUse
 
+        /* assign each spark process an ID and cache it! */
         val dataSet = sc.
             parallelize( ( 0 until nSlices ).zipWithIndex ).
-            partitionBy( new ExactPartitioner( nSlices, nSlices ) )
+            partitionBy( new ExactPartitioner( nSlices, nSlices ) ).
+            cache()
 
         /**
          * First start as many partitions as possible and count number of GPUs

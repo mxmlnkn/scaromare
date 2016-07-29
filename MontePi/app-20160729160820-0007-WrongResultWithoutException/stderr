@@ -1,0 +1,247 @@
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+16/07/29 16:08:21 INFO CoarseGrainedExecutorBackend: Registered signal handlers for [TERM, HUP, INT]
+16/07/29 16:08:21 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+16/07/29 16:08:21 INFO SecurityManager: Changing view acls to: s3495379
+16/07/29 16:08:21 INFO SecurityManager: Changing modify acls to: s3495379
+16/07/29 16:08:21 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: Set(s3495379); users with modify permissions: Set(s3495379)
+16/07/29 16:08:22 INFO Slf4jLogger: Slf4jLogger started
+16/07/29 16:08:22 INFO Remoting: Starting remoting
+16/07/29 16:08:22 INFO Remoting: Remoting started; listening on addresses :[akka.tcp://driverPropsFetcher@172.24.36.103:59604]
+16/07/29 16:08:22 INFO Utils: Successfully started service 'driverPropsFetcher' on port 59604.
+16/07/29 16:08:22 INFO SecurityManager: Changing view acls to: s3495379
+16/07/29 16:08:22 INFO SecurityManager: Changing modify acls to: s3495379
+16/07/29 16:08:22 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: Set(s3495379); users with modify permissions: Set(s3495379)
+16/07/29 16:08:22 INFO RemoteActorRefProvider$RemotingTerminator: Shutting down remote daemon.
+16/07/29 16:08:22 INFO RemoteActorRefProvider$RemotingTerminator: Remote daemon shut down; proceeding with flushing remote transports.
+16/07/29 16:08:22 INFO Slf4jLogger: Slf4jLogger started
+16/07/29 16:08:22 INFO RemoteActorRefProvider$RemotingTerminator: Remoting shut down.
+16/07/29 16:08:22 INFO Remoting: Starting remoting
+16/07/29 16:08:22 INFO Remoting: Remoting started; listening on addresses :[akka.tcp://sparkExecutor@172.24.36.103:57704]
+16/07/29 16:08:22 INFO Utils: Successfully started service 'sparkExecutor' on port 57704.
+16/07/29 16:08:22 INFO DiskBlockManager: Created local directory at /tmp/tmp.IrjLkiWbfr/spark-2eacfc91-4907-4139-a9a2-ae22c968630f/executor-18f3cbd1-787c-42db-8c22-a0020239e810/blockmgr-a1947283-4432-4299-aea2-5599f12965b3
+16/07/29 16:08:22 INFO MemoryStore: MemoryStore started with capacity 529.9 MB
+16/07/29 16:08:22 INFO CoarseGrainedExecutorBackend: Connecting to driver: akka.tcp://sparkDriver@172.24.32.16:34441/user/CoarseGrainedScheduler
+16/07/29 16:08:22 INFO WorkerWatcher: Connecting to worker akka.tcp://sparkWorker@172.24.36.103:41052/user/Worker
+16/07/29 16:08:22 INFO WorkerWatcher: Successfully connected to akka.tcp://sparkWorker@172.24.36.103:41052/user/Worker
+16/07/29 16:08:22 INFO CoarseGrainedExecutorBackend: Successfully registered with driver
+16/07/29 16:08:22 INFO Executor: Starting executor ID 0 on host 172.24.36.103
+16/07/29 16:08:22 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 52151.
+16/07/29 16:08:22 INFO NettyBlockTransferService: Server created on 52151
+16/07/29 16:08:22 INFO BlockManagerMaster: Trying to register BlockManager
+16/07/29 16:08:22 INFO BlockManagerMaster: Registered BlockManager
+16/07/29 16:08:22 INFO CoarseGrainedExecutorBackend: Got assigned task 0
+16/07/29 16:08:22 INFO Executor: Running task 0.0 in stage 0.0 (TID 0)
+16/07/29 16:08:22 INFO Executor: Fetching http://172.24.32.16:58556/jars/MontePi.jar with timestamp 1469804900427
+16/07/29 16:08:23 INFO Utils: Fetching http://172.24.32.16:58556/jars/MontePi.jar to /tmp/tmp.IrjLkiWbfr/spark-2eacfc91-4907-4139-a9a2-ae22c968630f/executor-18f3cbd1-787c-42db-8c22-a0020239e810/spark-21526b64-8033-4072-a0df-ce15f45a3e61/fetchFileTemp8654457294189265547.tmp
+16/07/29 16:08:23 INFO Utils: Copying /tmp/tmp.IrjLkiWbfr/spark-2eacfc91-4907-4139-a9a2-ae22c968630f/executor-18f3cbd1-787c-42db-8c22-a0020239e810/spark-21526b64-8033-4072-a0df-ce15f45a3e61/14279029501469804900427_cache to /home/h0/s3495379/spark/logs/app-20160729160820-0007/0/./MontePi.jar
+16/07/29 16:08:23 INFO Executor: Adding file:/home/h0/s3495379/spark/logs/app-20160729160820-0007/0/./MontePi.jar to class loader
+16/07/29 16:08:23 INFO TorrentBroadcast: Started reading broadcast variable 0
+16/07/29 16:08:23 INFO MemoryStore: ensureFreeSpace(1461) called with curMem=0, maxMem=555684986
+16/07/29 16:08:23 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 1461.0 B, free 529.9 MB)
+16/07/29 16:08:23 INFO TorrentBroadcast: Reading broadcast variable 0 took 150 ms
+16/07/29 16:08:23 INFO MemoryStore: ensureFreeSpace(2304) called with curMem=1461, maxMem=555684986
+16/07/29 16:08:23 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 2.3 KB, free 529.9 MB)
+16/07/29 16:08:23 INFO Executor: Finished task 0.0 in stage 0.0 (TID 0). 1161 bytes result sent to driver
+16/07/29 16:08:23 INFO CoarseGrainedExecutorBackend: Got assigned task 1
+16/07/29 16:08:23 INFO Executor: Running task 0.0 in stage 1.0 (TID 1)
+16/07/29 16:08:23 INFO MapOutputTrackerWorker: Updating epoch to 1 and clearing cache
+16/07/29 16:08:23 INFO TorrentBroadcast: Started reading broadcast variable 1
+16/07/29 16:08:23 INFO MemoryStore: ensureFreeSpace(1555) called with curMem=3765, maxMem=555684986
+16/07/29 16:08:23 INFO MemoryStore: Block broadcast_1_piece0 stored as bytes in memory (estimated size 1555.0 B, free 529.9 MB)
+16/07/29 16:08:23 INFO TorrentBroadcast: Reading broadcast variable 1 took 15 ms
+16/07/29 16:08:23 INFO MemoryStore: ensureFreeSpace(2568) called with curMem=5320, maxMem=555684986
+16/07/29 16:08:23 INFO MemoryStore: Block broadcast_1 stored as values in memory (estimated size 2.5 KB, free 529.9 MB)
+16/07/29 16:08:23 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 1, fetching them
+16/07/29 16:08:23 INFO MapOutputTrackerWorker: Doing the fetch; tracker endpoint = AkkaRpcEndpointRef(Actor[akka.tcp://sparkDriver@172.24.32.16:34441/user/MapOutputTracker#-1591325346])
+16/07/29 16:08:23 INFO MapOutputTrackerWorker: Got the output locations
+16/07/29 16:08:23 INFO ShuffleBlockFetcherIterator: Getting 1 non-empty blocks out of 1 blocks
+16/07/29 16:08:23 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 3 ms
+16/07/29 16:08:23 INFO Executor: Finished task 0.0 in stage 1.0 (TID 1). 1377 bytes result sent to driver
+16/07/29 16:08:23 INFO CoarseGrainedExecutorBackend: Got assigned task 2
+16/07/29 16:08:23 INFO Executor: Running task 0.0 in stage 2.0 (TID 2)
+16/07/29 16:08:23 INFO MapOutputTrackerWorker: Updating epoch to 2 and clearing cache
+16/07/29 16:08:23 INFO TorrentBroadcast: Started reading broadcast variable 2
+16/07/29 16:08:23 INFO MemoryStore: ensureFreeSpace(1400) called with curMem=7888, maxMem=555684986
+16/07/29 16:08:23 INFO MemoryStore: Block broadcast_2_piece0 stored as bytes in memory (estimated size 1400.0 B, free 529.9 MB)
+16/07/29 16:08:23 INFO TorrentBroadcast: Reading broadcast variable 2 took 14 ms
+16/07/29 16:08:23 INFO MemoryStore: ensureFreeSpace(2312) called with curMem=9288, maxMem=555684986
+16/07/29 16:08:23 INFO MemoryStore: Block broadcast_2 stored as values in memory (estimated size 2.3 KB, free 529.9 MB)
+16/07/29 16:08:23 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 0, fetching them
+16/07/29 16:08:23 INFO MapOutputTrackerWorker: Doing the fetch; tracker endpoint = AkkaRpcEndpointRef(Actor[akka.tcp://sparkDriver@172.24.32.16:34441/user/MapOutputTracker#-1591325346])
+16/07/29 16:08:23 INFO MapOutputTrackerWorker: Got the output locations
+16/07/29 16:08:23 INFO ShuffleBlockFetcherIterator: Getting 1 non-empty blocks out of 1 blocks
+16/07/29 16:08:23 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+16/07/29 16:08:23 INFO Executor: Finished task 0.0 in stage 2.0 (TID 2). 1321 bytes result sent to driver
+16/07/29 16:08:24 INFO CoarseGrainedExecutorBackend: Got assigned task 3
+16/07/29 16:08:24 INFO Executor: Running task 0.0 in stage 3.0 (TID 3)
+16/07/29 16:08:24 INFO CoarseGrainedExecutorBackend: Got assigned task 4
+16/07/29 16:08:24 INFO Executor: Running task 1.0 in stage 3.0 (TID 4)
+16/07/29 16:08:24 INFO TorrentBroadcast: Started reading broadcast variable 3
+16/07/29 16:08:24 INFO MemoryStore: ensureFreeSpace(1465) called with curMem=11600, maxMem=555684986
+16/07/29 16:08:24 INFO MemoryStore: Block broadcast_3_piece0 stored as bytes in memory (estimated size 1465.0 B, free 529.9 MB)
+16/07/29 16:08:24 INFO TorrentBroadcast: Reading broadcast variable 3 took 17 ms
+16/07/29 16:08:24 INFO MemoryStore: ensureFreeSpace(2304) called with curMem=13065, maxMem=555684986
+16/07/29 16:08:24 INFO MemoryStore: Block broadcast_3 stored as values in memory (estimated size 2.3 KB, free 529.9 MB)
+16/07/29 16:08:24 INFO Executor: Finished task 0.0 in stage 3.0 (TID 3). 1162 bytes result sent to driver
+16/07/29 16:08:24 INFO Executor: Finished task 1.0 in stage 3.0 (TID 4). 1162 bytes result sent to driver
+16/07/29 16:08:24 INFO CoarseGrainedExecutorBackend: Got assigned task 5
+16/07/29 16:08:24 INFO CoarseGrainedExecutorBackend: Got assigned task 6
+16/07/29 16:08:24 INFO Executor: Running task 0.0 in stage 4.0 (TID 5)
+16/07/29 16:08:24 INFO MapOutputTrackerWorker: Updating epoch to 3 and clearing cache
+16/07/29 16:08:24 INFO TorrentBroadcast: Started reading broadcast variable 4
+16/07/29 16:08:24 INFO Executor: Running task 1.0 in stage 4.0 (TID 6)
+16/07/29 16:08:24 INFO MemoryStore: ensureFreeSpace(1558) called with curMem=15369, maxMem=555684986
+16/07/29 16:08:24 INFO MemoryStore: Block broadcast_4_piece0 stored as bytes in memory (estimated size 1558.0 B, free 529.9 MB)
+16/07/29 16:08:24 INFO TorrentBroadcast: Reading broadcast variable 4 took 15 ms
+16/07/29 16:08:24 INFO MemoryStore: ensureFreeSpace(2568) called with curMem=16927, maxMem=555684986
+16/07/29 16:08:24 INFO MemoryStore: Block broadcast_4 stored as values in memory (estimated size 2.5 KB, free 529.9 MB)
+16/07/29 16:08:24 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 3, fetching them
+16/07/29 16:08:24 INFO MapOutputTrackerWorker: Doing the fetch; tracker endpoint = AkkaRpcEndpointRef(Actor[akka.tcp://sparkDriver@172.24.32.16:34441/user/MapOutputTracker#-1591325346])
+16/07/29 16:08:24 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 3, fetching them
+16/07/29 16:08:24 INFO MapOutputTrackerWorker: Got the output locations
+16/07/29 16:08:24 INFO ShuffleBlockFetcherIterator: Getting 2 non-empty blocks out of 2 blocks
+16/07/29 16:08:24 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+16/07/29 16:08:24 INFO ShuffleBlockFetcherIterator: Getting 2 non-empty blocks out of 2 blocks
+16/07/29 16:08:24 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+16/07/29 16:08:24 INFO Executor: Finished task 0.0 in stage 4.0 (TID 5). 1378 bytes result sent to driver
+16/07/29 16:08:24 INFO Executor: Finished task 1.0 in stage 4.0 (TID 6). 1378 bytes result sent to driver
+16/07/29 16:08:24 INFO CoarseGrainedExecutorBackend: Got assigned task 7
+16/07/29 16:08:24 INFO Executor: Running task 0.0 in stage 5.0 (TID 7)
+16/07/29 16:08:24 INFO CoarseGrainedExecutorBackend: Got assigned task 8
+16/07/29 16:08:24 INFO Executor: Running task 1.0 in stage 5.0 (TID 8)
+16/07/29 16:08:24 INFO MapOutputTrackerWorker: Updating epoch to 4 and clearing cache
+16/07/29 16:08:24 INFO TorrentBroadcast: Started reading broadcast variable 5
+16/07/29 16:08:24 INFO MemoryStore: ensureFreeSpace(1389) called with curMem=19495, maxMem=555684986
+16/07/29 16:08:24 INFO MemoryStore: Block broadcast_5_piece0 stored as bytes in memory (estimated size 1389.0 B, free 529.9 MB)
+16/07/29 16:08:24 INFO TorrentBroadcast: Reading broadcast variable 5 took 17 ms
+16/07/29 16:08:24 INFO MemoryStore: ensureFreeSpace(2312) called with curMem=20884, maxMem=555684986
+16/07/29 16:08:24 INFO MemoryStore: Block broadcast_5 stored as values in memory (estimated size 2.3 KB, free 529.9 MB)
+16/07/29 16:08:24 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 2, fetching them
+16/07/29 16:08:24 INFO MapOutputTrackerWorker: Doing the fetch; tracker endpoint = AkkaRpcEndpointRef(Actor[akka.tcp://sparkDriver@172.24.32.16:34441/user/MapOutputTracker#-1591325346])
+16/07/29 16:08:24 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 2, fetching them
+16/07/29 16:08:24 INFO MapOutputTrackerWorker: Got the output locations
+16/07/29 16:08:24 INFO ShuffleBlockFetcherIterator: Getting 2 non-empty blocks out of 2 blocks
+16/07/29 16:08:24 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 2 blocks
+16/07/29 16:08:24 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+16/07/29 16:08:24 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+16/07/29 16:08:24 INFO Executor: Finished task 1.0 in stage 5.0 (TID 8). 1165 bytes result sent to driver
+16/07/29 16:08:24 INFO Executor: Finished task 0.0 in stage 5.0 (TID 7). 1321 bytes result sent to driver
+16/07/29 16:08:24 INFO CoarseGrainedExecutorBackend: Got assigned task 9
+16/07/29 16:08:24 INFO Executor: Running task 0.0 in stage 6.0 (TID 9)
+16/07/29 16:08:24 INFO CoarseGrainedExecutorBackend: Got assigned task 10
+16/07/29 16:08:24 INFO Executor: Running task 1.0 in stage 6.0 (TID 10)
+16/07/29 16:08:24 INFO TorrentBroadcast: Started reading broadcast variable 6
+16/07/29 16:08:24 INFO MemoryStore: ensureFreeSpace(989) called with curMem=23196, maxMem=555684986
+16/07/29 16:08:24 INFO MemoryStore: Block broadcast_6_piece0 stored as bytes in memory (estimated size 989.0 B, free 529.9 MB)
+16/07/29 16:08:24 INFO TorrentBroadcast: Reading broadcast variable 6 took 14 ms
+16/07/29 16:08:24 INFO MemoryStore: ensureFreeSpace(1488) called with curMem=24185, maxMem=555684986
+16/07/29 16:08:24 INFO MemoryStore: Block broadcast_6 stored as values in memory (estimated size 1488.0 B, free 529.9 MB)
+16/07/29 16:08:24 INFO Executor: Finished task 1.0 in stage 6.0 (TID 10). 1162 bytes result sent to driver
+16/07/29 16:08:24 INFO Executor: Finished task 0.0 in stage 6.0 (TID 9). 1162 bytes result sent to driver
+16/07/29 16:08:24 INFO CoarseGrainedExecutorBackend: Got assigned task 11
+16/07/29 16:08:24 INFO CoarseGrainedExecutorBackend: Got assigned task 12
+16/07/29 16:08:24 INFO Executor: Running task 0.0 in stage 7.0 (TID 11)
+16/07/29 16:08:24 INFO Executor: Running task 1.0 in stage 7.0 (TID 12)
+16/07/29 16:08:24 INFO MapOutputTrackerWorker: Updating epoch to 5 and clearing cache
+16/07/29 16:08:24 INFO TorrentBroadcast: Started reading broadcast variable 7
+16/07/29 16:08:24 INFO MemoryStore: ensureFreeSpace(1539) called with curMem=25673, maxMem=555684986
+16/07/29 16:08:24 INFO MemoryStore: Block broadcast_7_piece0 stored as bytes in memory (estimated size 1539.0 B, free 529.9 MB)
+16/07/29 16:08:24 INFO TorrentBroadcast: Reading broadcast variable 7 took 12 ms
+16/07/29 16:08:24 INFO MemoryStore: ensureFreeSpace(2536) called with curMem=27212, maxMem=555684986
+16/07/29 16:08:24 INFO MemoryStore: Block broadcast_7 stored as values in memory (estimated size 2.5 KB, free 529.9 MB)
+16/07/29 16:08:24 INFO CacheManager: Partition rdd_11_0 not found, computing it
+16/07/29 16:08:24 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 5, fetching them
+16/07/29 16:08:24 INFO MapOutputTrackerWorker: Doing the fetch; tracker endpoint = AkkaRpcEndpointRef(Actor[akka.tcp://sparkDriver@172.24.32.16:34441/user/MapOutputTracker#-1591325346])
+16/07/29 16:08:24 INFO CacheManager: Partition rdd_11_1 not found, computing it
+16/07/29 16:08:24 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 5, fetching them
+16/07/29 16:08:24 INFO MapOutputTrackerWorker: Got the output locations
+16/07/29 16:08:24 INFO ShuffleBlockFetcherIterator: Getting 2 non-empty blocks out of 2 blocks
+16/07/29 16:08:24 INFO ShuffleBlockFetcherIterator: Getting 2 non-empty blocks out of 2 blocks
+16/07/29 16:08:24 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 1 ms
+16/07/29 16:08:24 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+16/07/29 16:08:24 INFO MemoryStore: ensureFreeSpace(64) called with curMem=29748, maxMem=555684986
+16/07/29 16:08:24 INFO MemoryStore: Block rdd_11_0 stored as values in memory (estimated size 64.0 B, free 529.9 MB)
+16/07/29 16:08:24 INFO MemoryStore: ensureFreeSpace(64) called with curMem=29812, maxMem=555684986
+16/07/29 16:08:24 INFO MemoryStore: Block rdd_11_1 stored as values in memory (estimated size 64.0 B, free 529.9 MB)
+16/07/29 16:08:25 INFO Executor: Finished task 0.0 in stage 7.0 (TID 11). 1958 bytes result sent to driver
+16/07/29 16:08:25 INFO Executor: Finished task 1.0 in stage 7.0 (TID 12). 1958 bytes result sent to driver
+16/07/29 16:08:25 INFO CoarseGrainedExecutorBackend: Got assigned task 13
+16/07/29 16:08:25 INFO CoarseGrainedExecutorBackend: Got assigned task 14
+16/07/29 16:08:25 INFO Executor: Running task 1.0 in stage 8.0 (TID 14)
+16/07/29 16:08:25 INFO Executor: Running task 0.0 in stage 8.0 (TID 13)
+16/07/29 16:08:25 INFO MapOutputTrackerWorker: Updating epoch to 6 and clearing cache
+16/07/29 16:08:25 INFO TorrentBroadcast: Started reading broadcast variable 8
+16/07/29 16:08:25 INFO MemoryStore: ensureFreeSpace(1370) called with curMem=29876, maxMem=555684986
+16/07/29 16:08:25 INFO MemoryStore: Block broadcast_8_piece0 stored as bytes in memory (estimated size 1370.0 B, free 529.9 MB)
+16/07/29 16:08:25 INFO TorrentBroadcast: Reading broadcast variable 8 took 17 ms
+16/07/29 16:08:25 INFO MemoryStore: ensureFreeSpace(2288) called with curMem=31246, maxMem=555684986
+16/07/29 16:08:25 INFO MemoryStore: Block broadcast_8 stored as values in memory (estimated size 2.2 KB, free 529.9 MB)
+16/07/29 16:08:25 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 4, fetching them
+16/07/29 16:08:25 INFO MapOutputTrackerWorker: Don't have map outputs for shuffle 4, fetching them
+16/07/29 16:08:25 INFO MapOutputTrackerWorker: Doing the fetch; tracker endpoint = AkkaRpcEndpointRef(Actor[akka.tcp://sparkDriver@172.24.32.16:34441/user/MapOutputTracker#-1591325346])
+16/07/29 16:08:25 INFO MapOutputTrackerWorker: Got the output locations
+16/07/29 16:08:25 INFO ShuffleBlockFetcherIterator: Getting 2 non-empty blocks out of 2 blocks
+16/07/29 16:08:25 INFO ShuffleBlockFetcherIterator: Getting 0 non-empty blocks out of 2 blocks
+16/07/29 16:08:25 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+16/07/29 16:08:25 INFO ShuffleBlockFetcherIterator: Started 0 remote fetches in 0 ms
+16/07/29 16:08:25 INFO Executor: Finished task 0.0 in stage 8.0 (TID 13). 1165 bytes result sent to driver
+16/07/29 16:08:25 INFO Executor: Finished task 1.0 in stage 8.0 (TID 14). 1383 bytes result sent to driver
+16/07/29 16:08:25 INFO CoarseGrainedExecutorBackend: Got assigned task 15
+16/07/29 16:08:25 INFO CoarseGrainedExecutorBackend: Got assigned task 16
+16/07/29 16:08:25 INFO Executor: Running task 0.0 in stage 10.0 (TID 15)
+16/07/29 16:08:25 INFO Executor: Running task 1.0 in stage 10.0 (TID 16)
+16/07/29 16:08:25 INFO TorrentBroadcast: Started reading broadcast variable 9
+16/07/29 16:08:25 INFO MemoryStore: ensureFreeSpace(1442) called with curMem=33534, maxMem=555684986
+16/07/29 16:08:25 INFO MemoryStore: Block broadcast_9_piece0 stored as bytes in memory (estimated size 1442.0 B, free 529.9 MB)
+16/07/29 16:08:25 INFO TorrentBroadcast: Reading broadcast variable 9 took 11 ms
+16/07/29 16:08:25 INFO MemoryStore: ensureFreeSpace(2408) called with curMem=34976, maxMem=555684986
+16/07/29 16:08:25 INFO MemoryStore: Block broadcast_9 stored as values in memory (estimated size 2.4 KB, free 529.9 MB)
+16/07/29 16:08:25 INFO BlockManager: Found block rdd_11_0 locally
+16/07/29 16:08:25 INFO BlockManager: Found block rdd_11_1 locally
+16/07/29 16:08:25 INFO Executor: Finished task 0.0 in stage 10.0 (TID 15). 2272 bytes result sent to driver
+16/07/29 16:08:25 INFO Executor: Finished task 1.0 in stage 10.0 (TID 16). 2272 bytes result sent to driver
+16/07/29 16:08:25 INFO CoarseGrainedExecutorBackend: Got assigned task 17
+16/07/29 16:08:25 INFO CoarseGrainedExecutorBackend: Got assigned task 18
+16/07/29 16:08:25 INFO Executor: Running task 1.0 in stage 12.0 (TID 18)
+16/07/29 16:08:25 INFO Executor: Running task 0.0 in stage 12.0 (TID 17)
+16/07/29 16:08:25 INFO TorrentBroadcast: Started reading broadcast variable 10
+16/07/29 16:08:25 INFO MemoryStore: ensureFreeSpace(1614) called with curMem=37384, maxMem=555684986
+16/07/29 16:08:25 INFO MemoryStore: Block broadcast_10_piece0 stored as bytes in memory (estimated size 1614.0 B, free 529.9 MB)
+16/07/29 16:08:25 INFO TorrentBroadcast: Reading broadcast variable 10 took 17 ms
+16/07/29 16:08:25 INFO MemoryStore: ensureFreeSpace(2664) called with curMem=38998, maxMem=555684986
+16/07/29 16:08:25 INFO MemoryStore: Block broadcast_10 stored as values in memory (estimated size 2.6 KB, free 529.9 MB)
+16/07/29 16:08:25 INFO BlockManager: Found block rdd_11_1 locally
+16/07/29 16:08:25 INFO BlockManager: Found block rdd_11_0 locally
+16/07/29 16:08:28 INFO Executor: Finished task 1.0 in stage 12.0 (TID 18). 2325 bytes result sent to driver
+16/07/29 16:08:28 ERROR Executor: Exception in task 0.0 in stage 12.0 (TID 17)
+java.lang.RuntimeException: [MonteCarloPi] This thread working on GPUs 0 should do 134217728(nWorkPerKernel(iGpu=0).sum = 134217728) iterations, but actually did 133532016 (seed range 7135068 -> 4611686018434522971)
+	at MonteCarloPi.calc(MonteCarloPi.scala:286)
+	at TestMonteCarloPi$$anonfun$9.apply(TestMonteCarloPi.scala:230)
+	at TestMonteCarloPi$$anonfun$9.apply(TestMonteCarloPi.scala:220)
+	at scala.collection.Iterator$$anon$11.next(Iterator.scala:328)
+	at scala.collection.Iterator$class.foreach(Iterator.scala:727)
+	at scala.collection.AbstractIterator.foreach(Iterator.scala:1157)
+	at scala.collection.generic.Growable$class.$plus$plus$eq(Growable.scala:48)
+	at scala.collection.mutable.ArrayBuffer.$plus$plus$eq(ArrayBuffer.scala:103)
+	at scala.collection.mutable.ArrayBuffer.$plus$plus$eq(ArrayBuffer.scala:47)
+	at scala.collection.TraversableOnce$class.to(TraversableOnce.scala:273)
+	at scala.collection.AbstractIterator.to(Iterator.scala:1157)
+	at scala.collection.TraversableOnce$class.toBuffer(TraversableOnce.scala:265)
+	at scala.collection.AbstractIterator.toBuffer(Iterator.scala:1157)
+	at scala.collection.TraversableOnce$class.toArray(TraversableOnce.scala:252)
+	at scala.collection.AbstractIterator.toArray(Iterator.scala:1157)
+	at org.apache.spark.rdd.RDD$$anonfun$collect$1$$anonfun$12.apply(RDD.scala:909)
+	at org.apache.spark.rdd.RDD$$anonfun$collect$1$$anonfun$12.apply(RDD.scala:909)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1850)
+	at org.apache.spark.SparkContext$$anonfun$runJob$5.apply(SparkContext.scala:1850)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:66)
+	at org.apache.spark.scheduler.Task.run(Task.scala:88)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:214)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:724)
+16/07/29 16:08:28 INFO CoarseGrainedExecutorBackend: Got assigned task 19
+16/07/29 16:08:28 INFO Executor: Running task 0.1 in stage 12.0 (TID 19)
+16/07/29 16:08:28 INFO BlockManager: Found block rdd_11_0 locally
+16/07/29 16:08:30 INFO Executor: Finished task 0.1 in stage 12.0 (TID 19). 2320 bytes result sent to driver
+16/07/29 16:08:30 INFO CoarseGrainedExecutorBackend: Driver commanded a shutdown
