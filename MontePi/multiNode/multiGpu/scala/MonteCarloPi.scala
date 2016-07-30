@@ -234,6 +234,17 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
                         "seed:"        + seed           + ", " +
                         "nIterations:" + nWorkPerKernel + " )\n"
                 }
+
+                if ( iKernel == 0 )
+                {
+                    println( "+---- MonteCarloPiKernel(0):\n" +
+                             "| long[] mnHits           = " + lnHits(iGpu)       + "\n" +
+                             "| long[] mnIterations     = " + lnIterations(iGpu) + "\n" +
+                             "| int    miLinearThreadId = " + iKernel            + "\n" +
+                             "| long   mRandomSeed      = " + kernelSeed         + "\n" +
+                             "| long   mnDiceRolls      = " + nWorkPerKernel     + "\n" );
+                }
+
                 /* return */
                 new MonteCarloPiKernel(
                     lnHits(iGpu)      ,
@@ -243,6 +254,7 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
                     nWorkPerKernel      /* iterations to do */
                 )
             } )
+
             runStates +:= runOnDevice( iGpu, tasks )
         }
         val t01 = System.nanoTime
