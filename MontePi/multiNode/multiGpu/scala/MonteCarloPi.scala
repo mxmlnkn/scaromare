@@ -24,11 +24,15 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
         for ( iGpu <- miGpusToUse )
             assert( iGpu < mAvailableDevices.size )
     }
-    print( "[MonteCarloPi.scala:<constructor>] Using the following GPUs : " )
-        miGpusToUse.foreach( x => print( x+", " ) )
-        println
+
+    var output = ""
+
+    output += "[MonteCarloPi.scala:<constructor>] Using the following GPUs : " +
+              miGpusToUse.map( x => x + " " ).reduce( _ + _ ) + "\n"
     private val t1 = System.nanoTime
-    println( "[MonteCarloPi.scala:<constructor>] MonteCarloPi constructor took " + ((t1-t0)/1e9) + " seconds" )
+    output += "[MonteCarloPi.scala:<constructor>] MonteCarloPi constructor took " +
+              ((t1-t0)/1e9) + " seconds\n"
+    print( output )
 
     /******* End of Constructor *******/
 
@@ -122,12 +126,14 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
         context.buildState()
 
         val t01 = System.nanoTime
-        println( "[MonteCarloPi.scala:runOnDevice] runOnDevice configuration took " + ((t01-t00)/1e9) + " seconds" )
+        println( "[MonteCarloPi.scala:runOnDevice] runOnDevice configuration took " +
+                ((t01-t00)/1e9) + " seconds" )
 
         val t10 = System.nanoTime
         val runWaitEvent = context.runAsync( work )
         val t11 = System.nanoTime
-        println( "[MonteCarloPi.scala:runOnDevice] context.run( work ) took " + ((t11-t10)/1e9) + " seconds" )
+        println( "[MonteCarloPi.scala:runOnDevice] context.run( work ) took " +
+                ((t11-t10)/1e9) + " seconds" )
 
         return ( context, runWaitEvent )
     }
@@ -171,23 +177,20 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
                                             lnKernelsPerGpu.map( _.toDouble ) )
 
         /**************************** Debug Output ****************************/
-        println( "[MonteCarloPi.scala:calc] Running MonteCarlo on " +
-                 miGpusToUse.size + " GPUs with these maximum kernel " +
-                 "configurations : " )
-        print( "[MonteCarloPi.scala:calc]     " )
-        lnKernelsPerGpu.foreach( x => print( x.toString + " " ) )
-        println
-
-        println( "[MonteCarloPi.scala:calc] with each these workloads / number of iterations :" )
-        print( "[MonteCarloPi.scala:calc]     " )
-        lnWorkPerGpu.foreach( x => print( x.toString + " " ) )
-        println
+        var output = ""
+        output += "[MonteCarloPi.scala:calc] Running MonteCarlo on " +
+                  miGpusToUse.size + " GPUs with these maximum kernel " +
+                  "configurations : \n" +
+                  "| " + lnKernelsPerGpu.map( x => "" + x + " " ).reduce(_+_) + "\n"
+                  "| with each these workloads / number of iterations :\n" +
+                  "|     " + lnWorkPerGpu.map( x => "" + x + " " ).reduce(_+_) + "\n"
+        print( output );
         /**********************************************************************/
 
         /* debug output the first 4 kernel constructor calls */
         val nKernelsToShow = 4
-        println( "[MonteCarloPi.scala:calc] These are the seeds for the first " +
-                 nKernelsToShow + " kernels:" )
+        output = "[MonteCarloPi.scala:calc] These are the seeds for the first " +
+                 nKernelsToShow + " kernels:\n"
 
         /* for each device create Rootbeer-Kernels */
         var runStates = List[ Tuple2[ Context, GpuFuture ] ]()
@@ -195,9 +198,9 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
          * {  0, 1, 2,... } -> { {4,3,3},      {4,3,3}, ... } */
         for ( iGpu <- 0 until lGpuDevices.size )
         {
-            println( "[MonteCarloPi.scala:calc]   GPU " + iGpu + " which runs " +
-                     lnKernelsPerGpu(iGpu) + " kernels and a total of " +
-                     lnWorkPerGpu(iGpu) + " iterations: " )
+            output += "|   GPU " + iGpu + " which runs " +
+                      lnKernelsPerGpu(iGpu) + " kernels and a total of " +
+                      lnWorkPerGpu(iGpu) + " iterations: "
             /* for each GPU distributed work to each kernel */
             /* distributes e.g. 10 on n=3 to (4,3,3) */
             val lnWorkPerKernel = distributor.distribute(
@@ -223,14 +226,13 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
                     /* show toInt seed, because the seed will be cast to int
                      * in MonteCarloPiKernel */
                     val seed = Math.abs( kernelSeed.toInt )
-                    println( "[MonteCarloPi.scala:calc] " +
-                        "    MonteCarloPiKernel( " +
+
+                    output += "|    MonteCarloPiKernel( " +
                         //lnHits(iGpu)       + ", "
                         //lnIterations(iGpu) + ", "
                         "iKernel:"     + iKernel        + ", " +
                         "seed:"        + seed           + ", " +
-                        "nIterations:" + nWorkPerKernel + " )"
-                    )
+                        "nIterations:" + nWorkPerKernel + " )\n"
                 }
                 /* return */
                 new MonteCarloPiKernel(

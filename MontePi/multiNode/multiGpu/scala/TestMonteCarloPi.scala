@@ -223,6 +223,7 @@ object TestMonteCarloPi
             val seedEnd   = x._2._2
 
             val hostname = InetAddress.getLocalHost.getHostName
+            // !!!!!!!!!!! must be % (MODULO, but that doesn't justify the Rootbeer bug, but it makest it reproducible)
             val iGpu = iRank / nCoresPerWorker
 
             var piCalculator = new MonteCarloPi(
@@ -232,6 +233,19 @@ object TestMonteCarloPi
             /* return */
             ( pi, ( hostname, iRank, iGpu ) )
         } ).collect
+
+        /* Assert that no host calculated on one GPU twice! */
+        //piTripels.
+        //    map( x => ( x._2._1 /* hostname */, x._2._3 /* iGpu */ ) ).
+        //    /* piTripels is not an RDD, but a simple Scala Array which does
+        //     * not have groupByKey, but groupby(_._1) is the same */
+        //    groupBy( _._1 ).
+        //    foreach( x => {
+        //        if ( x._2.toList.length != x._2.toList.distinct.length )
+        //            throw new RuntimeException( "Host " + x._1 +
+        //                " calculated on a GPU twice! (" +
+        //                x._2.toList.map( ""+_" " ).reduce(_+_) + ")" )
+        //    } )
 
         println( "Results per Slice : " )
         piTripels.foreach( x => {
