@@ -7,9 +7,10 @@ SCALA_ROOT    := /usr/share/java
 SCALAC        := scalac
 JAVAC         := javac
 
-ROOTBEER_JAR   = $(ROOTBEER_ROOT)/Rootbeer.jar
-SCALA_JAR      = $(SCALA_ROOT)/scala-library.jar
-SPARK_JAR      = $(SPARK_ROOT)/core/target/spark-core_2.10-1.5.2.jar
+ROOTBEER_COMPILER   = $(ROOTBEER_ROOT)/Rootbeer.jar
+ROOTBEER_JAR        = $(ROOTBEER_ROOT)/RootbeerRuntime.jar
+SCALA_JAR           = $(SCALA_ROOT)/scala-library.jar
+SPARK_JAR           = $(SPARK_ROOT)/core/target/spark-core_2.10-1.5.2.jar
 
 .phony: clean all
 
@@ -25,7 +26,7 @@ MonteCarloPiKernel.class: MonteCarloPiKernel.java $(ROOTBEER_JAR)
 
 gpu.jar: MonteCarloPiKernel.class
 	jar -cvf gputmp.jar $^
-	java -jar $(ROOTBEER_JAR) -64bit -nofatjar gputmp.jar $@ 
+	java -jar $(ROOTBEER_COMPILER) -64bit -nofatjar gputmp.jar $@
 
 
 Distribute.class: Distribute.scala

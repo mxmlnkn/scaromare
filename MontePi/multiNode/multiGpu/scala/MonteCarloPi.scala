@@ -1,6 +1,7 @@
 
 import scala.collection.JavaConversions._
 import org.trifort.rootbeer.runtime.{Kernel, Rootbeer, GpuDevice, Context, ThreadConfig, GpuFuture}
+import org.trifort.rootbeer.configuration.RootbeerPaths;
 import java.net.InetAddress
 
 /**
@@ -167,6 +168,10 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
                              )
         val nKernelsTotal = lnKernelsPerGpu.sum
 
+        //long[] nHitsA = new long[nKernels];
+        //long[] nHitsB = new long[nKernels];
+        /* Scala arrays correspond one-to-one to Java arrays. That is, a Scala
+         * array Array[Int] is represented as a Java int[] */
         var lnHits       = lnKernelsPerGpu.map( List.fill[Long](_)(0).toArray )
         var lnIterations = lnKernelsPerGpu.map( List.fill[Long](_)(0).toArray )
 
@@ -213,6 +218,7 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
             val tasks = lnWorkPerKernel.zipWithIndex.map( x => {
                 val nWorkPerKernel = x._1
                 val iKernel        = x._2
+                assert( iKernel < lnKernelsPerGpu(iGpu) )
                 val nPreviousKernels = lnKernelsPerGpu.slice(0,iGpu).sum
                 val kernelSeed = calcRandomSeed(
                                      lnKernelsPerGpu.sum,
@@ -291,6 +297,12 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
 
         /* Count and check iterations done in total by kernels */
         println( "[MonteCarloPi.scala:calc] iterations actually done : " + lnIterations.flatten.sum )
+        println( "[MonteCarloPi.scala:calc] iterations done per kernel : " )
+        lnIterations.foreach( x => {
+            print( x.slice(0,20).map( "  " + _ + "\n" ).reduce(_+_) )
+            println( "..." )
+            print( x.slice( x.length-20, x.length ).map( "  " + _ + "\n" ).reduce(_+_) )
+        } )
         if ( ! ( lnIterations.flatten.sum == nDiceRolls ) )
         {
             val lnWorkPerKernel = distributor.distribute(
@@ -307,6 +319,12 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
             )
         }
 
+        /* Note in contrast to Java Scala does not allow access to static
+         * methods over objecst Oo. I.e.
+         * Legacy RootbeerPaths.v().getRootbeerHome() does not work,
+         * but RootbeerPaths.getRootbeerHome() does!
+         */
+        println( "[MonteCarloPi.scala:calc] RootbeerPaths.v().getRootbeerHome() = " + RootbeerPaths.getRootbeerHome() )
         println( "[MonteCarloPi.scala:calc] Closing contexts now." )
         for ( x <- runStates )
             x._1.close
