@@ -400,6 +400,55 @@
     This happend on the K20x when debugging the `ClassCastException` error above while using `5*1024` threads. It means the number of Iterations done is not equal to the nDiceRolls requested, meaning something is wrong, e.g. kernels not being run, or the wrong amount of kernels being started.
       -> this doesn't really explain why it doesn't happen on K80, though
 
+# Compiling on Taurus
+
+Currently the example is using raw make, without CMake or a configure or similar, so you will have to configure some paths manually, e.g. on my Taurus:
+
+    makeOptsSpark=(
+        "SPARK_ROOT=$HOME/spark-1.5.2-bin-hadoop2.6"
+        "SPARK_JAR=$HOME/spark-1.5.2-bin-hadoop2.6/lib/spark-assembly-1.5.2-hadoop2.6.0.jar"
+        "SPARKCORE_JAR=$SPARK_JAR"
+        "SCALA_ROOT=$(dirname $(which scala))/../lib"
+    )
+
+Also you need to have `zipmerge` and for Rootbeer Compilation `ant` in your `PATH` variable. E.g. I installed zipmerge manually to `~/programs/bin`.
+
+Now you can compile e.g. the example using Spark und multiple GPUs with:
+
+    make ${makeOptsSpark[@]} -C multiNode/multiGpu/scala/
+
+
+# Benchmarking
+
+## Weak Scaling
+
+If a Spark instance is already running and the address of the master is saved in the variable `MASTER_ADDRESS`, then you can simply run:
+
+    nGpusAvailable=32
+    jarFile=$HOME/scaromare/MontePi/multiNode/multiGpu/scala/MontePi.jar
+    fname=strong-scaling_$(date +%Y-%m-%d_%H-%M-%S)
+    echo '' | tee -- "$fname-cpu.log" "$fname-gpu.log"
+    printf "# Total Elements   Elements Per Thread    Partitions   Time / s   Calculated Pi\n" | tee -- "$fname-cpu.dat" "$fname-gpu.dat"
+    for (( nPerPartition=2**35; nPerPartition<=2**41; nPerPartition*=4 )); do
+      for (( iRepetition=0; iRepetition<10; iRepetition++ )); do
+        # Spark + GPU
+        for (( nPartitions=1; nPartitions <= $nGpusAvailable; nPartitions++ )) do
+            sparkSubmit "$jarFile" $((nPerPartition*nPartitions)) $nPartitions 2>&1 |
+                tee tmp.log |             # log file to extract times in seconds from
+                tee -a "$fname-gpu.log" | # complete log file for human to view
+                sed '/ INFO /d'           # delete numerous Spark messages
+            seconds=$(sed -nr '
+                s/.*Rolling the dice.*and took (.*) seconds.*/\1/p' tmp.log)
+            pi=$(sed -nr 's/.*pi ~ ([0-9.]+).*/\1/p' tmp.log)
+
+            printf "%16i %16i %4i %10.5f %s\n" $((nPerPartition*nPartitions)) \
+                $nPerPartition $nPartitions $seconds $pi >> "$fname-gpu.dat"
+        done
+      done
+    done
+
+
+
 # ToDo
 
 - Benchmark Multi-GPU
