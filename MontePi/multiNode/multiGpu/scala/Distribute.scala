@@ -66,13 +66,13 @@ class Distribute {
         val cumMaxWork   = maxWork.map( _._2 ).scanLeft(0)(_+_)
         val afterFull    = cumMaxWork.indexWhere( _ > work ) - 1
         /* if no index found, then work is equal to all maxWorks summed.
-         * Note thate cumSum has 1 element more than the original array! */
+         * Note that cumSum has 1 element more than the original array! */
         if ( afterFull < 0 )
         {
             assert( totalMaxWork == work )
             return maxWork
         }
-        /* set index where maxWork began to exceede work needed to some
+        /* set index where maxWork began to exceed work needed to some
          * less work and all after that to 0 */
         var ret = maxWork
         println( "maxWork.size = "+(maxWork.size)+", ret.size = "+(ret.size) )

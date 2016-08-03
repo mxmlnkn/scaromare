@@ -15,10 +15,8 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
     private var mRootbeerContext  = new Rootbeer()
     private val mAvailableDevices = mRootbeerContext.getDevices()
     private var miGpusToUse       = iGpusToUse
-    if ( iGpusToUse == null || iGpusToUse.size == 0 )
-    {
+    if ( miGpusToUse == null || miGpusToUse.size == 0 )
         miGpusToUse = List.range( 0, mAvailableDevices.size ).toArray
-    }
     else
     {
         assert( miGpusToUse.size <= mAvailableDevices.size )
@@ -68,14 +66,13 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
      * Kernel configuration.
      */
     def runOnDevice(
-        riDevice         : Integer,
-        work             : List[Kernel]
+        device : GpuDevice,
+        work   : List[Kernel]
     ) : Tuple2[ Context, GpuFuture ] =
     {
         val t00 = System.nanoTime
 
-        assert( riDevice < mAvailableDevices.size() )
-        val context = mAvailableDevices.get( riDevice ).createContext(
+        val context = device.createContext(
             ( work.size * 2 /* nIteration and nHits List */ * 8 /* sizeof(Long) */ +
               work.size * 4 /* sizeof(exception) ??? */ ) * 4 /* empirical factor */ +
               64*1024*1024 /* safety padding */
@@ -151,9 +148,8 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
 
         val t00 = System.nanoTime
 
-        if ( mAvailableDevices.size <= iGpusToUse.size ) {
+        if ( mAvailableDevices.size <= iGpusToUse.size )
             throw new RuntimeException( "Not enough GPU devices found!" )
-        }
 
         /* start as many threads as possible. (More are possible, but
          * they wouldn't be hardware multithreaded anymore, but
@@ -182,20 +178,17 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
                                             lnKernelsPerGpu.map( _.toDouble ) )
 
         /**************************** Debug Output ****************************/
-        var output = ""
-        output += "[MonteCarloPi.scala:calc] Running MonteCarlo on " +
-                  miGpusToUse.size + " GPUs with these maximum kernel " +
-                  "configurations : \n" +
-                  "| " + lnKernelsPerGpu.map( x => "" + x + " " ).reduce(_+_) + "\n"
-                  "| with each these workloads / number of iterations :\n" +
-                  "|     " + lnWorkPerGpu.map( x => "" + x + " " ).reduce(_+_) + "\n"
-        print( output );
-        /**********************************************************************/
-
-        /* debug output the first 4 kernel constructor calls */
-        val nKernelsToShow = 4
-        output = "[MonteCarloPi.scala:calc] These are the seeds for the first " +
-                 nKernelsToShow + " kernels:\n"
+        // var output = ""
+        // output += "[MonteCarloPi.scala:calc] Running MonteCarlo on " +
+        //           miGpusToUse.size + " GPUs with these maximum kernel " +
+        //           "configurations : \n" +
+        //           "| " + lnKernelsPerGpu.map( x => "" + x + " " ).reduce(_+_) + "\n"
+        //           "| with each these workloads / number of iterations :\n" +
+        //           "|     " + lnWorkPerGpu.map( x => "" + x + " " ).reduce(_+_) + "\n"
+        // print( output );
+        // val nKernelsToShow = 4
+        // output = "[MonteCarloPi.scala:calc] These are the seeds for the first " +
+        //          nKernelsToShow + " kernels:\n"
 
         /* for each device create Rootbeer-Kernels */
         var runStates = List[ Tuple2[ Context, GpuFuture ] ]()
@@ -203,9 +196,10 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
          * {  0, 1, 2,... } -> { {4,3,3},      {4,3,3}, ... } */
         for ( iGpu <- 0 until lGpuDevices.size )
         {
-            output += "|   GPU " + iGpu + " which runs " +
-                      lnKernelsPerGpu(iGpu) + " kernels and a total of " +
-                      lnWorkPerGpu(iGpu) + " iterations: "
+            // output += "|   GPU " + iGpu + " which runs " +
+            //           lnKernelsPerGpu(iGpu) + " kernels and a total of " +
+            //           lnWorkPerGpu(iGpu) + " iterations: "
+
             /* for each GPU distributed work to each kernel */
             /* distributes e.g. 10 on n=3 to (4,3,3) */
             val lnWorkPerKernel = distributor.distribute(
@@ -226,30 +220,29 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
                                      rSeed0, rSeed1
                                  )
                 /* Debug output */
-                if ( iKernel < (nKernelsToShow+1)/2 ||
-                     ( lnKernelsPerGpu(iGpu)-1 - iKernel ) < nKernelsToShow/2 )
-                {
-                    /* show toInt seed, because the seed will be cast to int
-                     * in MonteCarloPiKernel */
-                    val seed = Math.abs( kernelSeed.toInt )
-
-                    output += "|    MonteCarloPiKernel( " +
-                        //lnHits(iGpu)       + ", "
-                        //lnIterations(iGpu) + ", "
-                        "iKernel:"     + iKernel        + ", " +
-                        "seed:"        + seed           + ", " +
-                        "nIterations:" + nWorkPerKernel + " )\n"
-                }
-
-                if ( iKernel == 0 )
-                {
-                    println( "+---- MonteCarloPiKernel(0):\n" +
-                             "| long[] mnHits           = " + lnHits(iGpu)       + "\n" +
-                             "| long[] mnIterations     = " + lnIterations(iGpu) + "\n" +
-                             "| int    miLinearThreadId = " + iKernel            + "\n" +
-                             "| long   mRandomSeed      = " + kernelSeed         + "\n" +
-                             "| long   mnDiceRolls      = " + nWorkPerKernel     + "\n" );
-                }
+                // if ( iKernel < (nKernelsToShow+1)/2 ||
+                //      ( lnKernelsPerGpu(iGpu)-1 - iKernel ) < nKernelsToShow/2 )
+                // {
+                //     /* show toInt seed, because the seed will be cast to int
+                //      * in MonteCarloPiKernel */
+                //     val seed = Math.abs( kernelSeed.toInt )
+                //
+                //     output += "|    MonteCarloPiKernel( " +
+                //         //lnHits(iGpu)       + ", "
+                //         //lnIterations(iGpu) + ", "
+                //         "iKernel:"     + iKernel        + ", " +
+                //         "seed:"        + seed           + ", " +
+                //         "nIterations:" + nWorkPerKernel + " )\n"
+                // }
+                // if ( iKernel == 0 )
+                // {
+                //     println( "+---- MonteCarloPiKernel(0):\n" +
+                //              "| long[] mnHits           = " + lnHits(iGpu)       + "\n" +
+                //              "| long[] mnIterations     = " + lnIterations(iGpu) + "\n" +
+                //              "| int    miLinearThreadId = " + iKernel            + "\n" +
+                //              "| long   mRandomSeed      = " + kernelSeed         + "\n" +
+                //              "| long   mnDiceRolls      = " + nWorkPerKernel     + "\n" );
+                // }
 
                 /* return */
                 new MonteCarloPiKernel(
@@ -261,27 +254,27 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
                 )
             } )
 
-            runStates +:= runOnDevice( iGpu, tasks )
+            runStates +:= runOnDevice( lGpuDevices(iGpu), tasks )
         }
         val t01 = System.nanoTime
         println( "[MonteCarloPi.scala:calc] Ran Kernels asynchronously on all GPUs. Took " + ((t01-t00)/1e9) + " seconds" )
 
-        /* Test if random seed and global iRank is unique:
-         *   iGpu -> kernels -> kernel+GPU rank
-         * rank = sum of kernels on lower GPUs + kernel rank on this GPU */
-        val testKernelHostRanks = List.range( 0, lGpuDevices.size ).map( iGpu => {
-            distributor.distribute( lnWorkPerGpu(iGpu), lnKernelsPerGpu(iGpu) ).
-            zipWithIndex.map( z => {
-                lnKernelsPerGpu.slice(0,iGpu).sum + z._2
-            } )
-        } )
-        println( "[MonteCarloPi.scala:calc] This is the list of kernel ranks for this host (one line per GPU) : " )
-        testKernelHostRanks.foreach( gpu => {
-            print( "[MonteCarloPi.scala:calc]     " )
-            gpu.slice(0,10).foreach( rank => print( rank+" " ) )
-            println( "..." )
-        } )
-        assert( testKernelHostRanks.distinct.size == lGpuDevices.size )
+        // /* Test if random seed and global iRank is unique:
+        //  *   iGpu -> kernels -> kernel+GPU rank
+        //  * rank = sum of kernels on lower GPUs + kernel rank on this GPU */
+        // val testKernelHostRanks = List.range( 0, lGpuDevices.size ).map( iGpu => {
+        //     distributor.distribute( lnWorkPerGpu(iGpu), lnKernelsPerGpu(iGpu) ).
+        //     zipWithIndex.map( z => {
+        //         lnKernelsPerGpu.slice(0,iGpu).sum + z._2
+        //     } )
+        // } )
+        // println( "[MonteCarloPi.scala:calc] This is the list of kernel ranks for this host (one line per GPU) : " )
+        // testKernelHostRanks.foreach( gpu => {
+        //     print( "[MonteCarloPi.scala:calc]     " )
+        //     gpu.slice(0,10).foreach( rank => print( rank+" " ) )
+        //     println( "..." )
+        // } )
+        // assert( testKernelHostRanks.distinct.size == lGpuDevices.size )
 
         val t10 = System.nanoTime
         println( "[MonteCarloPi.scala:calc] Taking from GpuFuture now (Wait for asynchronous tasks)." )
@@ -296,36 +289,36 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
         val quarterPi = lnHits.flatten.map( _.toDouble / nDiceRolls ).sum
 
         /* Count and check iterations done in total by kernels */
-        println( "[MonteCarloPi.scala:calc] iterations actually done : " + lnIterations.flatten.sum )
-        println( "[MonteCarloPi.scala:calc] iterations done per kernel : " )
-        lnIterations.foreach( x => {
-            print( x.slice(0,20).map( "  " + _ + "\n" ).reduce(_+_) )
-            println( "..." )
-            print( x.slice( x.length-20, x.length ).map( "  " + _ + "\n" ).reduce(_+_) )
-        } )
-        if ( ! ( lnIterations.flatten.sum == nDiceRolls ) )
-        {
-            val lnWorkPerKernel = distributor.distribute(
-                                      lnWorkPerGpu(0),
-                                      lnKernelsPerGpu(0)
-                                  )
-            throw new RuntimeException(
-                "[MonteCarloPi] This thread working on GPUs " +
-                miGpusToUse.mkString(" ") +
-                " should do " + nDiceRolls + "(nWorkPerKernel(iGpu=0).sum = " +
-                lnWorkPerKernel.sum + ")" +
-                " iterations, but actually did " + lnIterations.flatten.sum +
-                " (seed range " + rSeed0 + " -> " + rSeed1 + ")"
-            )
-        }
-
-        /* Note in contrast to Java Scala does not allow access to static
-         * methods over objecst Oo. I.e.
-         * Legacy RootbeerPaths.v().getRootbeerHome() does not work,
-         * but RootbeerPaths.getRootbeerHome() does!
-         */
-        println( "[MonteCarloPi.scala:calc] RootbeerPaths.v().getRootbeerHome() = " + RootbeerPaths.getRootbeerHome() )
-        println( "[MonteCarloPi.scala:calc] Closing contexts now." )
+        // println( "[MonteCarloPi.scala:calc] iterations actually done : " + lnIterations.flatten.sum )
+        // println( "[MonteCarloPi.scala:calc] iterations done per kernel : " )
+        // lnIterations.foreach( x => {
+        //     print( x.slice(0,20).map( "  " + _ + "\n" ).reduce(_+_) )
+        //     println( "..." )
+        //     print( x.slice( x.length-20, x.length ).map( "  " + _ + "\n" ).reduce(_+_) )
+        // } )
+        // if ( ! ( lnIterations.flatten.sum == nDiceRolls ) )
+        // {
+        //     val lnWorkPerKernel = distributor.distribute(
+        //                               lnWorkPerGpu(0),
+        //                               lnKernelsPerGpu(0)
+        //                           )
+        //     throw new RuntimeException(
+        //         "[MonteCarloPi] This thread working on GPUs " +
+        //         miGpusToUse.mkString(" ") +
+        //         " should do " + nDiceRolls + "(nWorkPerKernel(iGpu=0).sum = " +
+        //         lnWorkPerKernel.sum + ")" +
+        //         " iterations, but actually did " + lnIterations.flatten.sum +
+        //         " (seed range " + rSeed0 + " -> " + rSeed1 + ")"
+        //     )
+        // }
+        //
+        // /* Note in contrast to Java Scala does not allow access to static
+        //  * methods over objecst Oo. I.e.
+        //  * Legacy RootbeerPaths.v().getRootbeerHome() does not work,
+        //  * but RootbeerPaths.getRootbeerHome() does!
+        //  */
+        // println( "[MonteCarloPi.scala:calc] RootbeerPaths.v().getRootbeerHome() = " + RootbeerPaths.getRootbeerHome() )
+        // println( "[MonteCarloPi.scala:calc] Closing contexts now." )
         for ( x <- runStates )
             x._1.close
 
