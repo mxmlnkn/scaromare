@@ -1,13 +1,15 @@
 #!/bin/bash
 #
 # e.g. for Taurus gpu2 queue (K80)
-# ./benchmarkTaurusScaling.sh -c 1 -g 2 -n 1
+# ./benchmarkTaurusScaling.sh -c 1 -g 4 -n 1
+# e.g. for Taurus gpu1 queue (K20x)
+# ./benchmarkTaurusScaling.sh -p gpu1 -c 1 -g 2 -n 1 2
 #
 ############# Strong Scaling #############
 
 gpusPerNode=4
-coresPerNode=1
 nodeCounts=(1 2 4)
+partition=gpu2
 #nodeCounts=(1 2 4 8 16 24 32)
 #nodeCounts=(32 24 16 8 4 2 1)
 #nodeCounts=(24 16 8 4 2 1)
@@ -17,11 +19,13 @@ while [ ! -z "$1" ]; do
         '-g'|'--gpus-per-node')
             if [ "$2" -eq "$2" ] 2>/dev/null; then gpusPerNode=$2; shift; fi
             ;;
-        '-c'|'--cores-per-node')
-            if [ "$2" -eq "$2" ] 2>/dev/null; then coresPerNode=$2; shift; fi
+        '-p'|'--partition')
+            partition=$2
+            shift
             ;;
         '-n'|'--node-counts')
             nodeCounts=()
+            # while argument is a number
             while [ "$2" -eq "$2" ] 2>/dev/null; do
                 nodeCounts+=( "$2" )
                 shift
@@ -39,7 +43,6 @@ if [ ! -f "$jarFile" ]; then
     exit 1
 fi
 echo "Run with following node configurations : ${nodeCounts[@]}"
-echo "Cores per node                         : $coresPerNode"
 echo "GPUs  per node                         : $gpusPerNode"
 echo "Using '$jarFile' <nTotalIterations> <nSlices i.e. parallelization> <gpusPerNode (@todo: let process get this metric itself, necessary for heterogenous clusters)>"
 
@@ -54,9 +57,9 @@ for nodes in ${nodeCounts[@]}; do   # 32 nodes equals 128 GPUs
     $dryrun startSpark                  \
         --time=04:00:00                 \
         --nodes=$((nodes+1))            \
-        --partition=gpu2                \
-        --gres=gpu:$gpusPerNode         \
-        --cpus-per-task=$coresPerNode
+        --partition="$partition"        \
+        --gres=gpu:"$gpusPerNode"       \
+        --cpus-per-task="$gpusPerNode"
 
     for (( workPerNode=3*2**36; workPerNode<=3*2**40; workPerNode*=4 )); do
     {
