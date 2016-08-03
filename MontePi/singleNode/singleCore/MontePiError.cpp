@@ -13,7 +13,7 @@ singleNode/singleCpu/MontePiError.cpp!
 #include <cstdlib>   // atoi, atol
 #include <climits>   // UINT_MAX
 #include <cassert>
-#include "../../../getLogSamples.tpp"
+#include "../../../common/getLogSamples.tpp"
 
 
 typedef unsigned long long int CountType;

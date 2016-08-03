@@ -122,11 +122,17 @@ else
         echo "spark://$SPARK_MASTER_IP:$SPARK_MASTER_PORT" > "$sparkLogs/${SLURM_JOBID}_spark_master"
 
         echo "[Process $SLURM_PROCID] Starting Master at spark://$SPARK_MASTER_IP:$SPARK_MASTER_PORT (WebUI: $SPARK_MASTER_WEBUI_PORT)"
+
         "$SPARK_ROOT/bin/spark-class" org.apache.spark.deploy.master.Master \
             --ip $SPARK_MASTER_IP                                           \
             --port $SPARK_MASTER_PORT                                       \
-            --webui-port $SPARK_MASTER_WEBUI_PORT
+            --webui-port $SPARK_MASTER_WEBUI_PORT &
+
         echo "[Process $SLURM_PROCID] spark master finished, exiting now!"
+
+        MASTER_NODE=spark://$(scontrol show hostname $SLURM_NODELIST | head -n 1):7077
+        "$SPARK_ROOT/bin/spark-class" org.apache.spark.deploy.worker.Worker $MASTER_NODE
+        echo "[Process $SLURM_PROCID] spark master + slave finished, exiting now!"
     }
     else
     {
@@ -134,7 +140,9 @@ else
         # scontrol show hostname is used to convert host20[39-40] to host2039
         MASTER_NODE=spark://$(scontrol show hostname $SLURM_NODELIST | head -n 1):7077
         echo "[Process $SLURM_PROCID] Process $SLURM_PROCID starting slave at $(hostname) linked to $MASTER_NODE"
+
         "$SPARK_ROOT/bin/spark-class" org.apache.spark.deploy.worker.Worker $MASTER_NODE
+
         echo "[Process $SLURM_PROCID] spark slave finished, exiting now!"
     }
     fi

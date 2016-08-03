@@ -10,7 +10,7 @@ file=TestMonteCarloPiV2; rm $file.exe; nvcc -arch=sm_30 -x cu $file.cpp -o $file
 #include <cstdlib>   // atoi, atol
 #include <climits>   // UINT_MAX
 #include <cassert>
-#include "../../../../cudacommon.cpp"
+#include "../../../../common/cudacommon.cpp"
 
 using CalcType = float;
 

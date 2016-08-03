@@ -14,7 +14,7 @@ worthless but gives back faster an output for the error scaling!
 #include <cstdlib>   // atoi, atol
 #include <climits>   // UINT_MAX
 #include <cassert>
-#include "../../../cudacommon.cpp"
+#include "../../../common/cudacommon.cpp"
 
 typedef unsigned long long int CountType;
 typedef float SampleType;
@@ -62,7 +62,7 @@ __global__ void kernelMonteKarloPi( CountType * rnInside, uint64_t nTimes, uint3
 }
 
 
-#include "../../../getLogSamples.tpp"
+#include "../../../common/getLogSamples.tpp"
 #include <chrono>
 #include <thread>
 

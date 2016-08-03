@@ -1,3 +1,22 @@
+
+# Starting MontePi Spark Multi GPU Test
+
+    startSpark --time=15:00:00 --nodes=2 --partition=gpu2 --cpus-per-task=2 --gres='gpu:2'
+    squeue -u $USER
+         JOBID   PARTITION NAME     ST      TIME  NODES NODELIST(REASON)
+         7660143 gpu2      start_sp R   14:49:09      2 taurusi[2093-2094]
+    makeOptsSpark=(                                                      \
+        "SPARK_ROOT=$HOME/spark-1.5.2-bin-hadoop2.6"                     \
+        "SPARK_JAR=$SPARK_ROOT/lib/spark-assembly-1.5.2-hadoop2.6.0.jar" \
+        "SPARKCORE_JAR=$SPARK_JAR"                                       \
+        "SCALA_ROOT=$(dirname $(which scala))/../lib"                    \
+    )
+    ( cd "$HOME/scaromare/rootbeer1/" && ( cd csrc && ./compile_linux_x64 ) && ant clean && 'rm' -f dist/Rootbeer1.jar Rootbeer.jar && ant jar && ./pack-rootbeer ) && make clean && make -B && java -jar Count.jar
+    folder=$HOME/scaromare/MontePi/multiNode/multiGpu/scala
+    make -C "$folder" -B ${makeOptsSpark[@]} MontePi.jar
+    sparkSubmit "$folder/MontePi.jar" 268435456 2 2 2>&1 | sed '/ INFO /d'
+
+
 # Workings
 
     3. Rootbeer constructor -> CUDALoader:
