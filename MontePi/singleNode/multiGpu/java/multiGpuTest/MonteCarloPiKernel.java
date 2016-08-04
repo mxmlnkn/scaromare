@@ -1,1 +1,1 @@
-../scala/MonteCarloPiKernel.java
+../../../singleGpu/scala/MonteCarloPiKernel.java

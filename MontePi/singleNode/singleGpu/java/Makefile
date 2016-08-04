@@ -1,28 +1,37 @@
-ROOTBEER_ROOT := ../../../../rootbeer1
+
+ROOTBEER_ROOT      ?= ../../../../rootbeer1
+ROOTBEER_COMPILER  ?= $(ROOTBEER_ROOT)/Rootbeer.jar
+ROOTBEER_JAR       ?= $(ROOTBEER_ROOT)/RootbeerRuntime.jar
+
 
 .phony: clean all MontePiGPU.jar *.class
 
-all: MontePi.jar run
+
+all: MontePi.jar
+
 run:
 	java -jar MontePi.jar 268435456
 clean:
 	rm -f *.class *.jar *.tmp
 
+
 MonteCarloPiKernel.class: MonteCarloPiKernel.java
-	javac $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:.
+	javac $< -classpath $(ROOTBEER_JAR):.
+
 MonteCarloPi.class: MonteCarloPi.java MonteCarloPiKernel.class
-	javac $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:.
+	javac $< -classpath $(ROOTBEER_JAR):.
+
 TestMonteCarloPi.class: TestMonteCarloPi.java MonteCarloPi.class
-	javac $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:.
+	javac $< -classpath .
 
-# Splitting compilation in these units makes it faster, because Rootbeer is very slow!
+
 gpu.jar: MonteCarloPiKernel.class
-	# Note that .tmp is not possible, because Soot won't analyze files not ending with .jar!
 	jar -cvf $@.tmp.jar $^
-	java -jar $(ROOTBEER_ROOT)/Rootbeer.jar $@.tmp.jar $@ -64bit -computecapability=sm_30
-cpu.jar: TestMonteCarloPi.class MonteCarloPi.java
-	jar -cvfm $@ manifest.txt $^
+	java -jar $(ROOTBEER_COMPILER) -64bit -nofatjar $@.tmp.jar $@
 
-# Order of dependencies is important, because latter overwrites former especially the manifest file!
-MontePi.jar: gpu.jar cpu.jar
-	zipmerge MontePi.jar $(ROOTBEER_ROOT)/Rootbeer.jar $^
+cpu.jar: manifest.txt TestMonteCarloPi.class MonteCarloPi.java
+	jar -cvfm $@ $^
+
+
+MontePi.jar: $(ROOTBEER_JAR) gpu.jar cpu.jar
+	zipmerge $@ $^

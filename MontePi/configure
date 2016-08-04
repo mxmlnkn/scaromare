@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# This script must be sourced from the directory it resides in!
+
+if [ -f ../rootbeer1/Rootbeer.jar ]; then
+    export ROOTBEER_COMPILER=$(cd ../rootbeer1/ && pwd)/Rootbeer.jar
+fi
+if [ -f ../rootbeer1/RootbeerRuntime.jar ]; then
+    export ROOTBEER_JAR=$(cd ../rootbeer1/ && pwd)/RootbeerRuntime.jar
+elif [ -z "$ROOTBEER_JAR" ]; then
+    export ROOTBEER_JAR=$ROOTBEER_COMPILER
+fi
+
+if [ -d "$SPARK_ROOT" ]; then
+    # @todo possible problem with multiple finds:
+    #   /opt/spark-1.5.2/assembly/target/scala-2.10/spark-assembly-1.5.2-hadoop2.2.0.jar
+    #   /opt/spark-1.5.2/assembly/target/spark-assembly_2.10-1.5.2-tests.jar
+    SPARK_JAR=$(find "$SPARK_ROOT" -iname 'spark-core*-1.5.2.jar')
+    if [ -f "$SPARK_JAR" ]; then
+        export SPARK_JAR
+    else
+        SPARK_JAR=$(find "$SPARK_ROOT" -iname 'spark-assembly*.jar' | head -1)
+        if [ -f "$SPARK_JAR" ]; then
+            export SPARK_JAR
+        fi
+    fi
+fi
+
+SCALA_JAR=$(dirname $(which scala))/../lib/scala-library.jar
+if [ -f "$SCALA_JAR" ]; then
+    export SCALA_JAR
+else
+    SCALA_JAR=/usr/share/java/scala-library.jar
+    if [ -f "$SCALA_JAR" ]; then
+        export SCALA_JAR
+    fi
+fi

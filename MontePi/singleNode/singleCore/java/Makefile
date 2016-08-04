@@ -1,15 +1,18 @@
 
 .phony: clean all *.class *.jar
 
-all: MontePi.jar run
+
+all: MontePi.jar
 
 run:
 	java -jar MontePi.jar 268435456
+
 clean:
 	rm -f *.class *.jar
 
-MontePi.jar: TestMonteCarloPi.class MonteCarloPi.class MonteCarloPiKernel.class
-	jar cfm $@ manifest.txt $^
+
+MontePi.jar: manifest.txt TestMonteCarloPi.class MonteCarloPi.class MonteCarloPiKernel.class
+	jar cfm $@ $^
 
 %.class: %.java
 	javac -classpath . $<

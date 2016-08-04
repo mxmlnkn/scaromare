@@ -1,2 +1,1 @@
-Main-Class: TestMonteCarloPi
-Class-Path: .
+../error1/manifest.txt

@@ -1,16 +1,18 @@
 
-ROOTBEER_ROOT      := ../../../../rootbeer1
-SCALA_ROOT         := /usr/share/java
-ROOTBEER_COMPILER   = $(ROOTBEER_ROOT)/Rootbeer.jar
-ROOTBEER_JAR        = $(ROOTBEER_ROOT)/RootbeerRuntime.jar
-SCALA_JAR           = $(SCALA_ROOT)/scala-library.jar
+ROOTBEER_ROOT      ?= ../../../../rootbeer1
+SCALA_ROOT         ?= /usr/share/java
+ROOTBEER_COMPILER  ?= $(ROOTBEER_ROOT)/Rootbeer.jar
+ROOTBEER_JAR       ?= $(ROOTBEER_ROOT)/RootbeerRuntime.jar
+SCALA_JAR          ?= $(SCALA_ROOT)/scala-library.jar
 
 
-.phony: clean all MontePiGPU.jar *.class
+.phony: clean all run MontePi.jar *.class
 
-all: MontePi.jar run
+all: MontePi.jar
+
 run: MontePi.jar
-	java -jar MontePi.jar 2684354560
+	java -jar MontePi.jar 268435456 1
+
 clean:
 	rm -f *.class *.jar
 
