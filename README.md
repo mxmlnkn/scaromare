@@ -447,6 +447,13 @@ If a Spark instance is already running and the address of the master is saved in
       done
     done
 
+![Weak Scaling Plot (run times) with up to 32 K20x graphic cards](/MontePi/benchmark/weak-scaling-time-gpu.png?raw=true)
+
+![ibid. Speedup](/MontePi/benchmark/weak-scaling-speedup-gpu.png?raw=true)
+
+![ibid. Parallel Efficiency](/MontePi/benchmark/weak-scaling-efficiency-gpu.png?raw=true)
+
+
 ## Strong Scaling
 
     nGpusAvailable=32
@@ -471,6 +478,19 @@ If a Spark instance is already running and the address of the master is saved in
       done
     done
     
+![Strong Scaling Plot (run times) with up to 32 K20x graphic cards](/MontePi/benchmark/strong-scaling-time-logscale-gpu.png?raw=true)
+
+![ibid. Speedup](/MontePi/benchmark/strong-scaling-speedup-gpu.png?raw=true)
+
+![ibid. Parallel Efficiency](/MontePi/benchmark/strong-scaling-efficiency-gpu.png?raw=true)
+
+
+## Plots
+
+To make the plots `MontePi/benchmark/plot.py` can be used. Try also `python plot.py --help`.
+
+    python plot.py -s strong-scaling_2016-08-04_03-40-03 -k weak-scaling_2016-08-03_22-52-00
+
 
 ## Profiling
 
@@ -480,9 +500,9 @@ If a Spark instance is already running and the address of the master is saved in
     which java
         /sw/global/tools/java/jdk1.7.0_25/bin/java
     sbatch --time=00:30:00 --nodes=1 --partition=gpu2 --cpus-per-task=4 --gres='gpu:4' <<EOF
-#!/bin/bash
-nvprof --analysis-metrics --metrics all -o $HOME/scaromare/MontePi/profilingDataMultiGpuScala.nvp%p /sw/global/tools/java/jdk1.7.0_25/bin/java -jar $HOME/scaromare/MontePi/singleNode/multiGpu/scala/MontePi.jar $((4*14351234510)) 4
-EOF
+    #!/bin/bash
+    nvprof --analysis-metrics --metrics all -o $HOME/scaromare/MontePi/profilingDataMultiGpuScala.nvp%p /sw/global/tools/java/jdk1.7.0_25/bin/java -jar $HOME/scaromare/MontePi/singleNode/multiGpu/scala/MontePi.jar $((4*14351234510)) 4
+    EOF
 
 Output:
     

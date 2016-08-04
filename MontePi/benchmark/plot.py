@@ -12,7 +12,8 @@ parser = argparse.ArgumentParser()
 #parser.add_argument("rundir", help="Directory which contains 'simOutput'")
 parser.add_argument("-e", "--error-log", dest="errorlog", help="File with data from error scaling", type=str, nargs="*" )
 parser.add_argument("-w", "--workload-log", dest="workloadlog", help="File with data from benchmark", type=str, nargs=1 )
-parser.add_argument("-c", "--workload-cluster", dest="workloadcluster", help="File with data from benchmark", type=str, nargs=1 )
+parser.add_argument("-k", "--weakscaling", dest="weakscaling", help="File with data from benchmark", type=str, nargs=1 )
+parser.add_argument("-s", "--strongscaling", dest="strongscaling", help="File with data from benchmark", type=str, nargs=1 )
 parser.add_argument("-r", "--rootbeer-setup-time", dest="rootbeersetup", help="File with data from benchmark", type=str, nargs=1 )
 args = parser.parse_args()
 
@@ -24,8 +25,32 @@ def finishPlot( fig, ax, fname ):
     fig.tight_layout()
     fig.savefig( fname+".pdf" )
     print "[Saved '"+fname+".pdf']"
+    fig.savefig( fname+".png" )
+    print "[Saved '"+fname+".png']"
     plt.close( fig )
 
+def calcStatisticsFromDupes( x, y ):
+    # If x contains duplicates, then those elements will be merged and the
+    # corresponding elements in y will be calculated to mean + standard deviation
+    # x,y must be numpy arrays
+    assert( x.size == y.size )
+    todo = ones( x.size, dtype=bool )
+    i = 0
+    xres = empty( x.size )
+    yres = empty( y.size )
+    yerr = empty( y.size )
+    while todo.sum() > 0:
+        assert( i < x.size )
+        dupes = x == x[todo][0]
+        xres[i] = x[dupes][0]
+        yres[i] = mean( y[dupes] )
+        yerr[i] = std( y[dupes] ) if y[dupes].size >= 3 else  0.
+        i += 1
+        # no found dupes should already be found!
+        nextTodo = logical_and( todo, logical_not( dupes ) )
+        assert( dupes.sum() == todo.sum() - nextTodo.sum() )
+        todo = nextTodo
+    return xres[:i], yres[:i], yerr[:i]
 
 ########################### workload scaling ###########################
 
@@ -121,129 +146,187 @@ if args.errorlog:
     ax.set_xlim( [ xmin, xmax ] )
 
 
-########################### workload cluster ###########################
+########################### Weak Scaling ###########################
 
-if args.workloadcluster != None:
-    ####### Strong Scaling ( work per slice constant -> slices, work ^ ) #######
-    def plotData( cgpu, paramName, colorMap, lineStyle, ylims, labelGenerator ):
-        fig = plt.figure( figsize=(6,4) )
-        ax = fig.add_subplot( 111,
-            xlabel = "Parallelisierung",
-            ylabel = "Laufzeit / s",
-            xscale = "log",
-            yscale = "log"
-        )
+if args.weakscaling != None:
+    ####### Weak Scaling ( work per Partition constant -> Partitions, work ^ ) #######
+    def plotWeakScaling( fileprefix, cgpu, paramName, colorMap, lineStyle, ylims, labelGenerator ):
+        figs, axes = [], []
+        nPlots = 3  # run time, speedup, parallel efficiency
+        for i in range(nPlots):
+            figs.append( plt.figure( figsize=(6,4) ) )
+            axes.append( figs[-1].add_subplot( 111,
+                xlabel = "Anzahl Grafikkarten",
+                title  = "Weak Scaling\nTaurus, " + (
+                            "Intel Xeon E5-2680" if cgpu == "cpu" else
+                            "NVIDIA Tesla K20x" ) # K80
+            ) )
+
+        axes[0].set_ylabel( "Laufzeit / s"        )
+        axes[1].set_ylabel( "Speedup"             )
+        axes[2].set_ylabel( "Parallele Effizienz" )
 
         if not ( cgpu == "cpu" or cgpu == "gpu" ):
             return
 
-        data = genfromtxt( args.workloadcluster[0]+"-"+cgpu+".dat" )
-        # Total Elements   Elements Per Thread    Slices   Nodes   Time / s
+        data = genfromtxt( fileprefix+"-"+cgpu+".dat" )
+        # Total Elements   Elements Per Thread    Partitions   Time / s   Calculated Pi
         assert len( data.shape ) == 2
         assert data.shape[1] == 5
-        data = { "t"         : data[:,4],
-                 "N"         : data[:,0],
-                 "nPerSlice" : data[:,1],
-                 "nSlices"   : data[:,2],
-                 "nodes"     : data[:,3] }
-
-        if cgpu == "cpu":
-            ax.set_title( "Intel Xeon E5-2680" )
-        else:
-            ax.set_title( "NVIDIA Tesla K80" )
+        data = { "t"             : data[:,3],
+                 "N"             : data[:,0],
+                 "nPerPartition" : data[:,1],
+                 "nPartitions"   : data[:,2]  }
 
         params = unique( data[ paramName ] )[::-1]
         colors = linspace( 0,1, len( params ) )
         xmax = 0
-        xmin = 1e9
-        gpusPerNode=1 # 4
+        xmin = float('inf')
         for i in range( len(params) ):
-            filter = all( [
-                        data["nPerSlice"] == params[i],
-                        data["nSlices"] != 0,
-                        data["t"] != 0,
-                        data["nSlices"] >= gpusPerNode*(data["nodes"]-1),
-                        data["nSlices"] <= gpusPerNode*data["nodes"]
-                     ], axis=0 )
-            ax.plot( data["nSlices"][filter], data["t"][filter], lineStyle,
-                     label=labelGenerator( params[i] ),
-                     color=plt.get_cmap( colorMap )(colors[i]) )
-            xmin = min( xmin, data["nSlices"][filter].min() )
-            xmax = max( xmax, data["nSlices"][filter].max() )
-        ax.set_xlim( [ xmin/1.1, xmax*1.1 ] )
-        ax.set_ylim( ylims )
+            filter = data["nPerPartition"] == params[i]
+            x = array( data["nPartitions"][filter] )
+            y = array( data["t"][filter] )
+            x,y,sy = calcStatisticsFromDupes( x, y )
+            sorted = argsort( x )
+            x  = x [sorted]
+            y  = y [sorted]
+            sy = sy[sorted]
 
-        finishPlot( fig, ax, "cluster-strong-scaling-"+cgpu )
+            axes[0].errorbar( x, y, sy, linestyle='-', marker='.',
+                         label=labelGenerator( params[i] ),
+                         color=plt.get_cmap( colorMap )(colors[i]) )
+
+            # Speedup in respect to n=1
+            if i == 0:  # add ideal speedup
+                axes[1].plot( x,x, '--', color='gray', label='Ideal' )
+            Sp = y[0] / ( y / x )
+            # Watch out! As this is weakscaling the work is scaled with x,
+            # i.e. to get the speedup we also need to scale the time needed
+            # down by x
+            SpErr = Sp * sqrt( (sy/y)**2 + (sy[0]/y[0])**2 )
+            axes[1].errorbar( x, Sp, SpErr, linestyle='-', marker='.',
+                         label=labelGenerator( params[i] ),
+                         color=plt.get_cmap( colorMap )(colors[i]) )
+
+            # Parallel Efficiency in respect to n=1
+            if i == 0:  # add ideal speedup
+                axes[2].plot( x, ones( x.size ), '--', color='gray', label='Ideal' )
+            P    = Sp / x
+            PErr = SpErr / x
+            axes[2].errorbar( x, P, PErr, linestyle='-', marker='.',
+                         label=labelGenerator( params[i] ),
+                         color=plt.get_cmap( colorMap )(colors[i]) )
+
+            xmin = min( xmin, data["nPartitions"][filter].min() )
+            xmax = max( xmax, data["nPartitions"][filter].max() )
+
+        for i in range(nPlots):
+            axes[i].set_xlim( [ xmin, xmax ] )
+        axes[0].set_ylim( ylims )
+        #axes[1].set_ylim( ylims )
+        #axes[2].set_ylim( ylims )
+
+        finishPlot( figs[0], axes[0], "weak-scaling-time-"       + cgpu )
+        finishPlot( figs[1], axes[1], "weak-scaling-speedup-"    + cgpu )
+        finishPlot( figs[2], axes[2], "weak-scaling-efficiency-" + cgpu )
+
+    #plotWeakScaling( args.weakscaling[0], "cpu", "nPerPartition", "cool_r", ".-", [1,200],
+    #    lambda p : r"$2^{"+str(int( log(p)/log(2) ))+"}$ pro Partition" )
+    plotWeakScaling( args.weakscaling[0], "gpu", "nPerPartition", "cool_r", ".-", [0,66],
+        lambda p : r"$2^{"+str(int( log(p)/log(2) ))+"}$ Iterationen pro Grafikkarte" )
 
 
-    plotData( "cpu", "nPerSlice", "copper", ".-", [1,200],
-              lambda p : r"$2^{"+str(int( log(p)/log(2) ))+"}$ pro slice" )
-    plotData( "gpu", "nPerSlice", "cool_r", ".-", [1,200],
-              lambda p : r"$2^{"+str(int( log(p)/log(2) ))+"}$ pro slice" )
 
-    iTime=-1
-    iPerSlice=1
-    iSlices=2
-    iTime=-1
+################################# Strong Scaling #################################
 
-    ####### GPU ######
-    #data = genfromtxt( args.workloadcluster[0]+"-gpu.dat" )
-    ##x = linspace( 1, 8, 100 )
-    ##ax.plot( x, x, '--', color='gray', label="ideal speedup" )
-    #nPerSlice = unique( data[:,iPerSlice] )
-    #colors = linspace( 0,1, len(nPerSlice) )
-    #iC = 0
-    #for perSlice in nPerSlice:
-    #    iHits = logical_and( data[:,iPerSlice] == perSlice, data[:,iSlices] != 0 )
-    #    ax.plot( data[iHits,iSlices] , data[iHits,iTime], 'x--', label=r"GPU, $2^{"+str(int( log(perSlice)/log(2) ))+"}$ pro slice", color=plt.get_cmap("cool")(colors[iC]) )
-    #    iC += 1
-    #
-    #finishPlot( fig, ax, "cluster-strong-scaling" )
+if args.strongscaling != None:
 
-    ########## Weak Scaling ( work constant -> slices ^ ) ##########
+    def plotStrongScaling( fileprefix, cgpu, colorMap, ylims, labelGenerator ):
+        # fileprefix: File name without -gpu.dat or -cpu.dat respectively
+        figs, axes = [], []
+        nPlots = 4  # run time, speedup, parallel efficiency
+        for i in range(nPlots):
+            figs.append( plt.figure( figsize=(6,4) ) )
+            axes.append( figs[-1].add_subplot( 111,
+                xlabel = "Anzahl Grafikkarten",
+                title  = "Strong Scaling\nTaurus, " + (
+                            "Intel Xeon E5-2680" if cgpu == "cpu" else
+                            "NVIDIA Tesla K20x" ) # K80
+            ) )
+        axes[3].set_yscale( 'log' )
+        axes[0].set_ylabel( "Laufzeit / s"        )
+        axes[3].set_ylabel( "Laufzeit / s"        )
+        axes[1].set_ylabel( "Speedup"             )
+        axes[2].set_ylabel( "Parallele Effizienz" )
 
-    fig = plt.figure( figsize=(8,5) )
-    ax = fig.add_subplot( 111,
-        xlabel = "Parallelisierung",
-        ylabel = "Laufzeit / s",
-        xscale = "log",
-        yscale = "log"
-    )
-    # Total Elements   Elements Per Thread    Slices   Nodes   Time / s
-    iTime=-1
-    iWork=0
-    iPerSlice=1
-    iSlices=2
+        if not ( cgpu == "cpu" or cgpu == "gpu" ):
+            return
 
-    ###### CPU ######
-    data = genfromtxt( args.workloadcluster[0]+"-cpu.dat" )
-    #x = linspace( 1, 8, 100 )
-    #ax.plot( x, x, '--', color='gray', label="ideal speedup" )
-    nWork = unique( data[:,iWork] )
-    colors = linspace( 0,1, len(nWork) )
-    iC = 0
-    for work in nWork:
-        if work == 0:
-            continue
-        iHits = data[:,iSlices] != 0
-        #print data[iHits,iTime]
-        iHits = logical_and( data[:,iWork] == work, data[:,iSlices] != 0 )
-        ax.plot( data[iHits,iSlices] , data[iHits,iTime], '.-', label=r"CPU, "+str(work)+" Iterationen", color=plt.get_cmap("copper")(colors[iC]) )
-        iC += 1
+        data = genfromtxt( fileprefix+"-"+cgpu+".dat" )
+        # Total Elements    Partitions   Time / s   Calculated Pi
+        assert len( data.shape ) == 2
+        assert data.shape[1] == 4
+        data = { "t"             : data[:,2],
+                 "N"             : data[:,0],
+                 "nPartitions"   : data[:,1]  }
 
-    ###### GPU ######
-    #data = genfromtxt( args.workloadcluster[0]+"-gpu.dat" )
-    ##x = linspace( 1, 8, 100 )
-    ##ax.plot( x, x, '--', color='gray', label="ideal speedup" )
-    #nPerSlice = unique( data[:,iPerSlice] )
-    #colors = linspace( 0.5  , len(nPerSlice) )
-    #iC = 0
-    #for perSlice in nPerSlice:
-    #    iHits = logical_and( data[:,iPerSlice] == perSlice, data[:,iSlices] != 0 )
-    #    ax.plot( data[iHits,iSlices] , data[iHits,iTime], 'x--', label=r"GPU, $2^{"+str(int( log(perSlice)/log(2) ))+"}$ pro slice", color=plt.get_cmap("cool")(colors[iC]) )
-    #    iC += 1
-    #
-    finishPlot( fig, ax, "cluster-weak-scaling" )
+        params = unique( data["N"] )[::-1]
+        colors = linspace( 0,1, len( params ) )
+        xmax = 0
+        xmin = float('inf')
+        for i in range( len(params) ):
+            filter = data["N"] == params[i]
+            x = array( data["nPartitions"][filter] )
+            y = array( data["t"][filter] )
+            x,y,sy = calcStatisticsFromDupes( x, y )
+            sorted = argsort( x )
+            x  = x [sorted]
+            y  = y [sorted]
+            sy = sy[sorted]
+
+            axes[0].errorbar( x, y, sy, linestyle='-', marker='.',
+                         label=labelGenerator( params[i] ),
+                         color=plt.get_cmap( colorMap )(colors[i]) )
+            axes[3].errorbar( x, y, sy, linestyle='-', marker='.',
+                         label=labelGenerator( params[i] ),
+                         color=plt.get_cmap( colorMap )(colors[i]) )
+
+            # Speedup in respect to n=1
+            if i == 0:  # add ideal speedup
+                axes[1].plot( x,x, '--', color='gray', label='Ideal' )
+            Sp = y[0] / y
+            SpErr = Sp * sqrt( (sy/y)**2 + (sy[0]/y[0])**2 )
+            axes[1].errorbar( x, Sp, SpErr, linestyle='-', marker='.',
+                         label=labelGenerator( params[i] ),
+                         color=plt.get_cmap( colorMap )(colors[i]) )
+
+            # Parallel Efficiency in respect to n=1
+            if i == 0:  # add ideal speedup
+                axes[2].plot( x, ones( x.size ), '--', color='gray', label='Ideal' )
+            P    = Sp / x
+            PErr = SpErr / x
+            axes[2].errorbar( x, P, PErr, linestyle='-', marker='.',
+                         label=labelGenerator( params[i] ),
+                         color=plt.get_cmap( colorMap )(colors[i]) )
+
+            xmin = min( xmin, data["nPartitions"][filter].min() )
+            xmax = max( xmax, data["nPartitions"][filter].max() )
+
+        for i in range(nPlots):
+            axes[i].set_xlim( [ xmin, xmax ] )
+        #axes[0].set_ylim( ylims )
+        #axes[1].set_ylim( ylims )
+        #axes[2].set_ylim( ylims )
+
+        finishPlot( figs[0], axes[0], "strong-scaling-time-"          + cgpu )
+        finishPlot( figs[3], axes[3], "strong-scaling-time-logscale-" + cgpu )
+        finishPlot( figs[1], axes[1], "strong-scaling-speedup-"       + cgpu )
+        finishPlot( figs[2], axes[2], "strong-scaling-efficiency-"    + cgpu )
+
+    #plotStrongScaling( args.strongscaling[0], "cpu", "cool_r", ".-", [1,200],
+    #    lambda p : r"$2^{"+str(int( log(p)/log(2) ))+"}$ pro Partition" )
+    plotStrongScaling( args.strongscaling[0], "gpu", "cool_r", [0,66],
+        lambda p : r"$2^{"+str(int( log(p)/log(2) ))+"}$ Iterationen gesamt" )
 
 
 ########################### Rootbeer Setup Time ###########################
@@ -251,10 +334,10 @@ if args.workloadcluster != None:
 if args.rootbeersetup != None:
     fig = plt.figure( figsize=(6,4) )
     ax = fig.add_subplot( 111,
-        xlabel = "Anzahl Slices / Partitionen",
+        xlabel = "Anzahl Partitions / Partitionen",
         ylabel = "Laufzeit / s"
     )
-    # Total Elements   Elements Per Thread    Slices   Nodes   Time / s
+    # Total Elements   Elements Per Thread    Partitions   Nodes   Time / s
     data = genfromtxt( args.rootbeersetup[0]+"-cpu.dat" )
     ax.plot( data[:,2], data[:,4], 'ro-', label="Intel Xeon E5-2680" )
     data = genfromtxt( args.rootbeersetup[0]+"-gpu.dat" )
