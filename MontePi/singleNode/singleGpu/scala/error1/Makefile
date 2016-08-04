@@ -54,3 +54,19 @@ MontePi.jar: manifest.txt TestMonteCarloPi.class
 #   slurmstepd: *** STEP 7771122.1 ON taurusi2107 CANCELLED AT 2016-08-04T16:36:15 ***
 #   srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
 #   srun: error: taurusi2107: task 0: Killed
+#
+# Increasing to 12GB memory solves this, but results in other errors:
+#
+# Running scala $@ results in
+# java.lang.ClassNotFoundException: org.trifort.rootbeer.runtime.Kernel#
+# not sure why, because zipinfo $@ shows org/trifort/rootbeer/runtime/Kernel.class
+#
+# Running with java -jar $@ results in
+# Exception in thread "main" java.lang.NoSuchMethodError: MonteCarloPi: method <init>()V not found
+# 	at TestMonteCarloPi$.main(TestMonteCarloPi.scala:8)
+# 	at TestMonteCarloPi.main(TestMonteCarloPi.scala)
+# Also not sure why, I have newer other tests where running with java -jar works, because $(SCALA_JAR) is compiled into the resulting file, but that should be the case here too (although it is run through Rootbeer in contrast to the working tests)
+#
+# The newer tests avoid running Rootbeer over SCALA_JAR, because it is not necessary as long as the kernel is writting in java, as long as only the kernel is merged into a jar and then given to Rootbeer.
+#
+# It could also be worth experimenting with the -libjar option to Rootbeer, e.g. -libjar $(SCALA_JAR) ??
