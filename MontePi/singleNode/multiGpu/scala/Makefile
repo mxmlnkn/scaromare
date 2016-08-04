@@ -1,5 +1,10 @@
-ROOTBEER_ROOT := ../../../../rootbeer1
-SCALA_ROOT    := /usr/share/java
+
+ROOTBEER_ROOT      := ../../../../rootbeer1
+SCALA_ROOT         := /usr/share/java
+ROOTBEER_COMPILER   = $(ROOTBEER_ROOT)/Rootbeer.jar
+ROOTBEER_JAR        = $(ROOTBEER_ROOT)/RootbeerRuntime.jar
+SCALA_JAR           = $(SCALA_ROOT)/scala-library.jar
+
 
 .phony: clean all MontePiGPU.jar *.class
 
@@ -9,38 +14,27 @@ run: MontePi.jar
 clean:
 	rm -f *.class *.jar
 
+
 MonteCarloPiKernel.class: MonteCarloPiKernel.java
-	javac $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:.
-MonteCarloPi.class: MonteCarloPi.java MonteCarloPiKernel.class
-	javac $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:.
+	javac $< -classpath $(ROOTBEER_JAR):.
+
+Distribute.class: Distribute.scala
+	scalac $< -classpath . -deprecation
+
+MonteCarloPi.class: MonteCarloPi.scala MonteCarloPiKernel.class Distribute.class
+	scalac $< -classpath $(ROOTBEER_JAR):. -deprecation
+
 TestMonteCarloPi.class: TestMonteCarloPi.scala
-	scalac $< -classpath $(ROOTBEER_ROOT)/Rootbeer.jar:. -deprecation
+	scalac $< -classpath $(ROOTBEER_JAR):. -deprecation
+
 
 gpu.jar: MonteCarloPiKernel.class
-	jar -cf tmp.jar $^
-	java -jar $(ROOTBEER_ROOT)/Rootbeer.jar tmp.jar $@ -64bit -computecapability=sm_30
+	jar -cf gputmp.jar $^
+	java -jar $(ROOTBEER_COMPILER) -64bit -nofatjar gputmp.jar $@
 
-nongpu.jar: MonteCarloPi.class TestMonteCarloPi.class
+cpu.jar: MonteCarloPi.class TestMonteCarloPi.class
 	jar -cfm $@ manifest.txt $^ TestMonteCarloPi$*.class MonteCarloPi$*.class
-# Watch out! MonteCarloPi*.class would also encompass MonteCarloPiKernel.class which was not anaylzed by Rootbeer, thereby possibly giving problems because of clashing!
-#	Exception in thread "main" java.lang.ClassCastException: MonteCarloPiKernel cannot be cast to org.trifort.rootbeer.runtime.CompiledKernel
-#		at org.trifort.rootbeer.runtime.CUDAContext.setKernel(CUDAContext.java:119)
-#		at MonteCarloPi.runOnDevice(MonteCarloPi.java:116)
-#		at MonteCarloPi.calc(MonteCarloPi.java:180)
-#		at TestMonteCarloPi$.main(TestMonteCarloPi.scala:75)
-#		at TestMonteCarloPi.main(TestMonteCarloPi.scala)
-# But the * is needed if it should be tried to use MonteCarlo.scala because of those automatically created classes like MonteCarloPi$1.class
-# Either do: MonteCarloPi.class MonteCarloPi$*.class or
-# take care that gpu.jar is behind nongpu.jar which means it will override nongpu.jar
 
-MontePi.jar: gpu.jar nongpu.jar
-# note that the order of gpu.jar before nongpu.jar is important, because
-# gpu.jar contains a manifest with no content which must be overwritten
-# by the manifest in nongpu.jar!
-	zipmerge $@ $(ROOTBEER_ROOT)/Rootbeer.jar $(SCALA_ROOT)/scala-library.jar $^
 
-# jar -cf tmp.jar MonteCarloPiKernel.class &&
-# java -jar "$ROOTBEER_ROOT"/Rootbeer.jar tmp.jar gpu.jar -64bit -computecapability=sm_30 &&
-# jar -cfm nongpu.jar manifest.txt TestMonteCarloPi*.class MonteCarloPi.class &&
-# zipmerge MontePi.jar "$SCALA_JAR" gpu.jar nongpu.jar &&
-# java -jar MontePi.jar 2684354560
+MontePi.jar: $(SCALA_JAR) $(ROOTBEER_JAR) gpu.jar cpu.jar
+	zipmerge $@ $^

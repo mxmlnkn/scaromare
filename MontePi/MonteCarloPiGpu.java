@@ -4,11 +4,14 @@ import java.lang.Long;  // MAX_VALUE
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+import org.trifort.rootbeer.runtime.CacheConfig;
+import org.trifort.rootbeer.runtime.Context;
+import org.trifort.rootbeer.runtime.GpuDevice;
+import org.trifort.rootbeer.runtime.GpuFuture;
 import org.trifort.rootbeer.runtime.Kernel;
 import org.trifort.rootbeer.runtime.Rootbeer;
-import org.trifort.rootbeer.runtime.GpuDevice;
-import org.trifort.rootbeer.runtime.Context;
 import org.trifort.rootbeer.runtime.ThreadConfig;
+
 
 /**
  * This class starts the actual CUDA-Kernels and also calculates random seeds
@@ -16,11 +19,12 @@ import org.trifort.rootbeer.runtime.ThreadConfig;
  **/
 public class MonteCarloPi
 {
-    private Rootbeer mRootbeerContext;
-    private int miGpuDeviceToUse;
-    private GpuDevice mDevice;
+    private Rootbeer  mRootbeerContext;
+    private int       miGpuDeviceToUse;
+    private GpuDevice mDevice         ;
 
-    MonteCarloPi( int riGpuDeviceToUse )
+    /* creates rootbeer context and chooses device */
+    MonteCarloPi( final int riGpuDeviceToUse )
     {
         long t0, t1;
         t0 = System.nanoTime();
@@ -35,7 +39,6 @@ public class MonteCarloPi
         System.out.println( "Get device "+miGpuDeviceToUse+" from list of length "+devices.size() );
         mDevice = devices.get( miGpuDeviceToUse );
 
-        t1 = System.nanoTime();
         t1 = System.nanoTime();
         System.out.println( "MonteCarloPi constructor took " + ((t1-t0)/1e9) + " seconds" );
     }
@@ -98,6 +101,10 @@ public class MonteCarloPi
         System.out.println( "Getting GPU devince information took " + ((t1-t0)/1e9) + " seconds" );
     }
 
+    /**
+     * This routine automatically chooses a GPU device and manually sets the
+     * Kernel configuration.
+     */
     static public void runOnDevice
     (
         Rootbeer     rRootbeerContext,
@@ -126,7 +133,15 @@ public class MonteCarloPi
                              );
         assert( thread_config.getThreadCountX() * thread_config.getBlockCountX() >= work.size() );
 
-        System.out.println( "Run a total of " + thread_config.getNumThreads() + " threads in (" + thread_config.getBlockCountX() + "," + thread_config.getBlockCountY() + ",1) blocks with each (" + thread_config.getThreadCountX() + "," + thread_config.getThreadCountY() + "," + thread_config.getThreadCountZ() + ") threads on GPU device " + context.getDevice().getDeviceId() );
+        System.out.println( "Run a total of " + thread_config.getNumThreads() +
+                            " threads in (" +
+                            thread_config.getBlockCountX() + "," +
+                            thread_config.getBlockCountY() + ",1) blocks " +
+                            "with each (" +
+                            thread_config.getThreadCountX() + "," +
+                            thread_config.getThreadCountY() + "," +
+                            thread_config.getThreadCountZ() + ") threads " +
+                            "on GPU device " + context.getDevice().getDeviceId() );
 
         try
         {

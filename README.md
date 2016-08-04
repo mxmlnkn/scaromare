@@ -426,11 +426,11 @@ If a Spark instance is already running and the address of the master is saved in
 
     nGpusAvailable=32
     jarFile=$HOME/scaromare/MontePi/multiNode/multiGpu/scala/MontePi.jar
-    fname=strong-scaling_$(date +%Y-%m-%d_%H-%M-%S)
+    fname=weak-scaling_$(date +%Y-%m-%d_%H-%M-%S)
     echo '' | tee -- "$fname-cpu.log" "$fname-gpu.log"
     printf "# Total Elements   Elements Per Thread    Partitions   Time / s   Calculated Pi\n" | tee -- "$fname-cpu.dat" "$fname-gpu.dat"
-    for (( nPerPartition=2**35; nPerPartition<=2**41; nPerPartition*=4 )); do
-      for (( iRepetition=0; iRepetition<10; iRepetition++ )); do
+    for (( nPerPartition=2**37; nPerPartition<=2**41; nPerPartition*=4 )); do
+      for (( iRepetition=0; iRepetition<3; iRepetition++ )); do
         # Spark + GPU
         for (( nPartitions=1; nPartitions <= $nGpusAvailable; nPartitions++ )) do
             sparkSubmit "$jarFile" $((nPerPartition*nPartitions)) $nPartitions 2>&1 |
@@ -447,6 +447,92 @@ If a Spark instance is already running and the address of the master is saved in
       done
     done
 
+## Strong Scaling
+
+    nGpusAvailable=32
+    jarFile=$HOME/scaromare/MontePi/multiNode/multiGpu/scala/MontePi.jar
+    fname=strong-scaling_$(date +%Y-%m-%d_%H-%M-%S)
+    echo '' | tee -- "$fname-cpu.log" "$fname-gpu.log"
+    printf "# Total Elements    Partitions   Time / s   Calculated Pi\n" | tee -- "$fname-cpu.dat" "$fname-gpu.dat"
+    for (( n=2**37; n<=2**43; n*=4 )); do
+      for (( iRepetition=0; iRepetition<5; iRepetition++ )); do
+        # Spark + GPU
+        for (( nPartitions=1; nPartitions <= $nGpusAvailable; nPartitions++ )) do
+            sparkSubmit "$jarFile" $n $nPartitions 2>&1 |
+                tee tmp.log |             # log file to extract times in seconds from
+                tee -a "$fname-gpu.log" | # complete log file for human to view
+                sed '/ INFO /d'           # delete numerous Spark messages
+            seconds=$(sed -nr '
+                s/.*Rolling the dice.*and took (.*) seconds.*/\1/p' tmp.log)
+            pi=$(sed -nr 's/.*pi ~ ([0-9.]+).*/\1/p' tmp.log)
+
+            printf "%16i %4i %10.5f %s\n" $n $nPartitions $seconds $pi >> "$fname-gpu.dat"
+        done
+      done
+    done
+    
+
+## Profiling
+
+    salloc --time=02:00:00 --nodes=1 --partition=gpu2-interactive --cpus-per-task=4 --gres='gpu:4' --mem-per-cpu=1000M
+    make ${makeOptsSpark[@]} -C $HOME/scaromare/MontePi/singleNode/multiGpu/scala/ MontePi.jar
+    srun java -jar $HOME/scaromare/MontePi/singleNode/multiGpu/scala/MontePi.jar 32435123451 4
+    which java
+        /sw/global/tools/java/jdk1.7.0_25/bin/java
+    sbatch --time=00:30:00 --nodes=1 --partition=gpu2 --cpus-per-task=4 --gres='gpu:4' <<EOF
+#!/bin/bash
+nvprof --analysis-metrics --metrics all -o $HOME/scaromare/MontePi/profilingDataMultiGpuScala.nvp%p /sw/global/tools/java/jdk1.7.0_25/bin/java -jar $HOME/scaromare/MontePi/singleNode/multiGpu/scala/MontePi.jar $((4*14351234510)) 4
+EOF
+
+Output:
+    
+    ==26439== NVPROF is profiling process 26439, command: /sw/global/tools/java/jdk1.7.0_25/bin/java -jar $HOME/scaromare/MontePi/singleNode/multiGpu/scala/MontePi.jar 1435123451 4
+    [MonteCarloPi.scala:<constructor>] Using the following GPUs : 0 
+    [MonteCarloPi.scala:<constructor>] MonteCarloPi constructor took 6.281092309 seconds
+    0
+    [MonteCarloPi.scala:runOnDevice] [Host:taurusi2051,GPU:0] Total Thread Count = 26624, KernelConfig = (104,1,1) blocks with each (256,1,1) threads
+    [MonteCarloPi.scala:<constructor>] Using the following GPUs : 1 
+    [MonteCarloPi.scala:<constructor>] MonteCarloPi constructor took 7.513381237 seconds
+    0
+    [MonteCarloPi.scala:<constructor>] Using the following GPUs : 2 
+    [MonteCarloPi.scala:<constructor>] MonteCarloPi constructor took 7.538209838 seconds
+    0
+    [MonteCarloPi.scala:runOnDevice] runOnDevice configuration took 0.748453808 seconds
+    [MonteCarloPi.scala:runOnDevice] context.run( work ) took 5.4038E-5 seconds
+    [MonteCarloPi.scala:calc] Ran Kernels asynchronously on all GPUs. Took 1.265656465 seconds
+    [MonteCarloPi.scala:calc] Taking from GpuFuture now (Wait for asynchronous tasks).
+    [MonteCarloPi.scala:runOnDevice] [Host:taurusi2051,GPU:1] Total Thread Count = 26624, KernelConfig = (104,1,1) blocks with each (256,1,1) threads
+    [MonteCarloPi.scala:runOnDevice] [Host:taurusi2051,GPU:2] Total Thread Count = 26624, KernelConfig = (104,1,1) blocks with each (256,1,1) threads
+    [MonteCarloPi.scala:<constructor>] Using the following GPUs : 3 
+    [MonteCarloPi.scala:<constructor>] MonteCarloPi constructor took 7.580257042 seconds
+    0
+    [MonteCarloPi.scala:runOnDevice] [Host:taurusi2051,GPU:3] Total Thread Count = 26624, KernelConfig = (104,1,1) blocks with each (256,1,1) threads
+
+    [MonteCarloPi.scala:runOnDevice] runOnDevice configuration took 0.965182109 seconds
+    [MonteCarloPi.scala:runOnDevice] context.run( work ) took 4.1006E-5 seconds
+    [MonteCarloPi.scala:calc] Ran Kernels asynchronously on all GPUs. Took 1.017713559 seconds
+    [MonteCarloPi.scala:calc] Taking from GpuFuture now (Wait for asynchronous tasks).
+    [MonteCarloPi.scala:runOnDevice] runOnDevice configuration took 0.974981803 seconds
+    [MonteCarloPi.scala:runOnDevice] context.run( work ) took 3.4606E-5 seconds
+    [MonteCarloPi.scala:calc] Ran Kernels asynchronously on all GPUs. Took 1.004266163 seconds
+    [MonteCarloPi.scala:calc] Taking from GpuFuture now (Wait for asynchronous tasks).
+    [MonteCarloPi.scala:runOnDevice] runOnDevice configuration took 0.960264386 seconds
+    [MonteCarloPi.scala:runOnDevice] context.run( work ) took 2.3148E-5 seconds
+    [MonteCarloPi.scala:calc] Ran Kernels asynchronously on all GPUs. Took 0.976993471 seconds
+    [MonteCarloPi.scala:calc] Taking from GpuFuture now (Wait for asynchronous tasks).
+
+
+
+    [MonteCarloPi.scala:calc] synchronize (take) i.e. kernels took 1.673575898 seconds
+    Join thread after 9.409900961 seconds
+    [MonteCarloPi.scala:calc] synchronize (take) i.e. kernels took 1.296328742 seconds
+    [MonteCarloPi.scala:calc] synchronize (take) i.e. kernels took 1.3390092 seconds
+    [MonteCarloPi.scala:calc] synchronize (take) i.e. kernels took 1.326177838 seconds
+    Join thread after 10.060772521 seconds
+    Join thread after 10.25184158 seconds
+    Join thread after 10.253567369 seconds
+    Rolling the dice 1435123451 times resulted in pi ~ 3.141675075310326 and took 10.253777488 seconds
+    ==26439== Generated result file: $HOME/scaromare/MontePi/profilingDataMultiGpuScala.nvp26439
 
 
 # ToDo

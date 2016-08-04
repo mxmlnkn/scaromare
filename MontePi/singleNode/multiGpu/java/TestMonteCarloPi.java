@@ -5,9 +5,9 @@ import java.util.Scanner;   // nextLong
 import java.lang.Long;      // parseLong
 import java.lang.Integer;   // MAX_VALUE, parseInt
 
+
 public class TestMonteCarloPi
 {
-
     public static void main ( String[] args )
     {
         /* args[0] is not the path as can be shwon with the code below.

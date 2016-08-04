@@ -4,6 +4,7 @@ import org.trifort.rootbeer.runtime.{Kernel, Rootbeer, GpuDevice, Context, Threa
 import org.trifort.rootbeer.configuration.RootbeerPaths;
 import java.net.InetAddress
 
+
 /**
  * This class starts the actual CUDA-Kernels and also calculates random seeds
  * for those kernels
@@ -12,7 +13,7 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
 {
     private val t0 = System.nanoTime
 
-    private var mRootbeerContext  = new Rootbeer()
+    private val mRootbeerContext  = new Rootbeer()
     private val mAvailableDevices = mRootbeerContext.getDevices()
     private var miGpusToUse       = iGpusToUse
     if ( miGpusToUse == null || miGpusToUse.size == 0 )
@@ -147,9 +148,6 @@ class MonteCarloPi( iGpusToUse : Array[Int] = null )
         val distributor = new Distribute
 
         val t00 = System.nanoTime
-
-        if ( mAvailableDevices.size <= iGpusToUse.size )
-            throw new RuntimeException( "Not enough GPU devices found!" )
 
         /* start as many threads as possible. (More are possible, but
          * they wouldn't be hardware multithreaded anymore, but
