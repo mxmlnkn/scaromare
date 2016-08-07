@@ -29,7 +29,7 @@ The more long term goal is to hide the antics of the GPU task, so that a user ca
   
         Exception in thread "main" java.lang.NoClassDefFoundError: org/trifort/rootbeer/runtime/Kernel
 
-    It seems Rootbeer.jar wasn't merged into the fatjar or specified in the classpath. This may happen after the rootbeer commit where it doesn't do that automatically anymore.
+    It seems Rootbeer.jar wasn't merged into the fat JAR or specified in the class path. This may happen after the Rootbeer commit where it doesn't do that automatically anymore.
 
   - 
  
@@ -108,6 +108,49 @@ If a Spark instance is already running and the address of the master is saved in
 ![ibid. Speedup](/MontePi/benchmark/weak-scaling-speedup-gpu.png?raw=true)
 
 ![ibid. Parallel Efficiency](/MontePi/benchmark/weak-scaling-efficiency-gpu.png?raw=true)
+
+### About the Performance Decrease at roughly the half the GPUs
+
+Let's try to find out, if maybe some all the slower runs have a certain host in common which wasn't used in one of the faster rans. First let's extract the times and corresponding used hostnames using a sed script:
+
+    sed -nr '
+    /INFO/d;                    # delete spark output (more a performance thing)
+    /\(taurusi[0-9]*,/{
+        :findhosts
+            /\) : 0[ \t]*$/{    # skip hosts which are not using GPUs
+                s|\n[^\n]*$||   # delete last appended line
+                b findhosts
+            }
+            s|[\^n]*\((taurusi[0-9]*),.*|\1|    # extract hostname
+            N                                   # append next line with \n
+            /\(taurusi[0-9]*,/b findhosts       # repeat if the new line contains host
+        s|\n[^\n]*$||           # delete last appended line
+        s|[ \t]*\n[ \t]*|,|g    # delete newlines and whitespaces between hostnames
+        :pisearch
+            N
+            / pi ~ /!{          # if not line with pi value found
+                s|\n[^\n]*$||   # delete last appended line
+                b pisearch
+            }
+        # extract seconds needed
+        s/([^\n]*).* pi ~ ([0-9.]+) and took ([0-9.]+) seconds.*/\3 \1/
+        p
+    }
+    ' weak-scaling_2016-08-03_22-52-00-gpu.log | column -t > time-hosts.dat
+
+Manually delete the only half-done longest run with 222s run time and then try to sort the results in fast and slow runs.
+
+ - fast runs: `7.0 +- 0.3`, `17.3 +- 0.3`, `58.4 +- 0.3`
+ - slow runs: `8.0 +- 0.3`, `18.3 +- 0.3`, `59.4 +- 0.3`
+
+There seems to be no correlation with one straggling host.
+
+Note that `taurusi2001`-`taurusi2009` and `taurusi2010`-`taurusi2018` respectively share one chassis switch (Gigabit Ethernet and Infiniband).
+
+This also doesn't seem to be the reason, because almost all runs have hosts from both chassis, especially also fast runs.
+
+Idea: Maybe the switch gets saturated for a certain amount of connections? E.g. only if more than 8 nodes per chassis are used.
+ - Also does not seem to be the case.
 
 
 ## Strong Scaling
