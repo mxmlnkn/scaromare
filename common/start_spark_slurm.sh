@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # These settings can be overwritten setting by setting by specifying
-# 'fresH' command line parameters to sbatch
-#SBATCH --account=p_zih-hops
+# 'fresh' command line parameters to sbatch
 #SBATCH --partition=gpu1
 #SBATCH --nodes=3
 # ntasks per node MUST be one, because multiple slaves per work does not work with slurm + spark in this script
