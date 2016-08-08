@@ -1,22 +1,13 @@
 #!/bin/bash
 
-# These settings can be overwritten setting by setting by specifying
-# 'fresh' command line parameters to sbatch
-#SBATCH --partition=gpu1
-#SBATCH --nodes=3
-# ntasks per node MUST be one, because multiple slaves per work does not work with slurm + spark in this script
+# These settings can be overwritten by specifying 'fresh' command line parameters to startSpark / sbatch
+# ntasks per node (per node) MUST be one, because multiple slaves per work does not work with slurm + spark in this script
 #SBATCH --ntasks-per-node=1
-# CPUs per Task must be equal to gres:gpu or else too few or too much GPUs will
+# CPUs per Task should be equal to gres:gpu or else too few or too much GPUs will
 # be used. Partition 'gpu1' on taurus has 2 K20x GPUs per node and 'gpu2' has
 # 4 K80 GPUs per node
-#SBATCH --cpus-per-task=2
-#SBATCH --gres=gpu:2
 #SBATCH --mem-per-cpu=1000
-# Beware! $HOME will not be expanded and invalid output-URIs will result
-# Slurm jobs hanging indefinitely.
-#SBATCH --output="/home/s3495379/spark/logs/%j.out"
-#SBATCH --error="/home/s3495379/spark/logs/%j.err"
-#SBATCH --time=01:00:00
+# Beware! $HOME will not be expanded in --output option iuf given here in this script and invalid output-URIs will result Slurm jobs hanging indefinitely.
 
 # E.g. use it like this to run MontePi.jar with 8 slices (slice count is
 # specified in the program itself, but it was written to accept arguments):
@@ -89,8 +80,6 @@ else
     # mktemp -d must run for each host, that's why this is only done if
     # srun was called on this script! Else the temporary directory would be
     # created on tauruslogin
-    #export sparkLogs=$HOME/spark/logs
-    #mkdir -p "$sparkLogs"
     sparkTmp=$(mktemp -d)   # using $HOME/spark/tmp is not a good idea as it is slow and shared
     echo "[$(hostname)] Spark Working Directory (Logs, Distributed Jar, ...): $sparkTmp"
 
@@ -145,7 +134,7 @@ else
 
         # This can be used for debugging purposed and/or to find out the WebUI address
         # Furthermore this is necessary to submit jobs to the spark instance!
-        echo "spark://$SPARK_MASTER_IP:$SPARK_MASTER_PORT" > "$HOME/spark/logs/${SLURM_JOBID}_spark_master"
+        echo "spark://$SPARK_MASTER_IP:$SPARK_MASTER_PORT" > "$HOME/${SLURM_JOBID}_spark_master"
 
         echo "[Process $SLURM_PROCID] Starting Master at spark://$SPARK_MASTER_IP:$SPARK_MASTER_PORT (WebUI: $SPARK_MASTER_WEBUI_PORT)"
 

@@ -43,7 +43,7 @@ function startSpark() {
     done
     echo "OK"
     export MASTER_WEBUI
-    export MASTER_ADDRESS=$(cat ~/spark/logs/${jobid}_spark_master)
+    export MASTER_ADDRESS=$(cat "$HOME/${jobid}_spark_master")
     function sparkSubmit() {
         "$SPARK_ROOT"/bin/spark-submit --master $MASTER_ADDRESS $@
     }
