@@ -7,7 +7,7 @@ if [ -f ../rootbeer1/Rootbeer.jar ]; then
 fi
 if [ -f ../rootbeer1/RootbeerRuntime.jar ]; then
     export ROOTBEER_JAR=$(cd ../rootbeer1/ && pwd)/RootbeerRuntime.jar
-elif [ -z "$ROOTBEER_JAR" ]; then
+elif [ -z "$ROOTBEER_JAR" ] && [ ! -z "$ROOTBEER_COMPILER" ]; then
     export ROOTBEER_JAR=$ROOTBEER_COMPILER
 fi
 

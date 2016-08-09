@@ -5,13 +5,6 @@
 # or
 #   sbatch -p gpu2 --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --gres=gpu:1 --time=02:00:00 ./benchmarkImpl.sh 1
 taurus=$1
-if [ -z "$taurus" ]; then
-    taurus=0
-    gpusPerNode=1
-else
-    taurus=1
-    gpusPerNode=4
-fi
 RUN="time -p"
 if [ "$taurus" -eq 1 ]; then RUN="srun $RUN"; fi
 
@@ -20,21 +13,22 @@ imax=2684354560000
 tmaxCpu=100 # seconds
 tmaxGpu=120
 
-allDiceRolls=( )
-timesSingleCoreJava=( )
-timesSingleCoreScala=( )
-timesSingleGpuCpp=( )
-timesSingleGpuJava=( )
-timesSingleGpuScala=( )
+prefix=../singleNode
+allDiceRolls=()
+timesSingleCoreJava=()
+timesSingleCoreScala=()
+timesSingleGpuCpp=()
+timesSingleGpuJava=()
+timesSingleGpuScala=()
 
 trap "rm tmp.log" EXIT
 
 # Make all if changed
-#make -C singleNode/singleCore/java/
-#make -C singleNode/singleCore/scala/
-#make -C singleNode/singleGpu/cpp/
-#make -C singleNode/multiGpu/java/
-#make -C singleNode/multiGpu/scala/
+make -C $prefix/singleCore/java/
+make -C $prefix/singleCore/scala/
+make -C $prefix/singleGpu/cpp/
+make -C $prefix/multiGpu/java/
+make -C $prefix/multiGpu/scala/
 
 getTime() {
     # POSIX format has no 's' suffix but it is in seconds. In contrast
@@ -73,6 +67,7 @@ echo "nRollsList = ${nRollsList[@]}" 1>&2
 
 # benchmark scaling with different work loads until imax, but only to maximum
 # time so that we can still benchmark GPU versions while CPU is long unfeasible
+for (( n=0; n<5; n++ )); do
 for (( i=i0; i<imax; i=3*i/2  )); do
     nDiceRolls=$((i-i%256))
     allDiceRolls+=( $nDiceRolls )
@@ -120,11 +115,11 @@ for (( i=i0; i<imax; i=3*i/2  )); do
     }
 
     #echo "nDiceRolls = $nDiceRolls"
-    measure timesSingleCoreJava  'java -jar singleNode/singleCore/java/MontePi.jar'  $tmaxCpu
-    measure timesSingleCoreScala 'java -jar singleNode/singleCore/scala/MontePi.jar' $tmaxCpu
-    measure timesSingleGpuCpp    'singleNode/singleGpu/cpp/TestMonteCarloPiV2.exe'   $tmaxGpu 0
-    measure timesSingleGpuJava   'java -jar singleNode/multiGpu/java/MontePi.jar'    $tmaxGpu 0
-    measure timesSingleGpuScala  'java -jar singleNode/multiGpu/scala/MontePi.jar'   $tmaxGpu 0
+    measure timesSingleCoreJava  "java -jar $prefix/singleCore/java/MontePi.jar"  $tmaxCpu
+    measure timesSingleCoreScala "java -jar $prefix/singleCore/scala/MontePi.jar" $tmaxCpu
+    measure timesSingleGpuCpp    "$prefix/singleGpu/cpp/TestMonteCarloPiV2.exe"   $tmaxGpu 0
+    measure timesSingleGpuJava   "java -jar $prefix/multiGpu/java/MontePi.jar"    $tmaxGpu 0
+    measure timesSingleGpuScala  "java -jar $prefix/multiGpu/scala/MontePi.jar"   $tmaxGpu 0
 
     # use last instead of [-1] because latter doesn't work on taurus -.-
     printf "%15i%10.5f%10.5f%10.5f%10.5f%10.5f\n" \
@@ -134,4 +129,5 @@ for (( i=i0; i<imax; i=3*i/2  )); do
         $(last timesSingleGpuCpp)    \
         $(last timesSingleGpuJava)   \
         $(last timesSingleGpuScala) | tee -a $resultsFile
+done
 done
