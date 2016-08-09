@@ -252,12 +252,3 @@ Output:
     Join thread after 10.253567369 seconds
     Rolling the dice 1435123451 times resulted in pi ~ 3.141675075310326 and took 10.253777488 seconds
     ==26439== Generated result file: $HOME/scaromare/MontePi/profilingDataMultiGpuScala.nvp26439
-
-
-# ToDo
-
-- Benchmark Multi-GPU
-  - Implement Multi-GPU using runAsync
-    - try to convert MontePi.java to MontePi.scala so that it is easer to program
-      - Try it out on singleNode/singleGpu/scala first
-
