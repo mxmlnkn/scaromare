@@ -80,6 +80,11 @@
 \newcommand{\nolisttopbreak}{\vspace{\topsep}\nobreak\@afterheading}
 \makeatother
 
+\addto\extrasngerman{\def\figureautorefname{Abb.}} % for use with autoref
+\addto\extrasngerman{\def\equationautorefname{Gl.}} 
+\addto\extrasngerman{\def\sectionautorefname{Kapitel}} 
+\addto\extrasngerman{\def\subsectionautorefname{Kapitel}} 
+\addto\extrasngerman{\def\subsubsectionautorefname{Kapitel}} 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % main part
@@ -116,7 +121,7 @@
 \chapter{Programmausdrücke}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\lstinputlisting[language=bash, inputencoding=latin1, frame=single, caption={\lstinline!start_spark_slurm.sh! enthält Parameter für \lstinline!sbatch!, berechnet nötige Parameter für Spark aus denen von Slurm und startet dann einen Master und mehrere Worker-Prozesse startet}, label=lst:start_spark_slurm.sh]{../start_spark_slurm.sh}
+\lstinputlisting[language=bash, inputencoding=latin1, frame=single, caption={\lstinline!start_spark_slurm.sh! enthält Parameter für \lstinline!sbatch!, berechnet nötige Parameter für Spark aus denen von Slurm und startet dann einen Master und mehrere Worker-Prozesse startet}, label=lst:start_spark_slurm.sh]{../common/start_spark_slurm.sh}
 
 \lstinputlisting[language=bash, inputencoding=latin1, frame=single, caption={\lstinline!startSpark.sh! welche eine Funktion definiert die einen den Sparkslurmjob aus Listing~\ref{lst:start_spark_slurm.sh} startet und Master-IP aus der Logdatei extrahiert}, label=lst:startSpark]{../startSpark.sh}
 

@@ -180,7 +180,7 @@ Zugegeben, es wurde beim Prozessor gespart und bei der Grafikkarte nicht, aber d
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{System 2: Taurus}
-\label{sct:system2}
+\label{sct:taurus}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -258,7 +258,7 @@ Im Programmausdruck~\ref{lst:montemainloop} ist die Hauptschleife, die hauptsäc
 	= 8.8\cdot N
 \end{align}
 
-Zuletzt ist aus dem Plot abzulesen, dass für große Lasten wie z.B. für drei Milliarden Iterationen die Versionen, die von Grafikarten gebrauch machen, um einen Faktor $140$ (Scala) bis $320$ (C++) schneller sind als die Java Version, die auf einem Prozessor-Kern ausgeführt wird. Dieser große Unterschied zwischen CPU und GPU lässt darauf schließen, dass Java weder AVX noch mehrere Kerne gleichzeitig nutzt. Das heißt für die CPU-Versionen wäre für das Testsystem 1 noch ein Geschwindigkeitsgewinn von $8\,\frac{ \text{Op} }{ \text{AVX-Einheit} } \cdot 2\,\text{Kerne}$ erreichbar. Dies würde den Geschwindigkeitsunterschied von $320$ auf $20$ reduzieren, was in Übereinstimmung mit dem Verhältnis der Peakflops aus Kapitel~\ref{sct:system1} wäre.
+Zuletzt ist aus dem Plot abzulesen, dass für große Lasten wie z.B. für drei Milliarden Iterationen die Versionen, die von Grafikarten Gebrauch machen, um einen Faktor $140$ (Scala) bis $320$ (C++) schneller sind als die Java Version, die auf einem Prozessor-Kern ausgeführt wird. Dieser große Unterschied zwischen CPU und GPU lässt darauf schließen, dass Java weder AVX noch mehrere Kerne gleichzeitig nutzt. Das heißt für die CPU-Versionen wäre für das Testsystem 1 noch ein Geschwindigkeitsgewinn von $8\,\frac{ \text{Op} }{ \text{AVX-Einheit} } \cdot 2\,\text{Kerne}$ erreichbar. Dies würde den Geschwindigkeitsunterschied von $320$ auf $20$ reduzieren, was in Übereinstimmung mit dem Verhältnis der Peakflops aus Kapitel~\ref{sct:system1} wäre.
 
 \begin{lstlisting}[language=Java,caption={Hauptschleife der Monte-Carlo Pi-Berechnung},label=lst:montemainloop]
 for ( int i = 0; i < dnDiceRolls; ++i )
@@ -291,7 +291,7 @@ Zwar nicht in der Abbildung dargestellt, wurde auch für $4N+1$ und $4N+2$ gemes
 	\end{minipage}\begin{minipage}{0.5\linewidth}
 		\includegraphics[width=\linewidth]{cluster-strong-scaling-cpu}
 	\end{minipage}
-	\caption{Benötigte Ausführungszeit der Monte-Carlo Pi-Berechnung in Abhängigkeit von der Anzahl an \textbf{links:} Kernen und \textbf{rechts:} Grafikkarten. Getestet auf System 2, siehe Kapitel~\ref{sct:system2}}
+	\caption{Benötigte Ausführungszeit der Monte-Carlo Pi-Berechnung in Abhängigkeit von der Anzahl an \textbf{links:} Kernen und \textbf{rechts:} Grafikkarten. Getestet auf System 2, siehe Kapitel~\ref{sct:taurus}}
 	\label{fig:montepistrongscaling}
 \end{figure}
 

@@ -3,7 +3,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Im Rahmen dieser Belegarbeit soll ein Ansatz entwickelt werden, um mit Java oder Scala auf heterogenen Clustersystem mit Grafikkarten zu rechnen. Es wurde sich für eine Kombination von Spark für die Kommunikation im Cluster und Rootbeer für die Grafikkartenprogrammierung entschieden.
-% !!! Begründen warum Spark+Rootbeer
+
+Für Spark wurde sich entschieden, weil es nicht nur eine einfache Programmierung von Clustern mittels des MapReduce-Programmiermodells ermöglicht, sondern dazu noch zahlreiche Bibliotheken z.B. für Maschinenlernen zur Verfügung stellt.
+
+Rootbeer wurde genommen, weil es das Schreiben von CUDA-Kernel aus Java heraus erlaubt. Die so geschriebenen Kernel können dann sowohl auf Grafikkarten als auch auf dem Host ausgeführt werden.
 
 Zuerst wird in den Kapiteln \ref{sct:montecarloalgo}-\ref{sct:spark} die benutzten Algorithmen und Bibliotheken vorgestellt, in Kapitel~\ref{sct:implementation} wird die eigene Implementierung dokumentiert und in Kapitel~\ref{sct:benchmarks} werden Benchmarks dieser Implementierung vorgestellt.
 
