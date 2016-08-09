@@ -132,6 +132,44 @@
         \item[+] Unterstützung für: Scala, Java, Python, \ldots
         \item[+] lokales Dateisystem, HDFS, AmazonS3, \ldots nutzbar % (Hadoop erzwingt HDFS), HDFS u.a. auch in Spark möglich
     \end{itemize}
+    
+    % - datenanalyse, -visualisierung, prognosemodelle (z.B. "you also might like these products ...")
+    \centerline{\includegraphics[width=0.7\linewidth]{spark-libraries.png}}
+    % sagen:
+    %   - Spark SQL:
+    %       - allow access to RDDs using SQL queries über einen SQL Kontext:
+    %           val schemaString = "name age"
+    %           ...
+    %           val rowRDD = people.map(_.split(",")).map(p => Row(p(0), p(1).trim))
+    %           val peopleDataFrame = sqlContext.createDataFrame(rowRDD, schema)
+    %           val results = sqlContext.sql("SELECT name FROM people")
+    %         SchemaRDD
+    %       http://spark.apache.org/docs/latest/sql-programming-guide.html#programmatically-specifying-the-schema
+    %
+    %   - Spark Streaming: Echtzeitdatenanalyse (z.B. Themen / häufigste Wörter in den letzten 10k Tweets). oder Kombination mit MLib möglich (Streaming Linear Regression)
+    %     Data fitting während daten gestreamt werden (ich stelle mir z.B. least square fitting von einem physikalischen Experiment vor, z.B. v(t) fitting auf v(t)=v0+g*t fitting, um die Fallbeschleunigung g zu bestimmen, während gemessen wird. (Minimalbeispiel, denkbarer wäre wohl irgendetwas am LHC, mit ihren Terabyte an Daten pro Sekunde) -> Vorteil, dass die Daten nicht gespeichert werden müssen, was vlt. gar nicht möglich wäre:
+    %           http://spark.apache.org/docs/latest/mllib-linear-methods.html#streaming-linear-regression
+    %
+    %   - MlLib: statistiken (mittelwert, standardabweichung, ...), korrelaton, (lineare) regression, k-means, stochastic(online) gradient descent ...
+    %       http://spark.apache.org/mllib/
+    %       http://spark.apache.org/docs/latest/ml-guide.html
+    %       http://spark.apache.org/docs/latest/mllib-optimization.html
+    %     Primitiven für Machinenlernen, aber keine highlevel abstraktion wie z.B. Keras, wo das Training in einer Zeile geht:
+    %            model.fit( X_train, y_train,
+    %                       nb_epoch=1000, batch_size=100,
+    %                       verbose=1, validation_split=0.2,
+    %                       callbacks=[EarlyStopping( monitor='val_loss',
+    %                                                 patience=25, mode='min'),
+    %                       WeightLogger()] )
+    %               www.thoughtly.co/blog/deep-learning-lesson-3/
+    %       (verstehe ich das so richtig ???)
+    %       http://www.kdnuggets.com/2015/12/spark-deep-learning-training-with-sparknet.html
+    %
+    %   - GraphX
+    %       Graphdatentyp + Algorithmen drauf wie
+    %           PageRank: Berechnung der Relevanz / Popularität aller Knoten in einem Graphen aus den Wertungen ihrer jeweiligen Kanten
+    %           subgraph ...
+    %       http://spark.apache.org/docs/latest/graphx-programming-guide.html#graph_algorithms
 \end{frame}
 
 \begin{frame}[fragile]
@@ -174,8 +212,7 @@ def filter(f: (T) (*$\Rightarrow$*) Boolean): RDD[T]
     \end{column}\begin{column}{0.5\linewidth}
     Master:
     \begin{lstlisting}[language=bash,numbers=none,xleftmargin=0pt,linewidth=1.05\linewidth,basicstyle=\scriptsize]
-"$SPARK_ROOT/bin/spark-class" org.apache.spark.deploy.master.Master \
---ip $(hostname) --port 7077 --webui-port 8080 &
+"$SPARK_ROOT/bin/spark-class" org.apache.spark.deploy.master.Master --ip $(hostname) --port 7077 --webui-port 8080
 \end{lstlisting}\vspace{-1.5\baselineskip}
     Worker:
     \begin{lstlisting}[language=bash,numbers=none,xleftmargin=0pt,linewidth=1.05\linewidth,basicstyle=\scriptsize]
@@ -191,47 +228,6 @@ def filter(f: (T) (*$\Rightarrow$*) Boolean): RDD[T]
 %  export SPARK_LOCAL_DIRS=$(mktemp)
 %  export SPARK_MASTER_PORT=7077
 %  export SPARK_MASTER_WEBUI_PORT=8080
-\end{frame}
-
-\begin{frame}
-    \frametitle{Spark Anwendungen}
-    % - datenanalyse, -visualisierung, prognosemodelle (z.B. "you also might like these products ...")
-    \centerline{\includegraphics[width=0.8\linewidth]{spark-libraries.png}}
-    % sagen:
-    %   - Spark SQL:
-    %       - allow access to RDDs using SQL queries über einen SQL Kontext:
-    %           val schemaString = "name age"
-    %           ...
-    %           val rowRDD = people.map(_.split(",")).map(p => Row(p(0), p(1).trim))
-    %           val peopleDataFrame = sqlContext.createDataFrame(rowRDD, schema)
-    %           val results = sqlContext.sql("SELECT name FROM people")
-    %         SchemaRDD
-    %       http://spark.apache.org/docs/latest/sql-programming-guide.html#programmatically-specifying-the-schema
-    %
-    %   - Spark Streaming: Echtzeitdatenanalyse (z.B. Themen / häufigste Wörter in den letzten 10k Tweets). oder Kombination mit MLib möglich (Streaming Linear Regression)
-    %     Data fitting während daten gestreamt werden (ich stelle mir z.B. least square fitting von einem physikalischen Experiment vor, z.B. v(t) fitting auf v(t)=v0+g*t fitting, um die Fallbeschleunigung g zu bestimmen, während gemessen wird. (Minimalbeispiel, denkbarer wäre wohl irgendetwas am LHC, mit ihren Terabyte an Daten pro Sekunde) -> Vorteil, dass die Daten nicht gespeichert werden müssen, was vlt. gar nicht möglich wäre:
-    %           http://spark.apache.org/docs/latest/mllib-linear-methods.html#streaming-linear-regression
-    %
-    %   - MlLib: statistiken (mittelwert, standardabweichung, ...), korrelaton, (lineare) regression, k-means, stochastic(online) gradient descent ...
-    %       http://spark.apache.org/mllib/
-    %       http://spark.apache.org/docs/latest/ml-guide.html
-    %       http://spark.apache.org/docs/latest/mllib-optimization.html
-    %     Primitiven für Machinenlernen, aber keine highlevel abstraktion wie z.B. Keras, wo das Training in einer Zeile geht:
-    %            model.fit( X_train, y_train,
-    %                       nb_epoch=1000, batch_size=100,
-    %                       verbose=1, validation_split=0.2,
-    %                       callbacks=[EarlyStopping( monitor='val_loss',
-    %                                                 patience=25, mode='min'),
-    %                       WeightLogger()] )
-    %               www.thoughtly.co/blog/deep-learning-lesson-3/
-    %       (verstehe ich das so richtig ???)
-    %       http://www.kdnuggets.com/2015/12/spark-deep-learning-training-with-sparknet.html
-    %
-    %   - GraphX
-    %       Graphdatentyp + Algorithmen drauf wie
-    %           PageRank: Berechnung der Relevanz / Popularität aller Knoten in einem Graphen aus den Wertungen ihrer jeweiligen Kanten
-    %           subgraph ...
-    %       http://spark.apache.org/docs/latest/graphx-programming-guide.html#graph_algorithms
 \end{frame}
 
 \begin{frame}
@@ -347,67 +343,67 @@ pi = 3.1415955324
 %%%%NH: hier eine Einführung Rootbeer (Paper referenzieren + kurz erklären -> insb. mit Übersetzung in 3 adress code etc. ..)
 
 
-\begin{frame}
-    \frametitle{GPU-Programmierung mit Java/Scala}
-    \begin{itemize}
-        \item OpenCL-Schnittsellen: JogAmp JOCL, JOCL, JavaCL
-        % http://stackoverflow.com/questions/4649951/how-do-javacl-and-jogamp-jocl-compare
-        % ( ''ScalaCL is not production-ready!''
-        % JOCL:
-        %   MIT/X11 License
-        %   http://www.jocl.org/ -> auch nette übersicht über alle
-        % JogAmp JOCL: http://jogamp.org/jocl/www/
-        %              http://jogamp.org/git/?p=jocl.git;a=blob_plain;f=LICENSE.txt;hb=refs/heads/master (BSD)
-        %   - zwei Abstraktionsebenen, eine automatisch generierte Lowlevelschnittstelle und höhere prägnantere Schnittstelle
-        % JavaCL: GPL
-        %         JNA (Java Native Access) im Gegensatz zu JNI kann Code cross-plattform geschrieben werden
-        %         object oriented wrapper (like JogAmp JOCL)
-        % ScalaCL:
-        %   https://code.google.com/archive/p/scalacl/  (35 stars code.google.com)
-        %       "ScalaCL is not production-ready!" (scala 2.9)
-        %   https://github.com/nativelibs4java/ScalaCL (200 stars, letzer Commit März 2015)
-        %       reimplementation für Scala 2.10
-        %   ScalaCL is architectured around two components:
-        %       ScalaCL Collections: OpenCL-backed collections that look and behave like standard Scala collections (work in progress).
-        %       ScalaCL Compiler Plugin: optimizes Scala programs at compile-time, transforming regular Scala loops into faster code and transforming Scala functions given to ScalaCL Collections into OpenCL kernels
-        \item OpenCL für Scala: ScalaCL, Firepile % Version 0.1, letzter commit 2012 (45 stars)
-        \item jCUDA
-        % java bindings für cuda: JCUDA, JCublas, JCufft, JCurand, ...
-        % http://jcuda.org/
-        % aktiv in Entwicklung, aber halt nur bindings und dann halt plattformspezifisch
-        % MIT/X11 License (selbes seitendesign wie jocl)
-        \item Aparapi
-        % http://developer.amd.com/tools-and-sdks/opencl-zone/aparapi/
-        %   Aparapi is an API for expressing data parallel workloads in Java™ and a runtime component capable of converting the Java™ bytecode of compatible workloads into OpenCL™ so that it can be executed on a variety of GPU devices.
-        %   http://developer.amd.com/community/blog/2011/09/14/i-dont-always-write-gpu-code-in-java-but-when-i-do-i-like-to-use-aparapi/
-        % https://github.com/aparapi/aparapi/graphs -> auch eher wenig Entwicklung, 170 stars
-        %   1) We want to write all our code in Java™.
-        %
-        %   2) We want to use common Java™ idioms and patterns.
-        %
-        %   3) We don’t want to have to worry about exotic memory models.
-        %
-        %   4) We would prefer to not have to explicitly transfer data to the GPU and back.  Generally the compiler knows what data the code is accessing and whether the code is reading from or writing to it, so why can’t the runtime just handle ensuring that the data is where it needs to be, when it needs to be there?
-        %
-        %   5) We want to write code once. If it turns out that the code cannot be executed on the GPU (because, say, the runtime platform does not happen to have a GPU) we would still like the code to execute in a performant manner.  We certainly don’t expect to have to write our code once for the GPU (in a device specific language) and then a second time in case it has to run using a Thread Pool.
-        %       => alles auch gute Motivation für Rootbeer-Nutzung
-        % - initial Alpha release at JavaOne 2010 (AMD, later 2011 OpenSource)
-        % https://aparapi.github.io/
-        % Aparapi is just a contraction of "A PARallel API"
-        % However... "Apa rapi" in Indonesian (the language spoken on the island of Java) translates to "What a neat...". So "Apa rapi Java Project" translates to "What a neat Java Project" How cool is that?
-        % Kernel kernel = new Kernel(){
-        %   @Override public void run(){
-        %       int i= getGlobalId();
-        %       result[i]=intA[i]+inB[i];
-        %   }
-        % };
-        % Range range = Range.create(result.length);
-        % kernel.execute(range);
-        \item Rootbeer
-        % entschieden wurde sich für Rootbeer -> umblättern
-    \end{itemize}
-    % => Persönliche Meinung. Alle Lösungen außer die OpenCL-Bindings scheinen sich im Sande zu verlaufen
-\end{frame}
+%\begin{frame}
+%    \frametitle{GPU-Programmierung mit Java/Scala}
+%    \begin{itemize}
+%        \item OpenCL-Schnittsellen: JogAmp JOCL, JOCL, JavaCL
+%        % http://stackoverflow.com/questions/4649951/how-do-javacl-and-jogamp-jocl-compare
+%        % ( ''ScalaCL is not production-ready!''
+%        % JOCL:
+%        %   MIT/X11 License
+%        %   http://www.jocl.org/ -> auch nette übersicht über alle
+%        % JogAmp JOCL: http://jogamp.org/jocl/www/
+%        %              http://jogamp.org/git/?p=jocl.git;a=blob_plain;f=LICENSE.txt;hb=refs/heads/master (BSD)
+%        %   - zwei Abstraktionsebenen, eine automatisch generierte Lowlevelschnittstelle und höhere prägnantere Schnittstelle
+%        % JavaCL: GPL
+%        %         JNA (Java Native Access) im Gegensatz zu JNI kann Code cross-plattform geschrieben werden
+%        %         object oriented wrapper (like JogAmp JOCL)
+%        % ScalaCL:
+%        %   https://code.google.com/archive/p/scalacl/  (35 stars code.google.com)
+%        %       "ScalaCL is not production-ready!" (scala 2.9)
+%        %   https://github.com/nativelibs4java/ScalaCL (200 stars, letzer Commit März 2015)
+%        %       reimplementation für Scala 2.10
+%        %   ScalaCL is architectured around two components:
+%        %       ScalaCL Collections: OpenCL-backed collections that look and behave like standard Scala collections (work in progress).
+%        %       ScalaCL Compiler Plugin: optimizes Scala programs at compile-time, transforming regular Scala loops into faster code and transforming Scala functions given to ScalaCL Collections into OpenCL kernels
+%        \item OpenCL für Scala: ScalaCL, Firepile % Version 0.1, letzter commit 2012 (45 stars)
+%        \item jCUDA
+%        % java bindings für cuda: JCUDA, JCublas, JCufft, JCurand, ...
+%        % http://jcuda.org/
+%        % aktiv in Entwicklung, aber halt nur bindings und dann halt plattformspezifisch
+%        % MIT/X11 License (selbes seitendesign wie jocl)
+%        \item Aparapi
+%        % http://developer.amd.com/tools-and-sdks/opencl-zone/aparapi/
+%        %   Aparapi is an API for expressing data parallel workloads in Java™ and a runtime component capable of converting the Java™ bytecode of compatible workloads into OpenCL™ so that it can be executed on a variety of GPU devices.
+%        %   http://developer.amd.com/community/blog/2011/09/14/i-dont-always-write-gpu-code-in-java-but-when-i-do-i-like-to-use-aparapi/
+%        % https://github.com/aparapi/aparapi/graphs -> auch eher wenig Entwicklung, 170 stars
+%        %   1) We want to write all our code in Java™.
+%        %
+%        %   2) We want to use common Java™ idioms and patterns.
+%        %
+%        %   3) We don’t want to have to worry about exotic memory models.
+%        %
+%        %   4) We would prefer to not have to explicitly transfer data to the GPU and back.  Generally the compiler knows what data the code is accessing and whether the code is reading from or writing to it, so why can’t the runtime just handle ensuring that the data is where it needs to be, when it needs to be there?
+%        %
+%        %   5) We want to write code once. If it turns out that the code cannot be executed on the GPU (because, say, the runtime platform does not happen to have a GPU) we would still like the code to execute in a performant manner.  We certainly don’t expect to have to write our code once for the GPU (in a device specific language) and then a second time in case it has to run using a Thread Pool.
+%        %       => alles auch gute Motivation für Rootbeer-Nutzung
+%        % - initial Alpha release at JavaOne 2010 (AMD, later 2011 OpenSource)
+%        % https://aparapi.github.io/
+%        % Aparapi is just a contraction of "A PARallel API"
+%        % However... "Apa rapi" in Indonesian (the language spoken on the island of Java) translates to "What a neat...". So "Apa rapi Java Project" translates to "What a neat Java Project" How cool is that?
+%        % Kernel kernel = new Kernel(){
+%        %   @Override public void run(){
+%        %       int i= getGlobalId();
+%        %       result[i]=intA[i]+inB[i];
+%        %   }
+%        % };
+%        % Range range = Range.create(result.length);
+%        % kernel.execute(range);
+%        \item Rootbeer
+%        % entschieden wurde sich für Rootbeer -> umblättern
+%    \end{itemize}
+%    % => Persönliche Meinung. Alle Lösungen außer die OpenCL-Bindings scheinen sich im Sande zu verlaufen
+%\end{frame}
 
 
 \begin{frame}
