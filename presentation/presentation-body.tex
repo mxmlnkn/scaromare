@@ -51,7 +51,7 @@
     \end{column}\begin{column}{0.5\linewidth}
         \centerline{\includegraphics[height=0.3\textheight]{AMD_Opteron_2212_IMGP1795.jpg}}
         %\textcolor{gray}{\scriptsize{Rainer Knäpper, Free Art License (\url{artlibre.org/licence/lal/en/})}}
-    \end{column}\end{columns}
+    \end{column}\end{columns}\vspace{1.5\baselineskip}
     %Platz 3 Titan XK7 in der Top 500 (Juni 2016):
     %\begin{itemize}
     %    \item 18 688 AMD Opteron 6274 (16 Kerne) zu je 140\,TFLOPS(DP)
@@ -92,63 +92,33 @@
 %  - https://www.toptal.com/spark/introduction-to-apache-spark
 %  - "Learning Spark" book
 
-\begin{frame}
-    \frametitle{MapReduce Programmiermodell}
-    % nicht sicher in welchen Zitationsstil ich das hier machen soll, oder einfach nur freihand?
-    ''MapReduce: Simplified Data Processing on Large Clusters'' (2004) von Jeffrey Dean und Sanjay Ghemawat (Google Inc.)
-    %@article{
-    %    author     = {Dean, Jeffrey and Ghemawat, Sanjay},
-    %    title      = {MapReduce: Simplified Data Processing on Large Clusters},
-    %    journal    = {Commun. ACM},
-    %    issue_date = {January 2008},
-    %    volume     = {51},
-    %    number     = {1},
-    %    month      = jan,
-    %    year       = {2008},
-    %    issn       = {0001-0782},
-    %    pages      = {107--113},
-    %    numpages   = {7},
-    %    url        = {http://doi.acm.org/10.1145/1327452.1327492},
-    %    doi        = {10.1145/1327452.1327492},
-    %    acmid      = {1327492},
-    %    publisher  = {ACM},
-    %    address    = {New York, NY, USA},
-    %}
-    \begin{itemize}
-        \item Für Cluster aus tausenden von kommerziellen PCs entwickelt % (inexpensive HDDs) reliability on top of unreliable hardware
-        \item MapReduce bezeichnet ein Programmiermodell und die dazugehörige Implementation
-        \item Schlüssel/Wert-Paare auf die eine Abbildung und nachfolgend eine Reduktion aller Werte eines Schlüssels ausgeführt wird
-              \begin{tabular}{lll}
-                  Map     & : $(k,v)$ &
-                              $\mapsto \left[(l_1,x_1), \ldots, (l_{r_k},x_{r_k}) \right]$ \\
-                  %Shuffle & : $\left[(l_1,x_1), \ldots, (l_{r_k},x_{r_k}) \right]$ &
-                  %            $\mapsto (l,\left[ y_1, \ldots, y_{s_l} \right])$ \\
-                  Reduce  & : $(l,\left[ y_1, \ldots, y_{s_l} \right])$ &
-                              $\mapsto \left[ w_1, \ldots, w_{m_l} \right] $
-              \end{tabular}
-        % viele aufgaben lassen sich in dieses map+reduce schema pressen (turing vollständig?... ka)
-        \item Programme in diesem funktionalen Stil werten automatisch von MapReduce parallelisiert
-        % runtime macht dabei automatisch eine partitionierung und kümmert sich um lastbalancierung, Kommunikation der Input und Output-Daten, Fehlertoleranzm ...
-        % von Google aus der Not heraus entworfen riesige Daten z.B. zusammenzufassen und mit Graphenalgoritmen Webseiten zu bewerten
-        % inspiriert von funktionalen Sprachen wie Lisp (map, reduce)
-    \end{itemize}
-\end{frame}
-
+%\begin{frame}
+%    \frametitle{MapReduce Programmiermodell}
+%    % nicht sicher in welchen Zitationsstil ich das hier machen soll, oder einfach nur freihand?
+%    ''MapReduce: Simplified Data Processing on Large Clusters'' (2004) von Jeffrey Dean und Sanjay Ghemawat (Google Inc.)
+%    \begin{itemize}
+%        \item Für Cluster aus tausenden von kommerziellen PCs entwickelt % (inexpensive HDDs) reliability on top of unreliable hardware
+%        \item MapReduce bezeichnet ein Programmiermodell und die dazugehörige Implementation
+%        \item Schlüssel/Wert-Paare auf die eine Abbildung und nachfolgend eine Reduktion aller Werte eines Schlüssels ausgeführt wird
+%              \begin{tabular}{lll}
+%                  Map     & : $(k,v)$ &
+%                              $\mapsto \left[(l_1,x_1), \ldots, (l_{r_k},x_{r_k}) \right]$ \\
+%                  %Shuffle & : $\left[(l_1,x_1), \ldots, (l_{r_k},x_{r_k}) \right]$ &
+%                  %            $\mapsto (l,\left[ y_1, \ldots, y_{s_l} \right])$ \\
+%                  Reduce  & : $(l,\left[ y_1, \ldots, y_{s_l} \right])$ &
+%                              $\mapsto \left[ w_1, \ldots, w_{m_l} \right] $
+%              \end{tabular}
+%        % viele aufgaben lassen sich in dieses map+reduce schema pressen (turing vollständig?... ka)
+%        \item Programme in diesem funktionalen Stil werten automatisch von MapReduce parallelisiert
+%        % runtime macht dabei automatisch eine partitionierung und kümmert sich um lastbalancierung, Kommunikation der Input und Output-Daten, Fehlertoleranzm ...
+%        % von Google aus der Not heraus entworfen riesige Daten z.B. zusammenzufassen und mit Graphenalgoritmen Webseiten zu bewerten
+%        % inspiriert von funktionalen Sprachen wie Lisp (map, reduce)
+%    \end{itemize}
+%\end{frame}
 
 \begin{frame}
     \frametitle{Spark Übersicht}
-    % Sagen:
-    %  - 2009 als Forschungsprojekt am UC Berkely Lab angefangen
-    %  - 2013 Transfer zur Apache Software Foundation
-    %  - GraySort Gewinner 5.11.2014: Apache Spark von Reynold Xin (Databricks Inc.)
-    %     => 3x schneller bei 1/10 Knoten und 1/5 Datendurchsatz als alter Hadoop MapReduce-Gewinner
-    %     => ab da wsl. richtig an Fahrt gewonnen
-    %\begin{itemize}
-    %    \item Nachfolger zu Hadoop MapReduce
-    %    \item geschrieben in Scala
-    %\end{itemize}
-    % (Hadoop: Core MapReduce + verteiltes Dateisystem(HDFS,NFS,...))
-    Nachfolger von Hadoop MapReduce. Vorteile:
+    Alternative zu Hadoop MapReduce. Vorteile:
     \begin{itemize}
         \item[+] Abarbeitung im Arbeitsspeicher möglich % , was Hadoop nicht anbot
         \item[+] iterative Algorithmen schneller als Hadoop % wegen cache/persist-Funktionen
@@ -191,36 +161,28 @@ def filter(f: (T) (*$\Rightarrow$*) Boolean): RDD[T]
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}[fragile]
+    %    \item Manuelle Installation von maven, ant, spark, zipmerge
+    %    % für spark wurden precompiled binaries genommen, weil es bei der Kompilation auch Probleme gab, die nicht behoben werden konnten
     \frametitle{Spark Funktionsweise}
-    \centerline{\includegraphics[width=0.7\linewidth]{spark-components-execution.png}}
+    \begin{columns}\begin{column}{0.5\linewidth}
+    \centerline{\includegraphics[width=\linewidth]{spark-components-execution.png}}
     % spark opak gegenüber cluster manager, so lange man programme starten kann -> siehe Kapitel implementation
     % driver programm muss von allen worker erreichbar sein
     % spark hat auch job scheduling und übernimmt damit einige Funktionen von slurm / pbs (not user)
     % hat nettes webinterface mit logs und zustand ...
-\end{frame}
-
-
-\begin{frame}[fragile]
-    \frametitle{Spark auf Taurus über Slurm starten}
-    %\begin{itemize}
-    %    \item Manuelle Installation von maven, ant, spark, zipmerge
-    %    % für spark wurden precompiled binaries genommen, weil es bei der Kompilation auch Probleme gab, die nicht behoben werden konnten
-    %\end{itemize}
-    % This does similar things as vanilla $SPARK_ROOT/sbin/start-master.sh but slurm compatible, e.g. not in daemon-mode
-\begin{lstlisting}[language=bash]
-sbatch --output="$SPARK_LOGS/%j.out" --error="$SPARK_LOGS/%j.err" $HOME/scaromare/start_spark_slurm.sh --time=04:00:00 --nodes=$((nodes+1)) --partition=gpu2 --gres=gpu:$gpusPerNode --cpus-per-task=$coresPerNode
-~/spark-1.5.2-bin-hadoop2.6/bin/spark-submit --master $MASTER_ADDRESS ~/scaromare/MontePi/multiNode/multiGpu/scala/MontePi.jar ...
+    \end{column}\begin{column}{0.5\linewidth}
+    Master:
+    \begin{lstlisting}[language=bash,numbers=none,xleftmargin=0pt,linewidth=1.05\linewidth,basicstyle=\scriptsize]
+"$SPARK_ROOT/bin/spark-class" org.apache.spark.deploy.master.Master \
+--ip $(hostname) --port 7077 --webui-port 8080 &
 \end{lstlisting}\vspace{-1.5\baselineskip}
-    \lstinline!start_spark_slurm.sh!:
-    \begin{lstlisting}[language=bash,xleftmargin=0pt,linewidth=1.05\linewidth,basicstyle=\scriptsize]
-export SPARK_WORKER_CORES=$SLURM_CPUS_PER_TASK
-if [ $SLURM_PROCID -eq 0 ]; then # if master start driver
-  "$SPARK_ROOT/bin/spark-class" org.apache.spark.deploy.master.Master --ip $(hostname) --port $SPARK_MASTER_PORT --webui-port $SPARK_MASTER_WEBUI_PORT
-else
-  "$SPARK_ROOT/bin/spark-class" org.apache.spark.deploy.worker.Worker $MASTER_NODE
-fi
-\end{lstlisting}
+    Worker:
+    \begin{lstlisting}[language=bash,numbers=none,xleftmargin=0pt,linewidth=1.05\linewidth,basicstyle=\scriptsize]
+"$SPARK_ROOT/bin/spark-class" org.apache.spark.deploy.worker.Worker \
+    spark://$(scontrol show hostname $SLURM_NODELIST | head -n 1):7077
+\end{lstlisting}\vspace{-1.5\baselineskip}
+    \end{column}\end{columns}
 % This section will be run when started by sbatch
 %  export SPARK_ROOT=$HOME/spark-1.5.2-bin-hadoop2.6/
 %  export SPARK_JAVA_OPTS+="-XX:+UseParallelGC -XX:MaxPermSize=5G"
@@ -229,10 +191,6 @@ fi
 %  export SPARK_LOCAL_DIRS=$(mktemp)
 %  export SPARK_MASTER_PORT=7077
 %  export SPARK_MASTER_WEBUI_PORT=8080
-\end{frame}
-
-\begin{frame}
-    \centerline{\includegraphics[width=0.9\linewidth]{spark-main-view.png}}
 \end{frame}
 
 \begin{frame}
@@ -275,23 +233,6 @@ fi
     %           subgraph ...
     %       http://spark.apache.org/docs/latest/graphx-programming-guide.html#graph_algorithms
 \end{frame}
-
-
-\begin{frame}
-    \frametitle{Spark auf Github}
-    \centerline{\url{github.com/apache/spark.git master}}
-    % sagen:
-    %   - anhaltende >aktive< Entwicklung (nicht wie Rootbeer ...)
-    %   - 2012 nur 20k Code, nun 1 Millionen Zeilen -> betonen, um zu zeigen, dass es ein komplexes Projekt ist, für dass ein Mitwirken (GPU Plugin) möglicherweise den Rahmen einer Belegarbeit sprengt ... :)"
-    %   - über tausend (1203 an 2016-07-06) Beitragende / Programmierer (210 in den letzten 30 Tagen)
-    %   - 33 417 commits
-    \centerline{\includegraphics[width=0.9\linewidth]{spark-openhub.png}}
-    \centerline{\textcolor{gray}{\scriptsize{\url{
-        https://www.openhub.net/p/apache-spark
-    }}}}
-    % git://github.com/apache/spark.git master
-\end{frame}
-
 
 \begin{frame}
     \frametitle{Monte-Carlo-Integration}
@@ -476,7 +417,7 @@ pi = 3.1415955324
         \item $\approx$ 30k Codezeilen hauptsächlich Java und ein wenig C % (für bidnings, https://www.openhub.net/p/rootbeer1/analyses/latest/languages_summary )
         \item leider kaum Aktivität auf Github seit Juni 2015 % 1 Jahr
         %\item ''Rootbeer is pre-production beta. If Rootbeer works for you, please let me know.''
-        \item Unterstütze Java Features:
+        \item Unterstützte Java Features:
         \begin{itemize}
             \item Arrays jeden Types und Dimension
             \item beliebige (auch zyklische) Objektgraphen
@@ -717,7 +658,7 @@ runWaitEvent.take()
 %    \begin{lstlisting}[language=bash]
 %java -jar "$ROOTBEER_ROOT"/Rootbeer.jar processedGpuKernels.jar gpuKernels.jar -64bit -computecapability=sm_30
 %\end{lstlisting}
-    \centerline{\includegraphics[width=1.15\linewidth]{compile-structure-deu-new-short.pdf}}
+    \centerline{\includegraphics[width=1.0\linewidth]{compile-structure-deu-new-shorter.pdf}}
 \end{frame}
 
 
@@ -728,133 +669,54 @@ runWaitEvent.take()
     % sagen:
     %  - Leider wurde die meiste Bearbeitungszeit für diesen Beleg vom Lösen von Bugs beansprucht, sodass ich nicht darauf verzichten kann, zumindest einige davon zu erwähnen, auf dass sie jemanden helfen mögen, der einen ähnlichen Ansatz wie ich verfolgen möchte
     \begin{itemize}
-        \item Nur Java 6 ist von Rootbeer offiziell unterstützt, Java 7 geht aber großteils, nicht aber Java 8
-              %\begin{lstlisting}
-              %    java.lang.NullPointerException
-              %        at soot.rbclassload.RootbeerClassLoader.loadHierarchySootClasses(RootbeerClassLoader.java:963)
-              %\end{lstlisting}
-              % https://github.com/pcpratts/rootbeer1/issues/175 - Issues with jre1.8
-        \item Nur bis GCC 4.9 unterstützt % (wegen CUDA-Compiler)
-        \item Die Option \lstinline!-computecapability=sm_30! muss angegeben werden, da seit CUDA 7.0 die Standardarchitektur \lstinline!compute_12! nicht mehr unterstützt wird (korrekt nun \lstinline!sm_12!)
-              %\begin{lstlisting}
-              %    nvcc fatal   : Unsupported gpu architecture 'compute_12'
-              %\end{lstlisting}
-              % https://github.com/pcpratts/rootbeer1/issues/180 - CUDA 7.0: nvcc fatal: Unsupported gpu architecture 'compute_12'
-        \item Automatische Kernel-Konfiguration hat einen Bug, der standardmäßig immer so viele Kernel startet wie gleichzeitig auf einem Shared Multiprozessor laufen können.
+        \item Rootbeer funktioniert nicht mit Java 8
+        \item Automatische Kernel-Konfiguration hatte einen Bug, der standardmäßig immer so viele Kernel startete wie gleichzeitig auf einem Shared Multiprozessor laufen können.
               % return new ThreadConfig( block_shaper.getMaxThreadsPerBlock(), 1, 1,
               %                          block_shaper.getMaxBlocksPerProc(), 1,
               % https://github.com/pcpratts/rootbeer1/issues/168
-        \item Rootbeer hat standardmäßig versucht den gesamten freien Speicher zu alloziieren versuchte
+        \item Rootbeer hat standardmäßig versucht den gesamten freien Speicher zu alloziieren
               % sagen:
               %  - verhinderte multi-GPU, weil ein Kontext schon so gut wie den gesamten Speicher für sich beanspruchen wollte.
               %  - nur ein Problem mit multiple Rootbeer.jar
-              % https://github.com/mxmlnkn/rootbeer1/commit/0d9699a40b06a7e5efee7213ca7fb215d6ef1377
-              % https://github.com/mxmlnkn/rootbeer1/commit/cc2318673077a52f13a8c4b4d294fbd39e639ca5
-              % /media/d/Studium/9TH SEMESTER/scaromare/MontePi/multiNode/multiGpu/scala$ /opt/spark-1.5.2/bin/spark-submit --master local[4] --class TestMonteCarloPi MontePi.jar 268435456 2
-              %   16/01/22 03:27:59 ERROR Executor: Exception in task 1.0 in stage 0.0 (TID 1)
-              %rg.trifort.rootbeer.runtime.CudaErrorException: CUDA_ERROR_OUT_OF_MEMORY: Error in cuMemAlloc: gpu_object_mem
-              %   at org.trifort.rootbeer.runtime.CUDAContext.nativeBuildState(Native Method)
-              %   at org.trifort.rootbeer.runtime.CUDAContext.access$1100(CUDAContext.java:17)
-              %   at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:315)
-              %   at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:308)
-              %   at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:128)
-              %   at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-              %   at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
-              %   at java.lang.Thread.run(Thread.java:745)
-        \item Zu kompilierende jar an Rootbeer >muss< auf .jar enden
-              % normalerweise sollte die Dateiendung unter Linux egal sein, gibt Magic Bytes und Co
-              % #Warning: the following soot-classpath entry is not a supported archive file (must be .zip, .jar or .apk): MontePiGPU.jar.tmp
+        \item Rootbeer war nicht thread-safe
+              % shared-libraries in home + statische Variablen
   \end{itemize}
+  $\Rightarrow$ Fork auf \url{https://github.com/mxmlnkn/rootbeer1}
 \end{frame}
-
-\begin{frame}[fragile]
-    \frametitle{Bemerkungen und Hinweise}
-    %%%%NH: die folgenden Punkte finde ich gut, aber lieber am Schluss des Results-Kapitel einfügen. Kannst ja auch deine contributions+deren Effekt rootbeer erwähnen.
-    %%%%NH: multi gpu fähigkeiten von rb erwähnen
-    % sagen:
-    %  - Leider wurde die meiste Bearbeitungszeit für diesen Beleg vom Lösen von Bugs beansprucht, sodass ich nicht darauf verzichten kann, zumindest einige davon zu erwähnen, auf dass sie jemanden helfen mögen, der einen ähnlichen Ansatz wie ich verfolgen möchte
-    \begin{itemize}
-        \item Profiling mit NVIDIA nvvp möglich. (Executable: java, Argumente: \lstinline!-jar ./MontePi.jar!)
-        \item \lstinline!ERROR STATUS:716 : Error in cuCtxSynchronize! wenn man den Konfigurationsordner löscht oder woanders kompiliert als man ausführt
-        % https://github.com/pcpratts/rootbeer1/issues/185
-        \item Shared Libraries werden nach \lstinline!~/.rootbeer/! entpackt, was aber auf Taurus shared ist $\rightarrow$ Bugfix: entpacke nach \lstinline!~/.rootbeer/<hostname>/<pid>-<nanotimestamp>/!
-        %\item Lokale Dateien aus denen RDDs erstellt werden dürfen kein Leerzeichen im Pfad enthalten
-              % $SPARK_ROOT/bin/spark-submit --master $MASTER_ADDRESS ./src/sort.py "$(pwd)"/data/The_Complete_Works_of_Willia.txt
-              %   java.io.FileNotFoundException: Added file file:/media/f/Studium/9TH%20SEMESTER/scaromare/spark-gpu/src/sort.py does not exist.
-              %      at org.apache.spark.SparkContext.addFile(SparkContext.scala:1365)
-          %  - Alignement Bug in Speicherserialisierung
-          %       https://github.com/mxmlnkn/rootbeer1/commit/cc2318673077a52f13a8c4b4d294fbd39e639ca5
-        \item \textbf{Flüchtiger Fehler} \begin{lstlisting}
-java.lang.ClassCastException: MonteCarloPiKernel cannot be cast to [J
-  at MonteCarloPiKernel.org_trifort_readFromHeapRefFields_MonteCarloPiKernel0(Jasmin)
-  at MonteCarloPiKernelSerializer.doReadFromHeap(Jasmin)
-  at org.trifort.rootbeer.runtime.Serializer.readFromHeap(Serializer.java:155)
-  ...
-\end{lstlisting}
-    \end{itemize}
-\end{frame}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Ergebnisse}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
-    \frametitle{Testsystem: Taurus Insel 2 Phase 2}
+    \frametitle{Testsystem: Taurus Insel 2}
     \begin{tabularx}{0.9\linewidth}{r|Y}
+        Knoten          & 44 \\
+        Prozessor       & 2x Intel(R) Xeon(R) CPU E5-2450 (8 Kerne) @ 2.10GHz, 2x 268.8\,GSPFLOPS \\
+        GPU 			& 2x NVIDIA Tesla K20x je 2688 CUDA-Kerne, 3935\,GSPFLOPS\\
+        Arbeitsspeicher & \SI{32}{\gibi\byte}\\
+        \hline
         Knoten          & 64 \\
-        Hostnamen       & taurusi2[045-108] \\
-        Prozessor       & 2x Intel(R) Xeon(R) CPU E5-2680 v3 (12 Kerne) @ 2.50GHz, MultiThreading deaktiviert, AVX2 insbesondere FMA3, 2x 537.6\,GSPFLOPS \\
-        GPU 			& 4x NVIDIA Tesla K80 \\
-        Arbeitsspeicher & \SI{64}{\gibi\byte} \\
-        Festplatte      & \SI{128}{\gibi\byte} SSD
+        Prozessor       & 2x Intel(R) Xeon(R) CPU E5-2680 v3 (12 Kerne) @ 2.50GHz, 2x 537.6\,GSPFLOPS \\
+        GPU 			& 4x NVIDIA Tesla K80 je 4992 CUDA-Kerne, 5591\,GSPFLOPS\\
+        Arbeitsspeicher & \SI{64}{\gibi\byte}
     \end{tabularx}\\
-    \textbf{Tesla K80:}
-    \begin{tabular}{r|c}
-        Chip       & GK210 \\
-        Takt       & \SI{0.560}{\giga\hertz} \\
-        CUDA-Kerne & 4992 \\
-        Speicher Bandbreite & $2\times\SI{240}{\giga\byte\per\second}$              \\
-    %	\begin{minipage}{2.5cm}\begin{flushright}Theoretische\\Spitzenleistung\end{flushright}\end{minipage} & 3935\,GSPFLOPS, 1312\,GDPFLOPS
-    %					& 5591\,GSPFLOPS, 1864\,GDPFLOPS \\
-        Theoretische Spitzenleistung & 5591\,GSPFLOPS
-    \end{tabular}
 \end{frame}
 
-%%%%NH: hardware auf der du deine tests durchgeführt hast beschreiben
-%%%%NH: nochmal kurz den benchmark + motivation beschreiben  (use case => machine learning in labs). auch erwähnen, dass du eine cuda implementation erstellt hast ..
-%%%%NH: spannend wäre, ob bottlenecks in der implementierung => allg. profiling von spark/rootbeer code // hast du bottlenecks entdeckt?
+\begin{frame}[fragile]
+    Profiling mit NVIDIA nvvp möglich:\\
+    \begin{lstlisting}[language=bash,breakautoindent=false,numbers=none]
+nvprof --analysis-metrics --metrics all -o $HOME/scaromare/MontePi/profilingDataMultiGpuScala.nvp%p /sw/global/tools/java/jdk1.7.0_25/bin/java -jar $HOME/scaromare/MontePi/singleNode/multiGpu/scala/MontePi.jar $((2*14351234510)) 2
+\end{lstlisting}
+    \only<1>{\centerline{\includegraphics[width=1.2\linewidth]{../MontePi/profiling/2of4-APICalls.png}}}
+    \only<2>{\centerline{\includegraphics[width=1.2\linewidth]{../MontePi/profiling/2of2-afterLoadDevicesPerformanceFix.png}}}
+\end{frame}
 
 \begin{frame}[fragile]
     \frametitle{Leistungsanalyse: 1 CPU-Kern / GPU auf Taurus gpu2}
     \begin{lstlisting}[language=bash,breakautoindent=false,numbers=none]
 salloc -p gpu2-interactive --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --gres=gpu:1 --time=02:00:00
 \end{lstlisting}\vspace{-1.5\baselineskip}
-    % Erstellt  mit:
-    %   ssh taurus
-    %   # Rootbeer commit ef79eaddc7956bf9bb3b9bd4d287e377e3949075
-    %   ( git checkout a2302ec67b3f96df &&
-    %     cd ~/scaromare/rootbeer1/csrc &&
-    %     ./compile_linux_x64           &&
-    %     cd ..                         &&
-    %     ant jar                       &&
-    %     ./pack-rootbeer )
-    %   makeOpts=( \
-    %       "SPARK_ROOT=$HOME/spark-1.5.2-bin-hadoop2.6" \
-    %       "SPARKCORE_JAR=~/spark-1.5.2-bin-hadoop2.6/lib/spark-assembly-1.5.2-hadoop2.6.0.jar" \
-    %       "SCALA_ROOT=$(dirname $(which scala))/../lib" \
-    %   )
-    %   cd ~/scaromare/MontePi
-    %   git checkout
-    %   make -B -C singleNode/singleCore/java/  "${makeOpts[@]}"  MontePi.jar
-    %   make -B -C singleNode/singleCore/scala/ "${makeOpts[@]}"  MontePi.jar
-    %   make -B -C singleNode/singleGpu/cpp/    "${makeOpts[@]}"  MontePi.jar
-    %   make -B -C singleNode/multiGpu/java/    "${makeOpts[@]}"  MontePi.jar
-    %   make -B -C singleNode/multiGpu/scala/   "${makeOpts[@]}"  MontePi.jar
-    %   salloc -p gpu2-interactive --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --gres=gpu:1 --time=02:00:00
-    %   ~/scaromare/MontePi/benchmarkImpl.sh
-    %   cd scaromare/MontePi/
-    %   python plot.py --workload-log 2016-07-02_01-18-12/results.log
     \centerline{\includegraphics[width=0.9\linewidth]{benchmarks-workload-scaling.pdf}}
     % sagen:
     %   - benchmarkImpl.sh misst mittels 'time' Linuxshellbefehls
@@ -864,17 +726,20 @@ salloc -p gpu2-interactive --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --gre
 
 %%%%NH: multi gpu, multi node single gpu, multi node multi gpu, ...
 
-
 \begin{frame}
-    \frametitle{Benchmark Spark auf CPU}
-    \centerline{\includegraphics[width=0.9\linewidth]{cluster-strong-scaling-cpu.pdf}}
+    \frametitle{Weak-Scaling Benchmark Spark mit Rootbeer}
+    % "warum haben sie die neue Version nicht gebenchmarkt?" -> wegen Rootbeerproblemen -> deshalb rootbeer folie vor dieser
+    \only<1>{\centerline{\includegraphics[width=1.0\linewidth]{../MontePi/benchmark/weak-scaling-time-gpu.pdf}}}
+    \only<2>{\centerline{\includegraphics[width=1.0\linewidth]{../MontePi/benchmark/weak-scaling-speedup-gpu.pdf}}}
+    \only<3>{\centerline{\includegraphics[width=1.0\linewidth]{../MontePi/benchmark/weak-scaling-efficiency-gpu.pdf}}}
 \end{frame}
 
-
 \begin{frame}
-    \frametitle{Benchmark Spark mit Rootbeer}
+    \frametitle{Strong-Scaling Benchmark Spark mit Rootbeer}
     % "warum haben sie die neue Version nicht gebenchmarkt?" -> wegen Rootbeerproblemen -> deshalb rootbeer folie vor dieser
-    \centerline{\includegraphics[width=0.9\linewidth]{cluster-strong-scaling-gpu.pdf}}
+    \only<1>{\centerline{\includegraphics[width=1.0\linewidth]{../MontePi/benchmark/strong-scaling-time-gpu.pdf}}}
+    \only<2>{\centerline{\includegraphics[width=1.0\linewidth]{../MontePi/benchmark/strong-scaling-speedup-gpu.pdf}}}
+    \only<3>{\centerline{\includegraphics[width=1.0\linewidth]{../MontePi/benchmark/strong-scaling-efficiency-gpu.pdf}}}
 \end{frame}
 
 
@@ -888,47 +753,17 @@ salloc -p gpu2-interactive --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --gre
 \begin{frame}
 	\frametitle{Zusammenfassung}
 	\begin{itemize}
-		\item Kombination aus GPGPU mittels Rootbeer und Spark ausgetestet
-            % -> das haben wir gelernt?
         \item Mehrere Bugfixes für Rootbeer geschrieben
-            % -> und gelernt, dass man Ein-Mann-Projekte vlt.e her meiden sollte ... wenn man sie nicht eingenhändig weiterentwickeln will
-        % \item Leider erfolglos
+		\item Kombination aus GPGPU mittels Rootbeer und Spark ausgetestet: \url{https://github.com/mxmlnkn/scaromare}
 	\end{itemize}
     \textbf{Ausblick:}
     \begin{itemize}
-        \item Codereview von Rootbeer oder Nutzung anderer GPU-API ist nötig
-        %  java.lang.ClassCastException: MonteCarloPiKernel cannot be cast to [J
-        %      at MonteCarloPiKernel.org_trifort_readFromHeapRefFields_MonteCarloPiKernel0(Jasmin)
-        %      at MonteCarloPiKernelSerializer.doReadFromHeap(Jasmin)
-        %      at org.trifort.rootbeer.runtime.Serializer.readFromHeap(Serializer.java:155)
-        %      at org.trifort.rootbeer.runtime.CUDAContext.readBlocksList(CUDAContext.java:452)
-        %      at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:332)
-        %      at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:308)
-        %      at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:128)
-        %      at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-        %      at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
-        %      at java.lang.Thread.run(Thread.java:724)
-        %
-        % java.lang.NullPointerException
-        %     at org.trifort.rootbeer.runtime.Serializer.checkWriteCache(Serializer.java:91)
-        %     at org.trifort.rootbeer.runtime.Serializer.writeToHeap(Serializer.java:117)
-        %     at MonteCarloPiKernel.org_trifort_writeToHeapRefFields_MonteCarloPiKernel0(Jasmin)
-        %     at MonteCarloPiKernelSerializer.doWriteToHeap(Jasmin)
-        %     at org.trifort.rootbeer.runtime.Serializer.writeToHeap(Serializer.java:127)
-        %     at org.trifort.rootbeer.runtime.Serializer.writeToHeap(Serializer.java:44)
-        %     at org.trifort.rootbeer.runtime.CUDAContext.writeBlocksList(CUDAContext.java:500)
-        %     at org.trifort.rootbeer.runtime.CUDAContext.access$1400(CUDAContext.java:24)
-        %     at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:419)
-        %     at org.trifort.rootbeer.runtime.CUDAContext$GpuEventHandler.onEvent(CUDAContext.java:373)
-        %     at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:128)
-        %     at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-        %     at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
-        %     at java.lang.Thread.run(Thread.java:724)
-
        \item heterogene Berechnungen auf CPU + GPU (Problem Lastbalancierung) % sagen: sollten sehr einfach möglich sein, da Rootbeer asynchron unterstützt (although I don't think there is somehting like: peek yet), und da gpuMethod von Host aufrufbar ist ( wäre riesen Vorteil von Rootbeer, dass der Spark-Nutzer kein CUDA oder ähnliches schreiben muss ... durch den Vorteil fallen Alternativen mehr oder minder alle raus )  ( so heterogen kann aber nur einen CPU core pro GPU nutzen.. häufig aber mehr cores als CPUs :S... wäre also doch bisschen mehr dahinter. Außerdem kann man glaube nicht mehr spark partitionen auf einen Knoten starten, als er CPU cores hat, d.h. einige Partitionen müssten CPU+GPU starten, während andere nur CPU starten.. Weiteres Problem ist, dass man nicht weiß, wie lange das jeweils dauert. Wenn man CPU+GPU vom selben Programm startet, dann kann man sehr kleine Arbeitslasten an die CPU senden und dann immer in einer Schleife schauen, ob die GPU schon fertig ist. Aber die Partitionen, die nur CPU haben werden immer eher oder später fertig sein. ... wird möglicherweise doch schwieriger als gedacht ...)
        %\item Erweiterung von Rootbeer um neue Features wie NVIDIA NVLink
-       \item Implementation direkt in Spark würde z.B. cache/persist auf GPUs erlauben, um Host-GPU-Transfers zu sparen
+       \item Erweiterung von Rootbeer, um Daten zwischen iterativen Map-Operationen im Speicher zu behalten
+       %\item Implementation direkt in Spark würde z.B. cache/persist auf GPUs erlauben, um Host-GPU-Transfers zu sparen
                 % glaube cache/persist erkläre ich bei Spark irgendwann oben.
+       \item festere Integration in den Spark-Scheduler zur Vermeidung von Stragglern
     \end{itemize}
 \end{frame}
 

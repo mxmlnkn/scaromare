@@ -9,7 +9,7 @@
 \usepackage[controls,buttonsize=0.3cm,buttonfg=0.0, buttonbg=1.0]{animate}
 \usepackage{tcolorbox}
 
-\input{mk_definitions.tex} 
+\input{mk_definitions.tex}
 
 
 \newcommand{\setmathmargin}[1]{
@@ -36,14 +36,14 @@
 \mode<presentation>
 {
 	%\usetheme{Dresden}
-	
+
 	\setbeamercovered{transparent=10}  % transparency of not shown yet items
 	\beamertemplatenavigationsymbolsempty
-	
+
 	%\useoutertheme[footline=empty,subsection=false]{miniframes}
 	\useoutertheme[subsection=false]{miniframes}
 	\usecolortheme{whale}
-	
+
 }
 
 \makeatletter
@@ -51,7 +51,7 @@
 {
     \begin{beamercolorbox}[colsep=1.5pt]{upper separation line foot}
     \end{beamercolorbox}
-%    %%%%%%%% horizontal line containign authors and institute %%%%%%%%
+%    %%%%%%%% horizontal line containing authors and institute %%%%%%%%
 %    \begin{beamercolorbox}[
 %    	ht=2.5ex,
 %    	dp=1.125ex,
@@ -72,7 +72,7 @@
     	dp=1.125ex,
       	leftskip=.3cm,
       	rightskip=.3cm plus1fil
-    ]{title in head/foot}%
+    ]{title in head/foot}
         {\usebeamerfont{title in head/foot}\insertshorttitle}
         \hfill
         {
@@ -80,7 +80,7 @@
         	\usebeamercolor[fg]{frame number}
         	\insertframenumber~/~\inserttotalframenumber
         }
-    \end{beamercolorbox}%
+    \end{beamercolorbox}
     \begin{beamercolorbox}[colsep=1.5pt]{lower separation line foot}
     \end{beamercolorbox}
 }
@@ -98,7 +98,7 @@
 %}
 
 % If you wish to uncover everything in a step-wise fashion, uncomment
-% the following command: 
+% the following command:
 %\beamerdefaultoverlayspecification{<+->}
 
 \input{presentation-body.tex}
