@@ -76,6 +76,8 @@ Now you can compile e.g. the example using Spark und multiple GPUs with:
 
 # Benchmarking
 
+## Implementations
+
 ## Weak Scaling
 
 If a Spark instance is already running and the address of the master is saved in the variable `MASTER_ADDRESS`, then you can simply run:
