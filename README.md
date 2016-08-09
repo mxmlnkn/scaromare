@@ -78,6 +78,8 @@ Now you can compile e.g. the example using Spark und multiple GPUs with:
 
 ## Implementations
 
+![Strong Scaling Plot (run times) with up to 32 K20x graphic cards](/MontePi/benchmark/strong-scaling-time-logscale-gpu.png?raw=true)
+
 ## Weak Scaling
 
 If a Spark instance is already running and the address of the master is saved in the variable `MASTER_ADDRESS`, then you can simply run:
@@ -178,7 +180,7 @@ Idea: Maybe the switch gets saturated for a certain amount of connections? E.g. 
         done
       done
     done
-    
+
 ![Strong Scaling Plot (run times) with up to 32 K20x graphic cards](/MontePi/benchmark/strong-scaling-time-logscale-gpu.png?raw=true)
 
 ![ibid. Speedup](/MontePi/benchmark/strong-scaling-speedup-gpu.png?raw=true)

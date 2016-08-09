@@ -1,0 +1,1083 @@
+MonteCarloPi constructor took 0.347099601 seconds
+Adding work to Kernel List took 0.024826138 seconds
+Do 1 dice rolls in 256 threads and 0 dice rolls in 26368 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 988941888 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.258780235 seconds
+runOnDevice took 1.587233271 seconds
+Rolling the dice 256 times resulted in pi ~ 3.234375 and took 1.612632259 seconds
+real 3.03
+user 1.50
+sys 0.55
+MonteCarloPi constructor took 0.301955367 seconds
+Adding work to Kernel List took 0.020916565 seconds
+Do 1 dice rolls in 256 threads and 0 dice rolls in 26368 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.265499369 seconds
+runOnDevice took 1.579643307 seconds
+Rolling the dice 256 times resulted in pi ~ 3.234375 and took 1.601114405 seconds
+real 2.14
+user 1.47
+sys 0.54
+MonteCarloPi constructor took 0.330482563 seconds
+Adding work to Kernel List took 0.020892843 seconds
+Do 1 dice rolls in 512 threads and 0 dice rolls in 26112 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.252346152 seconds
+runOnDevice took 1.564596645 seconds
+Rolling the dice 512 times resulted in pi ~ 3.0390625 and took 1.586056513 seconds
+real 2.14
+user 1.47
+sys 0.53
+MonteCarloPi constructor took 0.317461223 seconds
+Adding work to Kernel List took 0.020891552 seconds
+Do 1 dice rolls in 768 threads and 0 dice rolls in 25856 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.254330509 seconds
+runOnDevice took 1.566644119 seconds
+Rolling the dice 768 times resulted in pi ~ 3.0520833333333517 and took 1.588093199 seconds
+real 2.14
+user 1.48
+sys 0.54
+MonteCarloPi constructor took 0.306070592 seconds
+Adding work to Kernel List took 0.020983468 seconds
+Do 1 dice rolls in 1280 threads and 0 dice rolls in 25344 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.253105571 seconds
+runOnDevice took 1.573207825 seconds
+Rolling the dice 1280 times resulted in pi ~ 3.1656249999999537 and took 1.594759501 seconds
+real 2.13
+user 1.48
+sys 0.52
+MonteCarloPi constructor took 0.315907856 seconds
+Adding work to Kernel List took 0.020772148 seconds
+Do 1 dice rolls in 1792 threads and 0 dice rolls in 24832 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211064 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.254110775 seconds
+runOnDevice took 1.564922148 seconds
+Rolling the dice 1792 times resulted in pi ~ 3.2299107142856602 and took 1.586254207 seconds
+real 2.13
+user 1.47
+sys 0.53
+MonteCarloPi constructor took 0.30893492 seconds
+Adding work to Kernel List took 0.020918195 seconds
+Do 1 dice rolls in 2816 threads and 0 dice rolls in 23808 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.251577633 seconds
+runOnDevice took 1.562899796 seconds
+Rolling the dice 2816 times resulted in pi ~ 3.2286931818182576 and took 1.584385943 seconds
+real 2.13
+user 1.46
+sys 0.53
+MonteCarloPi constructor took 0.304424531 seconds
+Adding work to Kernel List took 0.020952114 seconds
+Do 1 dice rolls in 4352 threads and 0 dice rolls in 22272 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.254526938 seconds
+runOnDevice took 1.566422778 seconds
+Rolling the dice 4352 times resulted in pi ~ 3.0303308823530832 and took 1.587940962 seconds
+real 2.12
+user 1.46
+sys 0.53
+MonteCarloPi constructor took 0.303161461 seconds
+Adding work to Kernel List took 0.021177404 seconds
+Do 1 dice rolls in 6400 threads and 0 dice rolls in 20224 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.251457501 seconds
+runOnDevice took 1.563120698 seconds
+Rolling the dice 6400 times resulted in pi ~ 2.8856249999999615 and took 1.584869265 seconds
+real 2.11
+user 1.48
+sys 0.52
+MonteCarloPi constructor took 0.305209647 seconds
+Adding work to Kernel List took 0.021488205 seconds
+Do 1 dice rolls in 9728 threads and 0 dice rolls in 16896 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.253567881 seconds
+runOnDevice took 1.565036622 seconds
+Rolling the dice 9728 times resulted in pi ~ 2.9588815789469303 and took 1.587101392 seconds
+real 2.12
+user 1.48
+sys 0.53
+MonteCarloPi constructor took 0.320486374 seconds
+Adding work to Kernel List took 0.023822491 seconds
+Do 1 dice rolls in 14592 threads and 0 dice rolls in 12032 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211112 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.305089643 seconds
+runOnDevice took 1.61690989 seconds
+Rolling the dice 14592 times resulted in pi ~ 3.0249451754386776 and took 1.641308057 seconds
+real 2.19
+user 1.52
+sys 0.54
+MonteCarloPi constructor took 0.303380895 seconds
+Adding work to Kernel List took 0.023776026 seconds
+Do 1 dice rolls in 22016 threads and 0 dice rolls in 4608 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211112 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.251373241 seconds
+runOnDevice took 1.562973357 seconds
+Rolling the dice 22016 times resulted in pi ~ 3.096293604650583 and took 1.58733324 seconds
+real 2.12
+user 1.46
+sys 0.54
+MonteCarloPi constructor took 0.313413878 seconds
+Adding work to Kernel List took 0.02124198 seconds
+Do 2 dice rolls in 6400 threads and 1 dice rolls in 20224 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.254664677 seconds
+runOnDevice took 1.566377572 seconds
+Rolling the dice 33024 times resulted in pi ~ 2.980741279069184 and took 1.58822083 seconds
+real 2.13
+user 1.48
+sys 0.53
+MonteCarloPi constructor took 0.300975648 seconds
+Adding work to Kernel List took 0.023916402 seconds
+Do 2 dice rolls in 23040 threads and 1 dice rolls in 3584 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.25147055 seconds
+runOnDevice took 1.563438802 seconds
+Rolling the dice 49664 times resulted in pi ~ 3.0667686855679133 and took 1.587959231 seconds
+real 2.12
+user 1.48
+sys 0.53
+MonteCarloPi constructor took 0.304746775 seconds
+Adding work to Kernel List took 0.023844486 seconds
+Do 3 dice rolls in 21248 threads and 2 dice rolls in 5376 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.251543505 seconds
+runOnDevice took 1.563161144 seconds
+Rolling the dice 74496 times resulted in pi ~ 3.1759020618563554 and took 1.587599834 seconds
+real 2.12
+user 1.47
+sys 0.53
+MonteCarloPi constructor took 0.306347504 seconds
+Adding work to Kernel List took 0.021069775 seconds
+Do 5 dice rolls in 5376 threads and 4 dice rolls in 21248 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.251679002 seconds
+runOnDevice took 1.56334853 seconds
+Rolling the dice 111872 times resulted in pi ~ 3.2274385011447184 and took 1.585025338 seconds
+real 2.12
+user 1.48
+sys 0.53
+MonteCarloPi constructor took 0.316623634 seconds
+Adding work to Kernel List took 0.021323166 seconds
+Do 7 dice rolls in 8192 threads and 6 dice rolls in 18432 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.255786377 seconds
+runOnDevice took 1.567632376 seconds
+Rolling the dice 167936 times resulted in pi ~ 3.200528772864555 and took 1.589569423 seconds
+real 2.13
+user 1.48
+sys 0.54
+MonteCarloPi constructor took 0.31354209 seconds
+Adding work to Kernel List took 0.021720095 seconds
+Do 10 dice rolls in 12544 threads and 9 dice rolls in 14080 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.251452943 seconds
+runOnDevice took 1.563215608 seconds
+Rolling the dice 252160 times resulted in pi ~ 3.155440989847841 and took 1.585541176 seconds
+real 2.12
+user 1.46
+sys 0.54
+MonteCarloPi constructor took 0.323832527 seconds
+Adding work to Kernel List took 0.021674496 seconds
+Do 15 dice rolls in 5376 threads and 14 dice rolls in 21248 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.259426495 seconds
+runOnDevice took 1.57170873 seconds
+Rolling the dice 378112 times resulted in pi ~ 3.1329447359512477 and took 1.596525861 seconds
+real 2.15
+user 1.47
+sys 0.53
+MonteCarloPi constructor took 0.316818633 seconds
+Adding work to Kernel List took 0.021259572 seconds
+Do 22 dice rolls in 8192 threads and 21 dice rolls in 18432 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211112 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.256411457 seconds
+runOnDevice took 1.567813202 seconds
+Rolling the dice 567296 times resulted in pi ~ 3.1349418998193754 and took 1.589684902 seconds
+real 2.13
+user 1.47
+sys 0.53
+MonteCarloPi constructor took 0.312739452 seconds
+Adding work to Kernel List took 0.023844525 seconds
+Do 32 dice rolls in 25600 threads and 31 dice rolls in 1024 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.258732521 seconds
+runOnDevice took 1.570251693 seconds
+Rolling the dice 850944 times resulted in pi ~ 3.1272187123944897 and took 1.594708614 seconds
+real 2.14
+user 1.47
+sys 0.53
+MonteCarloPi constructor took 0.305064539 seconds
+Adding work to Kernel List took 0.023946857 seconds
+Do 48 dice rolls in 25344 threads and 47 dice rolls in 1280 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211112 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.251450734 seconds
+runOnDevice took 1.565732418 seconds
+Rolling the dice 1276672 times resulted in pi ~ 3.124605223581489 and took 1.590314942 seconds
+real 2.12
+user 1.49
+sys 0.52
+MonteCarloPi constructor took 0.329787801 seconds
+Adding work to Kernel List took 0.023829867 seconds
+Do 72 dice rolls in 24576 threads and 71 dice rolls in 2048 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211112 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.251508441 seconds
+runOnDevice took 1.564100915 seconds
+Rolling the dice 1914880 times resulted in pi ~ 3.152803308822139 and took 1.588532987 seconds
+real 2.14
+user 1.48
+sys 0.53
+MonteCarloPi constructor took 0.318395138 seconds
+Adding work to Kernel List took 0.021737878 seconds
+Do 108 dice rolls in 23808 threads and 107 dice rolls in 2816 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.251739394 seconds
+runOnDevice took 1.566658038 seconds
+Rolling the dice 2872576 times resulted in pi ~ 3.1504642522944044 and took 1.591535589 seconds
+real 2.14
+user 1.48
+sys 0.53
+MonteCarloPi constructor took 0.303861797 seconds
+Adding work to Kernel List took 0.023784103 seconds
+Do 162 dice rolls in 22272 threads and 161 dice rolls in 4352 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211112 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.254128041 seconds
+runOnDevice took 1.56800189 seconds
+Rolling the dice 4308736 times resulted in pi ~ 3.15706415988335 and took 1.59239446 seconds
+real 2.12
+user 1.47
+sys 0.53
+MonteCarloPi constructor took 0.307475131 seconds
+Adding work to Kernel List took 0.026556893 seconds
+Do 243 dice rolls in 20224 threads and 242 dice rolls in 6400 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211112 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.251445331 seconds
+runOnDevice took 1.565581595 seconds
+Rolling the dice 6463232 times resulted in pi ~ 3.1457982631600685 and took 1.592767951 seconds
+real 2.12
+user 1.48
+sys 0.53
+MonteCarloPi constructor took 0.302562764 seconds
+Adding work to Kernel List took 0.020872978 seconds
+Do 365 dice rolls in 3840 threads and 364 dice rolls in 22784 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.25260855 seconds
+runOnDevice took 1.566317642 seconds
+Rolling the dice 9694976 times resulted in pi ~ 3.1649448126536526 and took 1.587794339 seconds
+real 2.11
+user 1.47
+sys 0.53
+MonteCarloPi constructor took 0.304875069 seconds
+Adding work to Kernel List took 0.021290207 seconds
+Do 547 dice rolls in 5888 threads and 546 dice rolls in 20736 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.253864698 seconds
+runOnDevice took 1.565686977 seconds
+Rolling the dice 14542592 times resulted in pi ~ 3.1679210968715767 and took 1.590113677 seconds
+real 2.12
+user 1.49
+sys 0.52
+MonteCarloPi constructor took 0.30367059 seconds
+Adding work to Kernel List took 0.02124446 seconds
+Do 820 dice rolls in 8704 threads and 819 dice rolls in 17920 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211112 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.353819681 seconds
+runOnDevice took 1.665097563 seconds
+Rolling the dice 21813760 times resulted in pi ~ 3.1607004019489615 and took 1.686944914 seconds
+real 2.21
+user 1.56
+sys 0.53
+MonteCarloPi constructor took 0.312854118 seconds
+Adding work to Kernel List took 0.020884537 seconds
+Do 1230 dice rolls in 0 threads and 1229 dice rolls in 26624 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.251511356 seconds
+runOnDevice took 1.563247273 seconds
+Rolling the dice 32720896 times resulted in pi ~ 3.154345895662981 and took 1.58473847 seconds
+real 2.12
+user 1.47
+sys 0.54
+MonteCarloPi constructor took 0.308384719 seconds
+Adding work to Kernel List took 0.021691175 seconds
+Do 1844 dice rolls in 13312 threads and 1843 dice rolls in 13312 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211112 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.251848829 seconds
+runOnDevice took 1.564144507 seconds
+Rolling the dice 49081344 times resulted in pi ~ 3.1497844883794452 and took 1.586447707 seconds
+real 2.12
+user 1.46
+sys 0.53
+MonteCarloPi constructor took 0.315831801 seconds
+Adding work to Kernel List took 0.02108536 seconds
+Do 2766 dice rolls in 6656 threads and 2765 dice rolls in 19968 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994210960 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.251529081 seconds
+runOnDevice took 1.563126767 seconds
+Rolling the dice 73622016 times resulted in pi ~ 3.1446755274939124 and took 1.584818049 seconds
+real 2.12
+user 1.50
+sys 0.52
+MonteCarloPi constructor took 0.305223437 seconds
+Adding work to Kernel List took 0.0238712 seconds
+Do 4148 dice rolls in 23552 threads and 4147 dice rolls in 3072 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994210960 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.253652666 seconds
+runOnDevice took 1.564866565 seconds
+Rolling the dice 110433280 times resulted in pi ~ 3.147055670174638 and took 1.589348392 seconds
+real 2.12
+user 1.50
+sys 0.51
+MonteCarloPi constructor took 0.315421413 seconds
+Adding work to Kernel List took 0.023857239 seconds
+Do 6222 dice rolls in 22016 threads and 6221 dice rolls in 4608 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211112 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.305639078 seconds
+runOnDevice took 1.6176897 seconds
+Rolling the dice 165649920 times resulted in pi ~ 3.1470073997017023 and took 1.64214987 seconds
+real 2.19
+user 1.52
+sys 0.55
+MonteCarloPi constructor took 0.30723312 seconds
+Adding work to Kernel List took 0.024435249 seconds
+Do 9333 dice rolls in 19712 threads and 9332 dice rolls in 6912 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211080 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.301502751 seconds
+runOnDevice took 1.616492429 seconds
+Rolling the dice 248474880 times resulted in pi ~ 3.1437098993664856 and took 1.641539787 seconds
+real 2.18
+user 1.50
+sys 0.53
+MonteCarloPi constructor took 0.300306653 seconds
+Adding work to Kernel List took 0.020934911 seconds
+Do 14000 dice rolls in 3072 threads and 13999 dice rolls in 23552 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.351600877 seconds
+runOnDevice took 1.663365444 seconds
+Rolling the dice 372712448 times resulted in pi ~ 3.1419070822128274 and took 1.684908243 seconds
+real 2.21
+user 1.58
+sys 0.54
+MonteCarloPi constructor took 0.317065756 seconds
+Adding work to Kernel List took 0.021668098 seconds
+Do 20999 dice rolls in 18176 threads and 20998 dice rolls in 8448 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211080 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.352611571 seconds
+runOnDevice took 1.66741295 seconds
+Rolling the dice 559068928 times resulted in pi ~ 3.1436214104896707 and took 1.692241589 seconds
+real 2.24
+user 1.54
+sys 0.56
+MonteCarloPi constructor took 0.305478236 seconds
+Adding work to Kernel List took 0.020867544 seconds
+Do 31499 dice rolls in 512 threads and 31498 dice rolls in 26112 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211080 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.401592416 seconds
+runOnDevice took 1.718223732 seconds
+Rolling the dice 838603264 times resulted in pi ~ 3.1407733418980497 and took 1.739695812 seconds
+real 2.29
+user 1.58
+sys 0.54
+MonteCarloPi constructor took 0.319464722 seconds
+Adding work to Kernel List took 0.020843865 seconds
+Do 47248 dice rolls in 1024 threads and 47247 dice rolls in 25600 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211080 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.401670243 seconds
+runOnDevice took 1.721541749 seconds
+Rolling the dice 1257905152 times resulted in pi ~ 3.1405937989196326 and took 1.742987669 seconds
+real 2.29
+user 1.61
+sys 0.55
+MonteCarloPi constructor took 0.305709017 seconds
+Adding work to Kernel List took 0.02243272 seconds
+Do 70871 dice rolls in 14848 threads and 70870 dice rolls in 11776 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211080 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.45414869 seconds
+runOnDevice took 1.769183679 seconds
+Rolling the dice 1886857728 times resulted in pi ~ 3.1416407480189137 and took 1.794754861 seconds
+real 2.33
+user 1.66
+sys 0.57
+MonteCarloPi constructor took 0.302048899 seconds
+Adding work to Kernel List took 0.021728673 seconds
+Do 106306 dice rolls in 22272 threads and 106305 dice rolls in 4352 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211080 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.555548191 seconds
+runOnDevice took 1.870378443 seconds
+Rolling the dice 2830286592 times resulted in pi ~ 3.142663224686064 and took 1.895240547 seconds
+real 2.42
+user 1.71
+sys 0.57
+MonteCarloPi constructor took 0.304921378 seconds
+Adding work to Kernel List took 0.023849591 seconds
+Do 159459 dice rolls in 20224 threads and 159458 dice rolls in 6400 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.65835773 seconds
+runOnDevice took 1.969536281 seconds
+Rolling the dice 4245430016 times resulted in pi ~ 3.141806040314569 and took 1.993998407 seconds
+real 2.52
+user 1.79
+sys 0.59
+MonteCarloPi constructor took 0.304740434 seconds
+Adding work to Kernel List took 0.020740176 seconds
+Do 239189 dice rolls in 3840 threads and 239188 dice rolls in 22784 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211080 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.852412282 seconds
+runOnDevice took 2.166585281 seconds
+Rolling the dice 6368145152 times resulted in pi ~ 3.1419583835513616 and took 2.187925216 seconds
+real 2.72
+user 1.97
+sys 0.61
+MonteCarloPi constructor took 0.311264304 seconds
+Adding work to Kernel List took 0.02108485 seconds
+Do 358783 dice rolls in 5888 threads and 358782 dice rolls in 20736 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211080 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 2.10257848 seconds
+runOnDevice took 2.417245882 seconds
+Rolling the dice 9552217856 times resulted in pi ~ 3.1414304112790425 and took 2.438939271 seconds
+real 2.97
+user 2.20
+sys 0.67
+MonteCarloPi constructor took 0.302658374 seconds
+Adding work to Kernel List took 0.021317694 seconds
+Do 538174 dice rolls in 8960 threads and 538173 dice rolls in 17664 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211080 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 2.55280097 seconds
+runOnDevice took 2.865538831 seconds
+Rolling the dice 14328326912 times resulted in pi ~ 3.1412742129930504 and took 2.88745914 seconds
+real 3.42
+user 2.61
+sys 0.69
+MonteCarloPi constructor took 0.320080959 seconds
+Adding work to Kernel List took 0.020706702 seconds
+Do 807261 dice rolls in 256 threads and 807260 dice rolls in 26368 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211080 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 3.36769205 seconds
+runOnDevice took 3.680755309 seconds
+Rolling the dice 21492490496 times resulted in pi ~ 3.141217432040323 and took 3.702061638 seconds
+real 4.25
+user 3.22
+sys 0.90
+MonteCarloPi constructor took 0.30130479 seconds
+Adding work to Kernel List took 0.020775691 seconds
+Do 1210891 dice rolls in 512 threads and 1210890 dice rolls in 26112 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 4.156981318 seconds
+runOnDevice took 4.468270409 seconds
+Rolling the dice 32238735872 times resulted in pi ~ 3.141447491182793 and took 4.489661294 seconds
+real 5.03
+user 3.95
+sys 0.98
+MonteCarloPi constructor took 0.309082648 seconds
+Adding work to Kernel List took 0.02097491 seconds
+Do 1816336 dice rolls in 768 threads and 1816335 dice rolls in 25856 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211080 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 5.608279475 seconds
+runOnDevice took 5.91991623 seconds
+Rolling the dice 48358103808 times resulted in pi ~ 3.14159496292888 and took 5.941505555 seconds
+real 6.47
+user 5.19
+sys 1.18
+MonteCarloPi constructor took 0.303306469 seconds
+Adding work to Kernel List took 0.023902166 seconds
+Do 2724503 dice rolls in 14592 threads and 2724502 dice rolls in 12032 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211056 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 8.008671738 seconds
+runOnDevice took 8.319823617 seconds
+Rolling the dice 72537155840 times resulted in pi ~ 3.1417910624272407 and took 8.344337927 seconds
+real 8.87
+user 7.14
+sys 1.60
+MonteCarloPi constructor took 0.301807226 seconds
+Adding work to Kernel List took 0.023922809 seconds
+Do 4086754 dice rolls in 22016 threads and 4086753 dice rolls in 4608 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 11.113486268 seconds
+runOnDevice took 11.426228871 seconds
+Rolling the dice 108805733888 times resulted in pi ~ 3.1417572356238623 and took 11.450770091 seconds
+real 11.98
+user 9.92
+sys 1.94
+MonteCarloPi constructor took 0.335236416 seconds
+Adding work to Kernel List took 0.023778659 seconds
+Do 6130131 dice rolls in 19968 threads and 6130130 dice rolls in 6656 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211056 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 16.066385856 seconds
+runOnDevice took 16.3787142 seconds
+Rolling the dice 163208601088 times resulted in pi ~ 3.1416011023065313 and took 16.40311234 seconds
+real 16.96
+user 13.96
+sys 2.83
+MonteCarloPi constructor took 0.303006419 seconds
+Adding work to Kernel List took 0.02090546 seconds
+Do 9195197 dice rolls in 3328 threads and 9195196 dice rolls in 23296 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 23.573788428 seconds
+runOnDevice took 23.886905453 seconds
+Rolling the dice 244812901632 times resulted in pi ~ 3.141489220303514 and took 23.90841743 seconds
+real 24.44
+user 20.48
+sys 3.84
+MonteCarloPi constructor took 0.332432751 seconds
+Adding work to Kernel List took 0.021035909 seconds
+Do 13792795 dice rolls in 5120 threads and 13792794 dice rolls in 21504 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211056 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 34.63774806 seconds
+runOnDevice took 34.951315643 seconds
+Rolling the dice 367219352576 times resulted in pi ~ 3.141490948675833 and took 34.97296343 seconds
+real 35.54
+user 29.97
+sys 5.43
+MonteCarloPi constructor took 0.324397065 seconds
+Adding work to Kernel List took 0.021224096 seconds
+Do 20689192 dice rolls in 7680 threads and 20689191 dice rolls in 18944 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 51.154329385 seconds
+runOnDevice took 51.467388848 seconds
+Rolling the dice 550829028864 times resulted in pi ~ 3.141569483650621 and took 51.489231276 seconds
+real 52.04
+user 43.91
+sys 8.00
+MonteCarloPi constructor took 0.303182205 seconds
+Adding work to Kernel List took 0.023784052 seconds
+Do 31033787 dice rolls in 24832 threads and 31033786 dice rolls in 1792 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 76.07806951 seconds
+runOnDevice took 76.389145848 seconds
+Rolling the dice 826243543296 times resulted in pi ~ 3.141588777668465 and took 76.413534579 seconds
+real 76.95
+user 65.03
+sys 11.82
+MonteCarloPi constructor took 0.301866561 seconds
+Adding work to Kernel List took 0.021559197 seconds
+Do 46550681 dice rolls in 10752 threads and 46550680 dice rolls in 15872 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211056 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 113.515433037 seconds
+runOnDevice took 113.836850545 seconds
+Rolling the dice 1239365315072 times resulted in pi ~ 3.1416232090488325 and took 113.859022641 seconds
+real 114.41
+user 96.82
+sys 17.46
+MonteCarloPi constructor took 0.352006339 seconds
+Adding work to Kernel List took 0.023804794 seconds
+Do 69826021 dice rolls in 16384 threads and 69826020 dice rolls in 10240 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985879040 B
+    CPU_SIZE         : 994211000 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 169.821489458 seconds
+runOnDevice took 170.13217863 seconds
+Rolling the dice 1859047972864 times resulted in pi ~ 3.141577252989819 and took 170.156602636 seconds
+real 170.74
+user 144.39
+sys 26.19

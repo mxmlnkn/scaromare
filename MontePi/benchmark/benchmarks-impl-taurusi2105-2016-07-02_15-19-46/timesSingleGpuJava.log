@@ -1,0 +1,2508 @@
+MonteCarloPi constructor took 0.686891356 seconds
+Creating Rootbeer context took 5.45E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.253089554 seconds
+Adding work to Kernel List took 0.019965491 seconds
+Do 1 dice rolls in 256 threads and 0 dice rolls in 26368 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 999502520 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.251318268 seconds
+runOnDevice took 1.767446673 seconds
+Rolling the dice 256 times resulted in pi ~ 3.234375 and took 1.788052855 seconds
+real 2.83
+user 1.32
+sys 0.75
+MonteCarloPi constructor took 0.315710718 seconds
+Creating Rootbeer context took 6.22E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.251805594 seconds
+Adding work to Kernel List took 0.019801372 seconds
+Do 1 dice rolls in 256 threads and 0 dice rolls in 26368 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.201864255 seconds
+runOnDevice took 1.530430184 seconds
+Rolling the dice 256 times resulted in pi ~ 3.234375 and took 1.550845657 seconds
+real 2.19
+user 1.31
+sys 0.74
+MonteCarloPi constructor took 0.307181826 seconds
+Creating Rootbeer context took 5.15E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.241890889 seconds
+Adding work to Kernel List took 0.020801027 seconds
+Do 1 dice rolls in 512 threads and 0 dice rolls in 26112 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.253519197 seconds
+runOnDevice took 1.574934481 seconds
+Rolling the dice 512 times resulted in pi ~ 3.0390625 and took 1.596358349 seconds
+real 2.21
+user 1.32
+sys 0.76
+MonteCarloPi constructor took 0.33031415 seconds
+Creating Rootbeer context took 7.18E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.252490094 seconds
+Adding work to Kernel List took 0.020042726 seconds
+Do 1 dice rolls in 768 threads and 0 dice rolls in 25856 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.254747585 seconds
+runOnDevice took 1.584205163 seconds
+Rolling the dice 768 times resulted in pi ~ 3.0520833333333517 and took 1.604869411 seconds
+real 2.25
+user 1.33
+sys 0.75
+MonteCarloPi constructor took 0.354194762 seconds
+Creating Rootbeer context took 6.18E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.252548999 seconds
+Adding work to Kernel List took 0.020086732 seconds
+Do 1 dice rolls in 1280 threads and 0 dice rolls in 25344 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.201700618 seconds
+runOnDevice took 1.530757519 seconds
+Rolling the dice 1280 times resulted in pi ~ 3.1656249999999537 and took 1.551460696 seconds
+real 2.22
+user 1.31
+sys 0.75
+MonteCarloPi constructor took 0.324678274 seconds
+Creating Rootbeer context took 6.25E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.252323542 seconds
+Adding work to Kernel List took 0.020049105 seconds
+Do 1 dice rolls in 1792 threads and 0 dice rolls in 24832 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.2015208 seconds
+runOnDevice took 1.532265291 seconds
+Rolling the dice 1792 times resulted in pi ~ 3.2299107142856602 and took 1.552938603 seconds
+real 2.20
+user 1.32
+sys 0.74
+MonteCarloPi constructor took 0.326354573 seconds
+Creating Rootbeer context took 7.09E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.251686377 seconds
+Adding work to Kernel List took 0.019840711 seconds
+Do 1 dice rolls in 2816 threads and 0 dice rolls in 23808 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.201616423 seconds
+runOnDevice took 1.529654321 seconds
+Rolling the dice 2816 times resulted in pi ~ 3.2286931818182576 and took 1.55013352 seconds
+real 2.19
+user 1.31
+sys 0.75
+MonteCarloPi constructor took 0.318080114 seconds
+Creating Rootbeer context took 7.59E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.25177359 seconds
+Adding work to Kernel List took 0.019873221 seconds
+Do 1 dice rolls in 4352 threads and 0 dice rolls in 22272 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.203829318 seconds
+runOnDevice took 1.531533569 seconds
+Rolling the dice 4352 times resulted in pi ~ 3.0303308823530832 and took 1.552032823 seconds
+real 2.19
+user 1.31
+sys 0.75
+MonteCarloPi constructor took 0.328292649 seconds
+Creating Rootbeer context took 5.84E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.26417048 seconds
+Adding work to Kernel List took 0.020107752 seconds
+Do 1 dice rolls in 6400 threads and 0 dice rolls in 20224 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.207791358 seconds
+runOnDevice took 1.536181705 seconds
+Rolling the dice 6400 times resulted in pi ~ 2.8856249999999615 and took 1.556889885 seconds
+real 2.21
+user 1.31
+sys 0.76
+MonteCarloPi constructor took 0.329959406 seconds
+Creating Rootbeer context took 6.34E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.251723801 seconds
+Adding work to Kernel List took 0.020705632 seconds
+Do 1 dice rolls in 9728 threads and 0 dice rolls in 16896 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.201703029 seconds
+runOnDevice took 1.530644168 seconds
+Rolling the dice 9728 times resulted in pi ~ 2.9588815789469303 and took 1.551980811 seconds
+real 2.20
+user 1.31
+sys 0.75
+MonteCarloPi constructor took 0.317979558 seconds
+Creating Rootbeer context took 5.81E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.251596556 seconds
+Adding work to Kernel List took 0.02284229 seconds
+Do 1 dice rolls in 14592 threads and 0 dice rolls in 12032 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.206289838 seconds
+runOnDevice took 1.534627666 seconds
+Rolling the dice 14592 times resulted in pi ~ 3.0249451754386776 and took 1.558127969 seconds
+real 2.19
+user 1.30
+sys 0.75
+MonteCarloPi constructor took 0.335499502 seconds
+Creating Rootbeer context took 6.78E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.252572925 seconds
+Adding work to Kernel List took 0.023448474 seconds
+Do 1 dice rolls in 22016 threads and 0 dice rolls in 4608 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.204306055 seconds
+runOnDevice took 1.537930223 seconds
+Rolling the dice 22016 times resulted in pi ~ 3.096293604650583 and took 1.564533762 seconds
+real 2.22
+user 1.32
+sys 0.76
+MonteCarloPi constructor took 0.313194913 seconds
+Creating Rootbeer context took 7.23E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.242681443 seconds
+Adding work to Kernel List took 0.020208011 seconds
+Do 2 dice rolls in 6400 threads and 1 dice rolls in 20224 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.251419505 seconds
+runOnDevice took 1.572297811 seconds
+Rolling the dice 33024 times resulted in pi ~ 2.980741279069184 and took 1.593162018 seconds
+real 2.22
+user 1.31
+sys 0.76
+MonteCarloPi constructor took 0.319897832 seconds
+Creating Rootbeer context took 5.3E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.241679574 seconds
+Adding work to Kernel List took 0.022667082 seconds
+Do 2 dice rolls in 23040 threads and 1 dice rolls in 3584 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.222594915 seconds
+runOnDevice took 1.542513152 seconds
+Rolling the dice 49664 times resulted in pi ~ 3.0667686855679133 and took 1.565839558 seconds
+real 2.19
+user 1.31
+sys 0.76
+MonteCarloPi constructor took 0.318155643 seconds
+Creating Rootbeer context took 6.28E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.255909758 seconds
+Adding work to Kernel List took 0.025464318 seconds
+Do 3 dice rolls in 21248 threads and 2 dice rolls in 5376 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.203855982 seconds
+runOnDevice took 1.535949671 seconds
+Rolling the dice 74496 times resulted in pi ~ 3.1759020618563554 and took 1.562112181 seconds
+real 2.20
+user 1.30
+sys 0.76
+MonteCarloPi constructor took 0.332287039 seconds
+Creating Rootbeer context took 5.72E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.251652266 seconds
+Adding work to Kernel List took 0.020105155 seconds
+Do 5 dice rolls in 5376 threads and 4 dice rolls in 21248 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.205506315 seconds
+runOnDevice took 1.534148905 seconds
+Rolling the dice 111872 times resulted in pi ~ 3.2274385011447184 and took 1.554920177 seconds
+real 2.20
+user 1.31
+sys 0.76
+MonteCarloPi constructor took 0.342028672 seconds
+Creating Rootbeer context took 5.79E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.252700242 seconds
+Adding work to Kernel List took 0.020380483 seconds
+Do 7 dice rolls in 8192 threads and 6 dice rolls in 18432 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.252069789 seconds
+runOnDevice took 1.58049521 seconds
+Rolling the dice 167936 times resulted in pi ~ 3.200528772864555 and took 1.601542629 seconds
+real 2.30
+user 1.32
+sys 0.75
+MonteCarloPi constructor took 0.319123658 seconds
+Creating Rootbeer context took 5.71E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.251853323 seconds
+Adding work to Kernel List took 0.020546588 seconds
+Do 10 dice rolls in 12544 threads and 9 dice rolls in 14080 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.201360161 seconds
+runOnDevice took 1.529925668 seconds
+Rolling the dice 252160 times resulted in pi ~ 3.155440989847841 and took 1.551143751 seconds
+real 2.19
+user 1.31
+sys 0.75
+MonteCarloPi constructor took 0.319077259 seconds
+Creating Rootbeer context took 5.2E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.252943896 seconds
+Adding work to Kernel List took 0.020190819 seconds
+Do 15 dice rolls in 5376 threads and 14 dice rolls in 21248 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.252193325 seconds
+runOnDevice took 1.582445675 seconds
+Rolling the dice 378112 times resulted in pi ~ 3.1329447359512477 and took 1.60330706 seconds
+real 2.24
+user 1.31
+sys 0.76
+MonteCarloPi constructor took 0.317499741 seconds
+Creating Rootbeer context took 6.81E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.252241531 seconds
+Adding work to Kernel List took 0.020182202 seconds
+Do 22 dice rolls in 8192 threads and 21 dice rolls in 18432 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.202081846 seconds
+runOnDevice took 1.529967022 seconds
+Rolling the dice 567296 times resulted in pi ~ 3.1349418998193754 and took 1.550820401 seconds
+real 2.18
+user 1.31
+sys 0.75
+MonteCarloPi constructor took 0.346180432 seconds
+Creating Rootbeer context took 4.81E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.254062323 seconds
+Adding work to Kernel List took 0.022876061 seconds
+Do 32 dice rolls in 25600 threads and 31 dice rolls in 1024 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.202421721 seconds
+runOnDevice took 1.531739875 seconds
+Rolling the dice 850944 times resulted in pi ~ 3.1272187123944897 and took 1.555284735 seconds
+real 2.23
+user 1.32
+sys 0.75
+MonteCarloPi constructor took 0.317044334 seconds
+Creating Rootbeer context took 6.85E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.25194174 seconds
+Adding work to Kernel List took 0.023184297 seconds
+Do 48 dice rolls in 25344 threads and 47 dice rolls in 1280 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.201421661 seconds
+runOnDevice took 1.529234221 seconds
+Rolling the dice 1276672 times resulted in pi ~ 3.124605223581489 and took 1.553084754 seconds
+real 2.20
+user 1.30
+sys 0.75
+MonteCarloPi constructor took 0.713606528 seconds
+Creating Rootbeer context took 9.0E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.310894743 seconds
+Adding work to Kernel List took 0.024213726 seconds
+Do 72 dice rolls in 24576 threads and 71 dice rolls in 2048 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.251788299 seconds
+runOnDevice took 1.698766363 seconds
+Rolling the dice 1914880 times resulted in pi ~ 3.152803308822139 and took 1.723757149 seconds
+real 2.81
+user 1.34
+sys 0.77
+MonteCarloPi constructor took 0.314644851 seconds
+Creating Rootbeer context took 5.59E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.242220762 seconds
+Adding work to Kernel List took 0.022966396 seconds
+Do 108 dice rolls in 23808 threads and 107 dice rolls in 2816 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.201605341 seconds
+runOnDevice took 1.523061523 seconds
+Rolling the dice 2872576 times resulted in pi ~ 3.1504642522944044 and took 1.546697618 seconds
+real 2.16
+user 1.31
+sys 0.75
+MonteCarloPi constructor took 0.308844371 seconds
+Creating Rootbeer context took 6.2E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.242682441 seconds
+Adding work to Kernel List took 0.022864095 seconds
+Do 162 dice rolls in 22272 threads and 161 dice rolls in 4352 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.201371318 seconds
+runOnDevice took 1.526601315 seconds
+Rolling the dice 4308736 times resulted in pi ~ 3.15706415988335 and took 1.55014597 seconds
+real 2.16
+user 1.30
+sys 0.77
+MonteCarloPi constructor took 0.318688747 seconds
+Creating Rootbeer context took 5.31E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.253278003 seconds
+Adding work to Kernel List took 0.022839599 seconds
+Do 243 dice rolls in 20224 threads and 242 dice rolls in 6400 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.201374293 seconds
+runOnDevice took 1.530227534 seconds
+Rolling the dice 6463232 times resulted in pi ~ 3.1457982631600685 and took 1.553747424 seconds
+real 2.19
+user 1.31
+sys 0.76
+MonteCarloPi constructor took 0.340242796 seconds
+Creating Rootbeer context took 5.29E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.251488779 seconds
+Adding work to Kernel List took 0.01889443 seconds
+Do 365 dice rolls in 3840 threads and 364 dice rolls in 22784 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.251415637 seconds
+runOnDevice took 1.579868693 seconds
+Rolling the dice 9694976 times resulted in pi ~ 3.1649448126536526 and took 1.604001516 seconds
+real 2.26
+user 1.31
+sys 0.76
+MonteCarloPi constructor took 0.317183716 seconds
+Creating Rootbeer context took 7.36E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.252548013 seconds
+Adding work to Kernel List took 0.020204077 seconds
+Do 547 dice rolls in 5888 threads and 546 dice rolls in 20736 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.201328909 seconds
+runOnDevice took 1.530284102 seconds
+Rolling the dice 14542592 times resulted in pi ~ 3.1679210968715767 and took 1.551164542 seconds
+real 2.18
+user 1.29
+sys 0.77
+MonteCarloPi constructor took 0.321136134 seconds
+Creating Rootbeer context took 6.42E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.251953425 seconds
+Adding work to Kernel List took 0.020364634 seconds
+Do 820 dice rolls in 8704 threads and 819 dice rolls in 17920 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.201726966 seconds
+runOnDevice took 1.530668585 seconds
+Rolling the dice 21813760 times resulted in pi ~ 3.1607004019489615 and took 1.551712152 seconds
+real 2.19
+user 1.30
+sys 0.77
+MonteCarloPi constructor took 0.318200969 seconds
+Creating Rootbeer context took 7.14E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.253451961 seconds
+Adding work to Kernel List took 0.01997783 seconds
+Do 1230 dice rolls in 0 threads and 1229 dice rolls in 26624 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.251387271 seconds
+runOnDevice took 1.579848518 seconds
+Rolling the dice 32720896 times resulted in pi ~ 3.154345895662981 and took 1.600516845 seconds
+real 2.24
+user 1.31
+sys 0.76
+MonteCarloPi constructor took 0.32180239 seconds
+Creating Rootbeer context took 6.1E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.253162202 seconds
+Adding work to Kernel List took 0.0207985 seconds
+Do 1844 dice rolls in 13312 threads and 1843 dice rolls in 13312 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.254282143 seconds
+runOnDevice took 1.58356093 seconds
+Rolling the dice 49081344 times resulted in pi ~ 3.1497844883794452 and took 1.605027808 seconds
+real 2.24
+user 1.33
+sys 0.75
+MonteCarloPi constructor took 0.33336794 seconds
+Creating Rootbeer context took 5.93E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.253208129 seconds
+Adding work to Kernel List took 0.020208625 seconds
+Do 2766 dice rolls in 6656 threads and 2765 dice rolls in 19968 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.255808521 seconds
+runOnDevice took 1.585198225 seconds
+Rolling the dice 73622016 times resulted in pi ~ 3.1446755274939124 and took 1.606077056 seconds
+real 2.25
+user 1.33
+sys 0.75
+MonteCarloPi constructor took 0.317778593 seconds
+Creating Rootbeer context took 6.23E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.252771911 seconds
+Adding work to Kernel List took 0.022894922 seconds
+Do 4148 dice rolls in 23552 threads and 4147 dice rolls in 3072 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.25393995 seconds
+runOnDevice took 1.582766673 seconds
+Rolling the dice 110433280 times resulted in pi ~ 3.147055670174638 and took 1.606323693 seconds
+real 2.24
+user 1.31
+sys 0.77
+MonteCarloPi constructor took 0.349045499 seconds
+Creating Rootbeer context took 8.19E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.252761642 seconds
+Adding work to Kernel List took 0.023012152 seconds
+Do 6222 dice rolls in 22016 threads and 6221 dice rolls in 4608 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.254085956 seconds
+runOnDevice took 1.583445815 seconds
+Rolling the dice 165649920 times resulted in pi ~ 3.1470073997017023 and took 1.607130751 seconds
+real 2.27
+user 1.36
+sys 0.75
+MonteCarloPi constructor took 0.317581868 seconds
+Creating Rootbeer context took 5.47E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.251672106 seconds
+Adding work to Kernel List took 0.02327755 seconds
+Do 9333 dice rolls in 19712 threads and 9332 dice rolls in 6912 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.252280536 seconds
+runOnDevice took 1.581886451 seconds
+Rolling the dice 248474880 times resulted in pi ~ 3.1437098993664856 and took 1.605830538 seconds
+real 2.24
+user 1.33
+sys 0.76
+MonteCarloPi constructor took 0.340238096 seconds
+Creating Rootbeer context took 5.45E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.252066479 seconds
+Adding work to Kernel List took 0.018875679 seconds
+Do 14000 dice rolls in 3072 threads and 13999 dice rolls in 23552 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.304155609 seconds
+runOnDevice took 1.635562763 seconds
+Rolling the dice 372712448 times resulted in pi ~ 3.1419070822128274 and took 1.659785773 seconds
+real 2.32
+user 1.36
+sys 0.77
+MonteCarloPi constructor took 0.322538298 seconds
+Creating Rootbeer context took 5.44E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.25332348 seconds
+Adding work to Kernel List took 0.023005986 seconds
+Do 20999 dice rolls in 18176 threads and 20998 dice rolls in 8448 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.302073291 seconds
+runOnDevice took 1.631958711 seconds
+Rolling the dice 559068928 times resulted in pi ~ 3.1436214104896707 and took 1.655676747 seconds
+real 2.29
+user 1.39
+sys 0.76
+MonteCarloPi constructor took 0.309800721 seconds
+Creating Rootbeer context took 6.92E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.246454347 seconds
+Adding work to Kernel List took 0.019966288 seconds
+Do 31499 dice rolls in 512 threads and 31498 dice rolls in 26112 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.35214007 seconds
+runOnDevice took 1.672946853 seconds
+Rolling the dice 838603264 times resulted in pi ~ 3.1407733418980497 and took 1.693587965 seconds
+real 2.32
+user 1.39
+sys 0.78
+MonteCarloPi constructor took 0.315576713 seconds
+Creating Rootbeer context took 6.36E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.252087096 seconds
+Adding work to Kernel List took 0.019956006 seconds
+Do 47248 dice rolls in 1024 threads and 47247 dice rolls in 25600 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.401876162 seconds
+runOnDevice took 1.730380785 seconds
+Rolling the dice 1257905152 times resulted in pi ~ 3.1405937989196326 and took 1.751005248 seconds
+real 2.39
+user 1.43
+sys 0.79
+MonteCarloPi constructor took 0.317438513 seconds
+Creating Rootbeer context took 5.3E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.251412549 seconds
+Adding work to Kernel List took 0.022804313 seconds
+Do 70871 dice rolls in 14848 threads and 70870 dice rolls in 11776 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.453984479 seconds
+runOnDevice took 1.781966166 seconds
+Rolling the dice 1886857728 times resulted in pi ~ 3.1416407480189137 and took 1.805453225 seconds
+real 2.44
+user 1.49
+sys 0.80
+MonteCarloPi constructor took 0.322896455 seconds
+Creating Rootbeer context took 8.12E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.243097742 seconds
+Adding work to Kernel List took 0.022831673 seconds
+Do 106306 dice rolls in 22272 threads and 106305 dice rolls in 4352 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.603793116 seconds
+runOnDevice took 1.926005009 seconds
+Rolling the dice 2830286592 times resulted in pi ~ 3.142663224686064 and took 1.949511779 seconds
+real 2.59
+user 1.63
+sys 0.82
+MonteCarloPi constructor took 0.309392581 seconds
+Creating Rootbeer context took 1.115E-6 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.243706039 seconds
+Adding work to Kernel List took 0.022870534 seconds
+Do 159459 dice rolls in 20224 threads and 159458 dice rolls in 6400 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.601767593 seconds
+runOnDevice took 1.923547428 seconds
+Rolling the dice 4245430016 times resulted in pi ~ 3.141806040314569 and took 1.947096724 seconds
+real 2.56
+user 1.64
+sys 0.82
+MonteCarloPi constructor took 0.312172599 seconds
+Creating Rootbeer context took 6.26E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.245317716 seconds
+Adding work to Kernel List took 0.0223519 seconds
+Do 239189 dice rolls in 3840 threads and 239188 dice rolls in 22784 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 1.807005628 seconds
+runOnDevice took 2.132617134 seconds
+Rolling the dice 6368145152 times resulted in pi ~ 3.1419583835513616 and took 2.155678795 seconds
+real 2.78
+user 1.83
+sys 0.85
+MonteCarloPi constructor took 0.312756229 seconds
+Creating Rootbeer context took 6.72E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.244357587 seconds
+Adding work to Kernel List took 0.020035363 seconds
+Do 358783 dice rolls in 5888 threads and 358782 dice rolls in 20736 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 2.25274685 seconds
+runOnDevice took 2.576296721 seconds
+Rolling the dice 9552217856 times resulted in pi ~ 3.1414304112790425 and took 2.597000775 seconds
+real 3.22
+user 2.17
+sys 0.94
+MonteCarloPi constructor took 0.311656639 seconds
+Creating Rootbeer context took 5.53E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.243861528 seconds
+Adding work to Kernel List took 0.020334414 seconds
+Do 538174 dice rolls in 8960 threads and 538173 dice rolls in 17664 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 2.504580188 seconds
+runOnDevice took 2.826502233 seconds
+Rolling the dice 14328326912 times resulted in pi ~ 3.1412742129930504 and took 2.847511371 seconds
+real 3.47
+user 2.41
+sys 0.97
+MonteCarloPi constructor took 0.315447442 seconds
+Creating Rootbeer context took 5.22E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.243257274 seconds
+Adding work to Kernel List took 0.019872206 seconds
+Do 807261 dice rolls in 256 threads and 807260 dice rolls in 26368 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 3.203459378 seconds
+runOnDevice took 3.525449574 seconds
+Rolling the dice 21492490496 times resulted in pi ~ 3.141217432040323 and took 3.545988469 seconds
+real 4.17
+user 3.00
+sys 1.04
+MonteCarloPi constructor took 0.315443299 seconds
+Creating Rootbeer context took 5.92E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.244956601 seconds
+Adding work to Kernel List took 0.021815487 seconds
+Do 1210891 dice rolls in 512 threads and 1210890 dice rolls in 26112 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 4.169093441 seconds
+runOnDevice took 4.496191843 seconds
+Rolling the dice 32238735872 times resulted in pi ~ 3.141447491182793 and took 4.518706863 seconds
+real 5.14
+user 3.85
+sys 1.19
+MonteCarloPi constructor took 0.319799505 seconds
+Creating Rootbeer context took 4.85E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.243426831 seconds
+Adding work to Kernel List took 0.019900887 seconds
+Do 1816336 dice rolls in 768 threads and 1816335 dice rolls in 25856 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 5.657156547 seconds
+runOnDevice took 5.985922413 seconds
+Rolling the dice 48358103808 times resulted in pi ~ 3.14159496292888 and took 6.006493482 seconds
+real 6.63
+user 5.09
+sys 1.42
+MonteCarloPi constructor took 0.312034002 seconds
+Creating Rootbeer context took 6.1E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.247507782 seconds
+Adding work to Kernel List took 0.022822628 seconds
+Do 2724503 dice rolls in 14592 threads and 2724502 dice rolls in 12032 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 7.858849148 seconds
+runOnDevice took 8.180475148 seconds
+Rolling the dice 72537155840 times resulted in pi ~ 3.1417910624272407 and took 8.203964587 seconds
+real 8.83
+user 6.95
+sys 1.78
+MonteCarloPi constructor took 0.315550598 seconds
+Creating Rootbeer context took 6.47E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.246235474 seconds
+Adding work to Kernel List took 0.02278508 seconds
+Do 4086754 dice rolls in 22016 threads and 4086753 dice rolls in 4608 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 11.222794534 seconds
+runOnDevice took 11.54479976 seconds
+Rolling the dice 108805733888 times resulted in pi ~ 3.1417572356238623 and took 11.568263273 seconds
+real 12.20
+user 9.77
+sys 2.29
+MonteCarloPi constructor took 0.318525413 seconds
+Creating Rootbeer context took 6.62E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.243876977 seconds
+Adding work to Kernel List took 0.022884885 seconds
+Do 6130131 dice rolls in 19968 threads and 6130130 dice rolls in 6656 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 16.23034621 seconds
+runOnDevice took 16.551768415 seconds
+Rolling the dice 163208601088 times resulted in pi ~ 3.1416011023065313 and took 16.575326965 seconds
+real 17.20
+user 14.15
+sys 2.96
+MonteCarloPi constructor took 0.311231635 seconds
+Creating Rootbeer context took 6.09E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.243765432 seconds
+Adding work to Kernel List took 0.020059235 seconds
+Do 9195197 dice rolls in 3328 threads and 9195196 dice rolls in 23296 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 23.726571984 seconds
+runOnDevice took 24.047797872 seconds
+Rolling the dice 244812901632 times resulted in pi ~ 3.141489220303514 and took 24.068530183 seconds
+real 24.69
+user 20.42
+sys 4.16
+MonteCarloPi constructor took 0.314809145 seconds
+Creating Rootbeer context took 5.4E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.244518487 seconds
+Adding work to Kernel List took 0.021076491 seconds
+Do 13792795 dice rolls in 5120 threads and 13792794 dice rolls in 21504 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 34.89488867 seconds
+runOnDevice took 35.218485783 seconds
+Rolling the dice 367219352576 times resulted in pi ~ 3.141490948675833 and took 35.240247435 seconds
+real 35.88
+user 29.85
+sys 5.94
+MonteCarloPi constructor took 0.310222229 seconds
+Creating Rootbeer context took 5.97E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.245982678 seconds
+Adding work to Kernel List took 0.020217138 seconds
+Do 20689192 dice rolls in 7680 threads and 20689191 dice rolls in 18944 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 52.052588724 seconds
+runOnDevice took 52.374044658 seconds
+Rolling the dice 550829028864 times resulted in pi ~ 3.141569483650621 and took 52.394933943 seconds
+real 53.02
+user 44.66
+sys 8.27
+MonteCarloPi constructor took 0.312260118 seconds
+Creating Rootbeer context took 5.96E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.243700236 seconds
+Adding work to Kernel List took 0.02302376 seconds
+Do 31033787 dice rolls in 24832 threads and 31033786 dice rolls in 1792 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 77.278849549 seconds
+runOnDevice took 77.601715624 seconds
+Rolling the dice 826243543296 times resulted in pi ~ 3.141588777668465 and took 77.625419957 seconds
+real 78.25
+user 65.77
+sys 12.40
+MonteCarloPi constructor took 0.320364199 seconds
+Creating Rootbeer context took 6.37E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.243135166 seconds
+Adding work to Kernel List took 0.020544834 seconds
+Do 46550681 dice rolls in 10752 threads and 46550680 dice rolls in 15872 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 115.232823337 seconds
+runOnDevice took 115.559442383 seconds
+Rolling the dice 1239365315072 times resulted in pi ~ 3.1416232090488325 and took 115.580671194 seconds
+real 116.21
+user 98.25
+sys 17.90
+MonteCarloPi constructor took 0.331613219 seconds
+Creating Rootbeer context took 8.19E-7 seconds
+
+================== Device Number 0 ==================
+| Device name              : Tesla K80
+| Device type              : 1
+| Computability            : 3.7
+|------------------- Architecture -------------------
+| Number of SM             : 13
+| Max Threads per SM       : 2048
+| Max Threads per Block    : 1024
+| Warp Size                : 32
+| Clock Rate               : 823.500032 GHz
+| Max Block Size           : (1024,1024,64)
+| Max Grid Size            : (2147483647,65535,65535)
+|---------------------- Memory ----------------------
+| Total Global Memory      : 12079136768 Bytes
+| Free Global Memory       : 11985895424 Bytes
+| Total Constant Memory    : 65536 Bytes
+| Shared Memory per Block  : 49152 Bytes
+| Registers per Block      : 65536
+| Memory Clock Rate        : 2.504999936 GHz
+| Memory Pitch             : 2147483647
+| Device is Integrated     : false
+=====================================================
+Getting GPU devince information took 0.254689586 seconds
+Adding work to Kernel List took 0.023137783 seconds
+Do 69826021 dice rolls in 16384 threads and 69826020 dice rolls in 10240 threads
+Run a total of 26624 threads in (104,1,1) blocks with each (256,1,1) threads on GPU device 0
+  Debugging Output:
+    GPU size         : 11985895424 B
+    CPU_SIZE         : 1004771632 B
+    Exceptions size  : 106496 B
+    class memory size: 1024 B
+    cubin size       : 54056 B
+    cubin32 size     : 0 B
+    cubin64 size     : 54056 B
+    alignment        : 16 B
+context.run( work ) took 171.822157634 seconds
+runOnDevice took 172.152840678 seconds
+Rolling the dice 1859047972864 times resulted in pi ~ 3.141577252989819 and took 172.176657248 seconds
+real 172.83
+user 146.22
+sys 26.59

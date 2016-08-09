@@ -1,0 +1,164 @@
+Rolling the dice 256 times resulted in pi ~ 3.015625 and took 6.1366E-4 seconds
+real 1.60
+user 0.03
+sys 0.02
+Rolling the dice 256 times resulted in pi ~ 3.015625 and took 6.18665E-4 seconds
+real 0.05
+user 0.03
+sys 0.00
+Rolling the dice 512 times resulted in pi ~ 3.1171875 and took 9.64013E-4 seconds
+real 0.19
+user 0.03
+sys 0.00
+Rolling the dice 768 times resulted in pi ~ 3.1354166666666665 and took 0.001362397 seconds
+real 0.05
+user 0.03
+sys 0.00
+Rolling the dice 1280 times resulted in pi ~ 3.16875 and took 0.002075017 seconds
+real 0.05
+user 0.03
+sys 0.00
+Rolling the dice 1792 times resulted in pi ~ 3.1339285714285716 and took 0.002759128 seconds
+real 0.05
+user 0.03
+sys 0.00
+Rolling the dice 2816 times resulted in pi ~ 3.1548295454545454 and took 0.007531397 seconds
+real 0.05
+user 0.03
+sys 0.00
+Rolling the dice 4352 times resulted in pi ~ 3.1645220588235294 and took 0.00785452 seconds
+real 0.06
+user 0.03
+sys 0.01
+Rolling the dice 6400 times resulted in pi ~ 3.16625 and took 0.00956433 seconds
+real 0.06
+user 0.04
+sys 0.01
+Rolling the dice 9728 times resulted in pi ~ 3.1661184210526314 and took 0.009848591 seconds
+real 0.06
+user 0.03
+sys 0.01
+Rolling the dice 14592 times resulted in pi ~ 3.1600877192982457 and took 0.013793213 seconds
+real 0.06
+user 0.04
+sys 0.00
+Rolling the dice 22016 times resulted in pi ~ 3.150436046511628 and took 0.014244403 seconds
+real 0.06
+user 0.04
+sys 0.00
+Rolling the dice 33024 times resulted in pi ~ 3.141593992248062 and took 0.014759336 seconds
+real 0.07
+user 0.04
+sys 0.01
+Rolling the dice 49664 times resulted in pi ~ 3.138692010309278 and took 0.015498408 seconds
+real 0.06
+user 0.05
+sys 0.00
+Rolling the dice 74496 times resulted in pi ~ 3.143041237113402 and took 0.016686898 seconds
+real 0.07
+user 0.04
+sys 0.01
+Rolling the dice 111872 times resulted in pi ~ 3.141840675057208 and took 0.018424588 seconds
+real 0.07
+user 0.05
+sys 0.00
+Rolling the dice 167936 times resulted in pi ~ 3.1412442835365852 and took 0.020653984 seconds
+real 0.17
+user 0.05
+sys 0.01
+Rolling the dice 252160 times resulted in pi ~ 3.1379600253807105 and took 0.024426419 seconds
+real 0.07
+user 0.05
+sys 0.00
+Rolling the dice 378112 times resulted in pi ~ 3.138234174001354 and took 0.030158554 seconds
+real 0.08
+user 0.06
+sys 0.00
+Rolling the dice 567296 times resulted in pi ~ 3.138601365072202 and took 0.03890977 seconds
+real 0.09
+user 0.07
+sys 0.00
+Rolling the dice 850944 times resulted in pi ~ 3.1383216756919374 and took 0.05160579 seconds
+real 0.10
+user 0.08
+sys 0.00
+Rolling the dice 1276672 times resulted in pi ~ 3.1403837477441345 and took 0.07094382 seconds
+real 0.12
+user 0.10
+sys 0.00
+Rolling the dice 1914880 times resulted in pi ~ 3.141074114304813 and took 0.09933262 seconds
+real 0.15
+user 0.13
+sys 0.00
+Rolling the dice 2872576 times resulted in pi ~ 3.1417793645842615 and took 0.142997172 seconds
+real 0.19
+user 0.17
+sys 0.01
+Rolling the dice 4308736 times resulted in pi ~ 3.140800457489157 and took 0.207260433 seconds
+real 0.26
+user 0.23
+sys 0.01
+Rolling the dice 6463232 times resulted in pi ~ 3.1407376371450075 and took 0.304468431 seconds
+real 0.35
+user 0.33
+sys 0.00
+Rolling the dice 9694976 times resulted in pi ~ 3.141436141770748 and took 0.453359561 seconds
+real 0.50
+user 0.48
+sys 0.00
+Rolling the dice 14542592 times resulted in pi ~ 3.1414669406939284 and took 0.667064256 seconds
+real 0.72
+user 0.70
+sys 0.00
+Rolling the dice 21813760 times resulted in pi ~ 3.1416786468724327 and took 0.998577243 seconds
+real 1.05
+user 1.03
+sys 0.00
+Rolling the dice 32720896 times resulted in pi ~ 3.1418783886602615 and took 1.490884076 seconds
+real 1.54
+user 1.52
+sys 0.00
+Rolling the dice 49081344 times resulted in pi ~ 3.141585527894265 and took 2.231375464 seconds
+real 2.28
+user 2.26
+sys 0.00
+Rolling the dice 73622016 times resulted in pi ~ 3.141663928355344 and took 3.335193711 seconds
+real 3.39
+user 3.37
+sys 0.00
+Rolling the dice 110433280 times resulted in pi ~ 3.141663708621169 and took 5.027304359 seconds
+real 5.08
+user 5.05
+sys 0.01
+Rolling the dice 165649920 times resulted in pi ~ 3.1416065640116217 and took 7.472336299 seconds
+real 7.52
+user 7.50
+sys 0.01
+Rolling the dice 248474880 times resulted in pi ~ 3.1415146352017556 and took 11.320690667 seconds
+real 11.38
+user 11.35
+sys 0.01
+Rolling the dice 372712448 times resulted in pi ~ 3.1414777002564724 and took 16.929591003 seconds
+real 16.98
+user 16.96
+sys 0.02
+Rolling the dice 559068928 times resulted in pi ~ 3.141534075741015 and took 25.566274479 seconds
+real 25.61
+user 25.61
+sys 0.01
+Rolling the dice 838603264 times resulted in pi ~ 3.141552380125246 and took 38.13552108 seconds
+real 38.19
+user 38.19
+sys 0.01
+Rolling the dice 1257905152 times resulted in pi ~ 3.1415574582208246 and took 57.143677133 seconds
+real 57.19
+user 57.21
+sys 0.01
+Rolling the dice 1886857728 times resulted in pi ~ 3.1415714688161165 and took 85.395797506 seconds
+real 85.45
+user 85.48
+sys 0.01
+Rolling the dice 2830286592 times resulted in pi ~ 3.141581006366157 and took 127.643386742 seconds
+real 127.69
+user 127.76
+sys 0.02

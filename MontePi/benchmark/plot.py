@@ -17,9 +17,150 @@ parser.add_argument("-s", "--strongscaling", dest="strongscaling", help="File wi
 parser.add_argument("-r", "--rootbeer-setup-time", dest="rootbeersetup", help="File with data from benchmark", type=str, nargs=1 )
 args = parser.parse_args()
 
-def finishPlot( fig, ax, fname ):
-    l = ax.legend( loc='best', prop={'size':10}, labelspacing=0.2, # fontsize=10 also works
-                   fancybox=True, framealpha=0.5 )
+
+def bisectionExtrema( f,a,b,nIterations=16,debug=False ):
+    """
+    " finds the extremum of f(x) in the interval (a,b)
+    " assumes that b > a and that only one extremum exists in [a,b]
+    """
+    """
+    " ^
+    " |           .´
+    " |  .'',   .'
+    " |.'    ´'`
+    " +--------------------
+    "  a  c  b
+    """
+    extremaWasInside = True
+    for i in range(nIterations):
+        if b < a:
+            a,b = b,a
+        c  = 0.5 *(a+b)
+        # everything smaller than interval width / 6 should basically be enough
+        # if the factor is too small it may result in problems like the
+        # bisection quitting too early, thereby giving back wrong maxima!
+        dx = 1e-2*(b-a)
+        # if floating point precision exhausted then these differences will be 0
+        # for a and b do only onesided, because else we would leave the given interval!
+        left   = f(a+dx) > f(a   )
+        middle = f(c+dx) > f(c-dx)
+        right  = f(b   ) > f(b-dx)
+        if left == middle and middle == right and i == 0:
+            extremaWasInside = False
+
+        if debug:
+            print "f at x=",a,"going up?",left  ," ( f(x+dx)=",f(a+dx),", f(x   =",f(a   )
+            print "f at x=",c,"going up?",middle," ( f(x+dx)=",f(c+dx),", f(x-dx)=",f(c-dx)
+            print "f at x=",b,"going up?",right ," ( f(x   )=",f(b   ),", f(x-dx)=",f(b-dx)
+
+        # If the sign of the derivative is the same for all, then
+        # the maximum is not inside the specified interval!
+        if ( left == middle and middle == right ):
+            if extremaWasInside:
+                break   # this can also happen if dx is too small to resolve, so we break the search
+            else:
+                raise Exception(
+                    "Specified Interval seems to not contain any extremum!\n" +
+                    "  ["+str(a)+","+str(b)+"]: f(a)=" + str(f(a)) +
+                    ", f((a+b)/2)=" + str(f(c)) + "f(b)=" + str(f(b))
+                )
+                return None, None, None # unreasonable result, therefore error code
+        elif left == middle:
+            a = c
+        elif middle == right:
+            b = c
+        else:
+            # This happens if there are two extrema inside interval
+            raise Exception( "Specified Interval has more than one extremum!" )
+            return None, None, None
+
+    c = 0.5*(a+b)
+    return f(c), c, 0.5*(b-a)
+
+def bisectionNExtrema( f,a,b,nExtrema,nIterations=16,maxLevel=8,debug=False ):
+    """
+    " finds at least nExtrema extrema of f(x) in the interval (a,b)
+    " assumes that b > a and that only one extremum exists in (a,b)
+    " maxLevel ... specifies maximum iterations. In every iteration the
+    "              interval count will be doubled in order to find more
+    "              extrema
+    """
+    assert( nExtrema != 0 )
+    nExtremaFound      = 0
+    nIntervals         = nExtrema+1
+    for curLevel in range(maxLevel):
+        if nExtremaFound >= nExtrema:
+            break
+        xi = np.linspace( a,b,nIntervals )
+        # not simply *2, because we don't want half of the xi be on the same
+        # positions like in the last iteration as that could be unwanted if
+        # one such x is exactly on an extrema
+        dx = 1e-7*(b-a)
+        assert( dx < 0.5*(xi[1]-xi[0]) )
+        fIncreasing =  f(xi+dx) > f(xi-dx)
+        nExtremaFound = np.sum( np.logical_xor( fIncreasing[:-1], fIncreasing[1:] ) )
+        if debug:
+            print "nIntervals = ",nIntervals," with ",nExtremaFound," extrema"
+        nIntervals = nIntervals*2+1
+
+    if nExtremaFound < nExtrema:
+        return np.zeros(0)  # error code
+
+    extrema = np.empty( nExtremaFound )
+    curExtremum = 0
+    extremumInInterval = np.logical_xor( fIncreasing[:-1], fIncreasing[1:] )
+    for i in range(len(extremumInInterval)):
+        if not extremumInInterval[i]:
+            continue
+        if debug:
+            sys.stdout.write( "Find extremum in ["+str(xi[i])+","+str(xi[i+1])+"] : " )
+        xmax = bisectionExtrema( f, xi[i], xi[i+1], nIterations, debug )
+        if (xi[i] <= xmax) and (xmax <= xi[i+1]):  # check for error code of bisectionExtrema
+            extrema[curExtremum] = xmax
+            curExtremum += 1
+
+        if debug:
+            if (xi[i] <= xmax) and (xmax <= xi[i+1]):  # check for error code of bisectionExtrema
+                print "found at ",xmax
+            else:
+                print "not found!"
+
+    return extrema
+
+def relErr( x, y ):
+    from numpy import zeros
+    assert len(x) == len(y)
+    non0 = abs(y) > 1e-16
+    #non0 = abs(y) != 0
+    tmp = ( x[non0] - y[non0] ) / y[non0]
+    res = zeros( len(y) )
+    res[non0] = tmp
+    return y[non0], abs(res[non0])
+
+def p(x0,y0,x):
+    """
+    This function approximates f so that f(x0)=y0 and returns f(x)
+    """
+    assert( len(x0) == len(y0) )
+    # number of values. Approximating polynomial is of degree n-1
+    n = len(x0)
+    assert( n > 1 )
+    res = 0
+    for k in range(n):
+        prod = y0[k]
+        for j in range(n):
+            if j != k:
+                prod *= (x0[j]-x)/(x0[j]-x0[k])
+        res += prod
+    return res
+
+
+def finishPlot( fig, ax, fname, loc='best' ):
+    if not isinstance( ax, list):
+        ax = [ ax ]
+    for a in ax:
+        l = a.legend( loc=loc, prop={'size':10}, labelspacing=0.2, # fontsize=10 also works
+                      fancybox=True, framealpha=0.5 )
     #if l != None:
     #    l.set_zorder(0)  # alternative to transparency
     fig.tight_layout()
@@ -28,6 +169,96 @@ def finishPlot( fig, ax, fname ):
     fig.savefig( fname+".png" )
     print "[Saved '"+fname+".png']"
     plt.close( fig )
+
+def axisIsLog( ax, axis ):
+    assert ( axis == 'x' or axis == 'y' ) # axis neither 'x' nor 'y'!
+    if axis == 'x':
+        return ax.get_xscale() == 'log'
+    elif axis == 'y':
+        return ax.get_yscale() == 'log'
+
+def axisMin( ax, axis ):
+    xmin=float('+inf')
+    isLog = axisIsLog( ax, axis )
+    for line in ax.get_lines():
+        if axis == 'x':
+            x = line.get_xdata()
+        else:
+            x = line.get_ydata()
+        if isLog:
+            x = x[ x>0 ]
+        xmin = min( xmin, min(x) )
+    return xmin
+
+def axisMax( ax, axis ):
+    xmax=float('-inf')
+    isLog = axisIsLog( ax, axis )
+    for line in ax.get_lines():
+        if axis == 'x':
+            x = line.get_xdata()
+        else:
+            x = line.get_ydata()
+        if isLog:
+            x = x[ x>0 ]
+        xmax = max( xmax, max(x) )
+    return xmax
+
+def autoRange( ax, axis, lb, rb = None ):
+    if rb == None:
+        rb = lb
+    isLog = axisIsLog( ax, axis )
+
+    xmin=axisMin( ax, axis )
+    xmax=axisMax( ax, axis )
+
+    from math import log,exp
+
+    if isLog:
+        dx   = log(xmax) - log(xmin)
+        xmin /= exp( lb*( dx ) )
+        xmax *= exp( rb*( dx ) )
+    else:
+        dx = xmax - xmin
+        xmin -= lb*dx
+        xmax += rb*dx
+
+    if axis == 'x':
+        ax.set_xlim( [xmin,xmax] )
+    else:
+        ax.set_ylim( [xmin,xmax] )
+
+def autoRangeXY( ax, lb = 0.1, rb = None, bb = None, tb = None ):
+    if rb == None:
+        rb = lb
+    if tb == None:
+        tb = lb
+    if bb == None:
+        bb = lb
+
+    autoRange( ax, 'x', lb, rb )
+    autoRange( ax, 'y', bb, tb )
+
+def autoLabel( ax, axis, nbins=5, roundFunc=ceil ):
+    """
+    This functions is a workaround for ticks being too many or too few in
+    log scale.
+    https://github.com/matplotlib/matplotlib/issues/6549
+    """
+    from math import log10,ceil,floor
+    xmin  = axisMin( ax, axis )
+    xmax  = axisMax( ax, axis )
+    isLog = axisIsLog( ax, axis )
+    assert isLog # Autolabeling only implemented for log scale yet
+    if isLog:
+        dx   = roundFunc( ( log10(xmax) - log10(xmin) ) / nbins )
+
+    from numpy import arange
+    n0 = int( floor( log10( xmin ) ) )
+    n1 = int( ceil ( log10( xmax ) ) )
+    #print "n0 =",n0,", n1 =",n1,", dx =",dx
+    xpos = 10.**( n0 + arange(nbins+2)*dx )
+    ax.set_xticks( xpos )
+    #print "set xlabels at : ", xpos
 
 def calcStatisticsFromDupes( x, y ):
     # If x contains duplicates, then those elements will be merged and the
@@ -52,6 +283,51 @@ def calcStatisticsFromDupes( x, y ):
         todo = nextTodo
     return xres[:i], yres[:i], yerr[:i]
 
+def plotBenchmark( ax, rx,ry,rz=None, label=None, color=None ):
+    """
+    " Creates multiple lines for each different z-Values (so there shouldn't
+    " be too may different z values or the plot will get chaotic.
+    " ^ y             +-----+
+    " |           .´  |..z=1|
+    " |  .'',   .'.´  |..z=2|
+    " |.'.'',´'`.'.´  |..z=3|
+    " |.'.'',´'`.'    +-----+
+    " |.'    ´'`            x
+    " +--------------------->
+    " If there are multiple duplicate x-values to one z value, then the
+    " corresponding st of y values will get merged to mean y +- std y
+    """
+    assert len(rx) == len(ry)
+    if rz != None:
+        assert len(ry) == len(rz)
+    else:
+        rz = zeros( len(rx) )
+        params = array( [0] )
+    # Sort z-values for correct coloring and overlay z-order
+    params = sort( unique(rz) )
+    colors = linspace( 0,1, len( params ) )
+    for i in range( len(params) ):
+        filter = rz == params[i]
+        x = array( rx[filter] )
+        y = array( ry[filter] )
+
+        x,y,sy = calcStatisticsFromDupes( x, y )
+
+        # sort by x-value or else the connecting line will make zigzags
+        sorted = argsort( x )
+        x  = x [sorted]
+        y  = y [sorted]
+        sy = sy[sorted]
+
+        ax.errorbar( x, y, sy, linestyle='-', marker='.',
+                     label=None if label == None else (
+                        label if isinstance( label, basestring ) else
+                        label( params[i] )
+                     ), color=color if color != None or len(params) == 1 else
+                            plt.get_cmap( 'cool' )(colors[i]) )
+
+    autoRangeXY( ax, 0,0, 0.1,0.1 )
+
 ########################### workload scaling ###########################
 
 if args.workloadlog != None:
@@ -65,11 +341,12 @@ if args.workloadlog != None:
         xscale = 'log',
         yscale = 'log'
     )
-    ax.plot( data[ data[:,1]>0, 0 ], data[ data[:,1]>0, 1 ], 'o-', label="single core (Java)" )
-    ax.plot( data[ data[:,2]>0, 0 ], data[ data[:,2]>0, 2 ], 'o-', label="single core (Scala)" )
-    ax.plot( data[ data[:,3]>0, 0 ], data[ data[:,3]>0, 3 ], 'o-', label="single GPU (C++)" )
-    ax.plot( data[ data[:,4]>0, 0 ], data[ data[:,4]>0, 4 ], 'o-', label="single GPU (Java)" )
-    ax.plot( data[ data[:,5]>0, 0 ], data[ data[:,5]>0, 5 ], 'o-', label="single GPU (Scala)" )
+    plotBenchmark( ax, data[ data[:,1]>0, 0 ], data[ data[:,1]>0, 1 ], label="single core (Java)"  )
+    plotBenchmark( ax, data[ data[:,1]>0, 0 ], data[ data[:,1]>0, 1 ], label="single core (Java)"  )
+    plotBenchmark( ax, data[ data[:,2]>0, 0 ], data[ data[:,2]>0, 2 ], label="single core (Scala)" )
+    plotBenchmark( ax, data[ data[:,3]>0, 0 ], data[ data[:,3]>0, 3 ], label="single GPU (C++)"    )
+    plotBenchmark( ax, data[ data[:,4]>0, 0 ], data[ data[:,4]>0, 4 ], label="single GPU (Java)"   )
+    plotBenchmark( ax, data[ data[:,5]>0, 0 ], data[ data[:,5]>0, 5 ], label="single GPU (Scala)"  )
     #ax.plot( data[:,0], data[:,6] , 'o-', label="Spark local" )
     #ax.plot( data[:,0], data[:,7] , 'o-', label="Spark + GPUs" )
     #ax.plot( data[:,0], data[:,8] , 'o-', label="Spark 2 nodes" )

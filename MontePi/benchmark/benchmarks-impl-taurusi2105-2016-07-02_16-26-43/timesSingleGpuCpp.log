@@ -1,0 +1,285 @@
+Launch 1 blocks with 8 threads each on GPU device 0 (parameter: 0) each doing 32 dice rolls each
+Rolling the dice 256 times resulted in pi ~ 2.937500000000000 and took 0.000361 seconds
+real 0.28
+user 0.00
+sys 0.16
+Launch 1 blocks with 8 threads each on GPU device 0 (parameter: 0) each doing 32 dice rolls each
+Rolling the dice 256 times resulted in pi ~ 2.937500000000000 and took 0.000319 seconds
+real 0.28
+user 0.00
+sys 0.14
+Launch 1 blocks with 16 threads each on GPU device 0 (parameter: 0) each doing 32 dice rolls each
+Rolling the dice 512 times resulted in pi ~ 3.070312500000000 and took 0.000318 seconds
+real 0.26
+user 0.00
+sys 0.24
+Launch 1 blocks with 24 threads each on GPU device 0 (parameter: 0) each doing 32 dice rolls each
+Rolling the dice 768 times resulted in pi ~ 3.140625000000000 and took 0.000315 seconds
+real 0.26
+user 0.00
+sys 0.24
+Launch 1 blocks with 40 threads each on GPU device 0 (parameter: 0) each doing 32 dice rolls each
+Rolling the dice 1280 times resulted in pi ~ 3.143750000000000 and took 0.000317 seconds
+real 0.27
+user 0.00
+sys 0.24
+Launch 1 blocks with 56 threads each on GPU device 0 (parameter: 0) each doing 32 dice rolls each
+Rolling the dice 1792 times resulted in pi ~ 3.196428571428572 and took 0.000320 seconds
+real 0.27
+user 0.00
+sys 0.24
+Launch 1 blocks with 88 threads each on GPU device 0 (parameter: 0) each doing 32 dice rolls each
+Rolling the dice 2816 times resulted in pi ~ 3.211647727272727 and took 0.000320 seconds
+real 0.27
+user 0.00
+sys 0.24
+Launch 1 blocks with 136 threads each on GPU device 0 (parameter: 0) each doing 32 dice rolls each
+Rolling the dice 4352 times resulted in pi ~ 3.198529411764706 and took 0.000322 seconds
+real 0.29
+user 0.00
+sys 0.15
+Launch 1 blocks with 200 threads each on GPU device 0 (parameter: 0) each doing 32 dice rolls each
+Rolling the dice 6400 times resulted in pi ~ 3.208125000000000 and took 0.000320 seconds
+real 0.27
+user 0.00
+sys 0.24
+Launch 2 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 19 dice rolls each
+Rolling the dice 9728 times resulted in pi ~ 3.283717105263158 and took 0.000309 seconds
+real 0.29
+user 0.00
+sys 0.25
+Launch 2 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 28.5 dice rolls each
+Rolling the dice 14592 times resulted in pi ~ 3.250548245614035 and took 0.000319 seconds
+real 0.27
+user 0.00
+sys 0.25
+Launch 3 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 28.6667 dice rolls each
+Rolling the dice 22016 times resulted in pi ~ 3.242005813953488 and took 0.000318 seconds
+real 0.27
+user 0.00
+sys 0.24
+Launch 5 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 25.8 dice rolls each
+Rolling the dice 33024 times resulted in pi ~ 3.265867248062015 and took 0.000323 seconds
+real 0.27
+user 0.00
+sys 0.25
+Launch 7 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 27.7143 dice rolls each
+Rolling the dice 49664 times resulted in pi ~ 3.255476804123711 and took 0.000381 seconds
+real 0.63
+user 0.00
+sys 0.17
+Launch 10 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 29.1 dice rolls each
+Rolling the dice 74496 times resulted in pi ~ 3.250644329896907 and took 0.000322 seconds
+real 0.26
+user 0.00
+sys 0.24
+Launch 14 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 31.2143 dice rolls each
+Rolling the dice 111872 times resulted in pi ~ 3.243599828375286 and took 0.000331 seconds
+real 0.27
+user 0.00
+sys 0.25
+Launch 21 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 31.2381 dice rolls each
+Rolling the dice 167936 times resulted in pi ~ 3.242116044207317 and took 0.000332 seconds
+real 0.27
+user 0.00
+sys 0.24
+Launch 31 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 31.7742 dice rolls each
+Rolling the dice 252160 times resulted in pi ~ 3.240323604060914 and took 0.000341 seconds
+real 0.28
+user 0.00
+sys 0.25
+Launch 47 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 31.4255 dice rolls each
+Rolling the dice 378112 times resulted in pi ~ 3.241843686526743 and took 0.000360 seconds
+real 0.28
+user 0.00
+sys 0.25
+Launch 70 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 31.6571 dice rolls each
+Rolling the dice 567296 times resulted in pi ~ 3.240544618682311 and took 0.000385 seconds
+real 0.27
+user 0.00
+sys 0.23
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 31.9615 dice rolls each
+Rolling the dice 850944 times resulted in pi ~ 3.239183777075812 and took 0.000419 seconds
+real 0.29
+user 0.00
+sys 0.26
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 47.9519 dice rolls each
+Rolling the dice 1276672 times resulted in pi ~ 3.203256592139563 and took 0.000466 seconds
+real 0.27
+user 0.00
+sys 0.25
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 71.9231 dice rolls each
+Rolling the dice 1914880 times resulted in pi ~ 3.183236547459893 and took 0.000550 seconds
+real 0.27
+user 0.00
+sys 0.24
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 107.894 dice rolls each
+Rolling the dice 2872576 times resulted in pi ~ 3.169099790571250 and took 0.000674 seconds
+real 0.28
+user 0.00
+sys 0.26
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 161.837 dice rolls each
+Rolling the dice 4308736 times resulted in pi ~ 3.159981952943972 and took 0.000851 seconds
+real 0.27
+user 0.00
+sys 0.25
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 242.76 dice rolls each
+Rolling the dice 6463232 times resulted in pi ~ 3.153692146591674 and took 0.001128 seconds
+real 0.26
+user 0.00
+sys 0.24
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 364.144 dice rolls each
+Rolling the dice 9694976 times resulted in pi ~ 3.149656069287845 and took 0.001533 seconds
+real 0.28
+user 0.00
+sys 0.25
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 546.221 dice rolls each
+Rolling the dice 14542592 times resulted in pi ~ 3.146130483479149 and took 0.002284 seconds
+real 0.28
+user 0.01
+sys 0.25
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 819.327 dice rolls each
+Rolling the dice 21813760 times resulted in pi ~ 3.144590386985096 and took 0.003059 seconds
+real 0.28
+user 0.00
+sys 0.25
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 1229 dice rolls each
+Rolling the dice 32720896 times resulted in pi ~ 3.143619172286725 and took 0.004436 seconds
+real 0.29
+user 0.01
+sys 0.25
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 1843.5 dice rolls each
+Rolling the dice 49081344 times resulted in pi ~ 3.142908067065156 and took 0.006496 seconds
+real 0.29
+user 0.00
+sys 0.26
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 2765.25 dice rolls each
+Rolling the dice 73622016 times resulted in pi ~ 3.142257283473465 and took 0.009578 seconds
+real 0.29
+user 0.01
+sys 0.25
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 4147.88 dice rolls each
+Rolling the dice 110433280 times resulted in pi ~ 3.141870059460337 and took 0.014202 seconds
+real 0.29
+user 0.01
+sys 0.25
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 6221.83 dice rolls each
+Rolling the dice 165649920 times resulted in pi ~ 3.141702670306149 and took 0.021174 seconds
+real 0.30
+user 0.02
+sys 0.26
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 9332.74 dice rolls each
+Rolling the dice 248474880 times resulted in pi ~ 3.141699120651552 and took 0.031536 seconds
+real 0.31
+user 0.03
+sys 0.25
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 13999.1 dice rolls each
+Rolling the dice 372712448 times resulted in pi ~ 3.141468191585595 and took 0.047100 seconds
+real 0.33
+user 0.04
+sys 0.26
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 20998.7 dice rolls each
+Rolling the dice 559068928 times resulted in pi ~ 3.141591764513159 and took 0.070560 seconds
+real 0.35
+user 0.05
+sys 0.26
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 31498 dice rolls each
+Rolling the dice 838603264 times resulted in pi ~ 3.141594493006886 and took 0.105616 seconds
+real 0.39
+user 0.08
+sys 0.27
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 47247 dice rolls each
+Rolling the dice 1257905152 times resulted in pi ~ 3.141559350255368 and took 0.158447 seconds
+real 0.45
+user 0.13
+sys 0.28
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 70870.6 dice rolls each
+Rolling the dice 1886857728 times resulted in pi ~ 3.141547520004646 and took 0.228417 seconds
+real 0.51
+user 0.20
+sys 0.28
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 106306 dice rolls each
+Rolling the dice 2830286592 times resulted in pi ~ 3.141588359685096 and took 0.342742 seconds
+real 0.61
+user 0.30
+sys 0.29
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 159459 dice rolls each
+Rolling the dice 4245430016 times resulted in pi ~ 3.141556707738696 and took 0.342273 seconds
+real 0.61
+user 0.29
+sys 0.30
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 239188 dice rolls each
+Rolling the dice 6368145152 times resulted in pi ~ 3.141570524930145 and took 0.513828 seconds
+real 0.79
+user 0.44
+sys 0.32
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 358782 dice rolls each
+Rolling the dice 9552217856 times resulted in pi ~ 3.141591413050787 and took 0.771849 seconds
+real 1.04
+user 0.64
+sys 0.37
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 538173 dice rolls each
+Rolling the dice 14328326912 times resulted in pi ~ 3.141607915876117 and took 1.159278 seconds
+real 1.43
+user 0.97
+sys 0.43
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 807260 dice rolls each
+Rolling the dice 21492490496 times resulted in pi ~ 3.141604717450796 and took 1.740669 seconds
+real 2.01
+user 1.47
+sys 0.51
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 1.21089e+06 dice rolls each
+Rolling the dice 32238735872 times resulted in pi ~ 3.141609120969444 and took 2.613661 seconds
+real 2.88
+user 2.20
+sys 0.65
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 1.81634e+06 dice rolls each
+Rolling the dice 48358103808 times resulted in pi ~ 3.141620588912898 and took 3.922787 seconds
+real 4.18
+user 3.35
+sys 0.81
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 2.7245e+06 dice rolls each
+Rolling the dice 72537155840 times resulted in pi ~ 3.141622977259539 and took 5.887556 seconds
+real 6.16
+user 4.98
+sys 1.14
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 4.08675e+06 dice rolls each
+Rolling the dice 108805733888 times resulted in pi ~ 3.141624226714577 and took 8.839410 seconds
+real 9.11
+user 7.50
+sys 1.59
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 6.13013e+06 dice rolls each
+Rolling the dice 163208601088 times resulted in pi ~ 3.141615431404488 and took 13.265894 seconds
+real 13.53
+user 11.20
+sys 2.30
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 9.1952e+06 dice rolls each
+Rolling the dice 244812901632 times resulted in pi ~ 3.141618833978430 and took 19.900917 seconds
+real 20.17
+user 16.74
+sys 3.34
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 1.37928e+07 dice rolls each
+Rolling the dice 367219352576 times resulted in pi ~ 3.141619893230537 and took 29.935957 seconds
+real 30.22
+user 25.07
+sys 5.05
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 2.06892e+07 dice rolls each
+Rolling the dice 550829028864 times resulted in pi ~ 3.141622218452943 and took 44.778862 seconds
+real 45.05
+user 36.81
+sys 8.18
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 3.10338e+07 dice rolls each
+Rolling the dice 826243543296 times resulted in pi ~ 3.141621948895617 and took 67.245186 seconds
+real 67.53
+user 56.88
+sys 10.53
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 4.65507e+07 dice rolls each
+Rolling the dice 1239365315072 times resulted in pi ~ 3.141624198952028 and took 100.931900 seconds
+real 101.21
+user 85.07
+sys 15.95
+Launch 104 blocks with 256 threads each on GPU device 0 (parameter: 0) each doing 6.9826e+07 dice rolls each
+Rolling the dice 1859047972864 times resulted in pi ~ 3.141623793166773 and took 151.201050 seconds
+real 151.48
+user 128.24
+sys 23.09
