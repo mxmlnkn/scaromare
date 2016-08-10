@@ -342,7 +342,6 @@ if args.workloadlog != None:
         yscale = 'log'
     )
     plotBenchmark( ax, data[ data[:,1]>0, 0 ], data[ data[:,1]>0, 1 ], label="single core (Java)"  )
-    plotBenchmark( ax, data[ data[:,1]>0, 0 ], data[ data[:,1]>0, 1 ], label="single core (Java)"  )
     plotBenchmark( ax, data[ data[:,2]>0, 0 ], data[ data[:,2]>0, 2 ], label="single core (Scala)" )
     plotBenchmark( ax, data[ data[:,3]>0, 0 ], data[ data[:,3]>0, 3 ], label="single GPU (C++)"    )
     plotBenchmark( ax, data[ data[:,4]>0, 0 ], data[ data[:,4]>0, 4 ], label="single GPU (Java)"   )

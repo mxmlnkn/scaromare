@@ -207,6 +207,7 @@ Die \lstinline!run!-Methode nimmt eine Liste von Kernel-Objekten als Argument un
 Mit \lstinline!getDevices! erhält man eine Liste von \lstinline!GpuDevice!-Objekten die alle Informationen über die jeweilige Grafikkarte enthalten, so z.B. den maximalen Grafikkartenspeicher oder die Taktfrequenz.
 Außerdem können diese Objekte benutzt werden um Rootbeer-Kernel auf der ausgewählten Grafikkarte in Multi-GPU-Umgebungen auszuführen. In \autoref{lst:kernelinit} werden die Grafikkarteninformationen benötigt um die Seeds und die Anzahl an Iterationen pro Kernelthread zu berechnen.
 
+\label{pg:cuCtxCreate}
 Der angelegte Rootbeerfork \cite{ownrootbeerfork} reduziert mit Commit \lstinline!e48b9ae! auf Knoten mit sehr vielen Grafikkarten die Initialisierungszeit von \lstinline!getDevices! um ca. \SI{1}{\second} pro verfügbarer Grafikkarte, indem es die Aufrufe zu \lstinline!cuCtxCreate! und \lstinline!cuCtxDestroy! für jede Grafikkarte einspart, vgl. \autoref{fig:profilingapi}.
 Der einzige Nachteil ist, dass der freie Speicherplatz auf der Grafikkarte nicht mehr in \lstinline!GpuDevice! verfügbar ist.
 
