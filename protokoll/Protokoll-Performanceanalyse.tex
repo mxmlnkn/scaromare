@@ -3,64 +3,14 @@
 \label{sct:benchmarks}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-%\subsection{Pseudozufallszahlgeneratoren}
-%\section{Vergleich - Alternativen}
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Testsysteme}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{System 1: Heimsystem}
-\label{sct:system1}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-Aufgrund der leichten Verfügbarkeit und als Beispiel für Grafikkartenbeschleuniger im nicht-professionellen Verbrauchersegment, wurden einige Tests auf einem herkömmlichen Arbeitsplatzrechner ausgeführt:
-
-\begin{table}[H]
-	\begin{center}\begin{tabularx}{0.9\linewidth}{r|X}
-	Prozessor & Intel(R) Core(TM) i3-3220 (Ivy-Bridge), \SI{3.30}{\giga\hertz}, 2 Kerne (4 durch SMT), AVX\cite{ark3220} \\
-	Arbeitsspeicher & $4\times \SI{4}{\gibi\byte}$ DDR3 \SI{1600}{\mega\hertz} CL9\cite{corsair4gbddr3}\\
-	\hline
-	Grafikkarte & GigaByte GTX 760 WindForce 3X Overclocked, Codename: GK104-225-A2 (Kepler), 1152 CUDA-Kerne, \SI{1085}{\mega\hertz} ( \SI{1150}{\mega\hertz} Boost), \SI{2}{\gibi\byte} GDDR5-VRAM mit \SI{1502}{\mega\hertz} PCIe-3.0-x16-Schnittstelle\cite{gigabytegtx760,gtx760,nvidiakepler}
-	\end{tabularx}\end{center}
-	\caption{Heimsystemkonfiguration}
-\end{table}
-
-Die Maximalleistung in der Berechnung von Fließkommazahlen einfacher Genauigkeit (SPFLO) im Verhältnis einer Multiplikation zu einer Addition beträgt
-\begin{align}
-	\SI{3.30}{\giga\hertz} \cdot
-	2\,\text{Kerne} \left(
-		1\,\frac{ \text{AVX ADD Einheit} }{ \text{Kern} } +
-		1\,\frac{ \text{AVX MUL Einheit} }{ \text{Kern} }
-	\right) \cdot
-	8\,\frac{ \text{SPFLO} }{ \text{AVX Einheit} } \\
-	= 105.6\,\text{GSPFLOPS}
-\end{align}
-für den Prozessor. Informationen zur Architektur, wie die Anzahl an AVX-Einheiten wurde aus Ref.\cite{cesga} entnommen.
-
-Die Maximalleistung der Grafikkarte beträgt:
-\begin{align}
-	\SI{1.085}{\giga\hertz} \cdot 1152 \text{CUDA-Kerne} \cdot
-	1 \frac{ \text{FMA-Einheit} }{ \text{CUDA-Kern} } \cdot
-	2 \frac{ \text{SPFLO} }{ \text{FMA-Einheit} }
-	= 2500\,\text{GSPFLOPS}
-\end{align}
-Zugegeben, es wurde beim Prozessor gespart und bei der Grafikkarte nicht, aber der Geschwindigkeitsunterschied von 24x begründet dennoch das Interesse daran Grafikkarten zu nutzen, auch wenn es bei Grafikkarten mehr zu beachten gibt, um diese Maximalleistung erhalten zu können.
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{System 2: Taurus}
+\section{Testsystem}
 \label{sct:taurus}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-Für Skalierungstests wurde einer der Hochleistungsrechner der TU-Dresden, ein Bull HPC-Cluster mit dem Namen Taurus, benutzt. Der Bau der ersten Phase von Taurus war 2013 abgeschlossen\cite{taurusnutzerschulung}. Zum Zeitpunkt der Nutzung (2015/2016) waren alle Knoten von Phase 1 schon in die 2015 fertiggestellt\cite{heisehrsk2} Phase 2 integriert wurden\cite{doctudtaurushardware} und werden nun beide unter dem Namen Taurus zusammengefasst.
+Für Skalierungstests wurde einer der Hochleistungsrechner der TU-Dresden, ein Bull HPC-Cluster mit dem Namen Taurus, benutzt. Der Bau der ersten Phase von Taurus war 2013 abgeschlossen\cite{taurusnutzerschulung}.
+Zum Zeitpunkt der Nutzung (2015/2016) waren alle Knoten von Phase 1 schon in die 2015 fertiggestellt\cite{heisehrsk2} Phase 2 integriert wurden\cite{doctudtaurushardware} und werden nun beide unter dem Namen Taurus zusammengefasst.
 
 \begin{figure}[H]
 	\centering
@@ -114,9 +64,34 @@ Gerechnet wurde auf Insel 2 von Taurus, vgl. Tabelle~\ref{tbl:island2}. Wenn nic
 Zu den Spitzenleistungen in Tabelle~\ref{tbl:k20k80} sei angemerkt, dass jeder CUDA-Kern einfache Fließkommagenaugigkeit berechnet und auf drei CUDA-Kerne eine Doppelpräzisionseinheit kommt, wodurch sich die DFLOPS berechnen.
 Die K80 hat außerdem einen Boost-Modus mit \SI{0.875}{\giga\hertz}, also einer Leistungssteigerung von $1.56$.
 
+%Die Maximalleistung in der Berechnung von Fließkommazahlen einfacher Genauigkeit (SPFLOPS) im Verhältnis einer Multiplikation zu einer Addition beträgt
+%\begin{align}
+%	\SI{3.30}{\giga\hertz} \cdot
+%	2\,\text{Kerne} \left(
+%		1\,\frac{ \text{AVX ADD Einheit} }{ \text{Kern} } +
+%		1\,\frac{ \text{AVX MUL Einheit} }{ \text{Kern} }
+%	\right) \cdot
+%	8\,\frac{ \text{SPFLO} }{ \text{AVX Einheit} } \\
+%	= 105.6\,\text{GSPFLOPS}
+%\end{align}
+%für den Prozessor. Informationen zur Architektur, wie die Anzahl an AVX-Einheiten wurde aus Ref.\cite{cesga} entnommen.
+%
+%Die Maximalleistung der Grafikkarte beträgt:
+%\begin{align}
+%	\SI{1.085}{\giga\hertz} \cdot 1152 \text{CUDA-Kerne} \cdot
+%	1 \frac{ \text{FMA-Einheit} }{ \text{CUDA-Kern} } \cdot
+%	2 \frac{ \text{SPFLO} }{ \text{FMA-Einheit} }
+%	= 2500\,\text{GSPFLOPS}
+%\end{align}
+
 \section{Monte-Carlo-Simulation verschiedener Implementationen}
 
-In Abb.\ref{fig:montepiworkloadscaling} wurde die Ausführungszeit von Monte-Carlo-Simulationen in verschiedenen Programmiersprachen über die Anzahl an Monte-Carlo-Iterationen gemessen. Gemessen wurde die Zeit mit dem Linux \texttt{time}-Befehl und zwar die \texttt{real}-Zeit. Es fällt auf, dass alle Versionen eine Initialisierungszeit haben. Bei der C++-Version beträgt diese jedoch nur knapp \SI{30}{\milli\second}, während die reine Java-Version schon ca. \SI{70}{\milli\second} benötigt. Die Nutzung von Scala erhöht dies schon auf \SI{200}{\milli\second} und die Nutzung von Rootbeer führt eine weitere Initialisierungszeit von \SI{430}{\milli\second} ein, sodass für wenig Iterationen die Rootberversion bis zu 20x langsamer sind. Erst für 10 Milliarden Iterationen beginnt die Initialisierungszeit im Vergleich zur Rechenzeit vernachlässigbar zu werden, sodass aber da die Lastenskalierung ein lineares Verhalten annimmt. Bei der C++-Version ist dies schon bei ca. 100 Millionen Iterationen der Fall.
+In Abb.\ref{fig:montepiworkloadscaling} wurde die Ausführungszeit von Monte-Carlo-Simulationen in verschiedenen Programmiersprachen über die Anzahl an Monte-Carlo-Iterationen gemessen.
+Gemessen wurde die Zeit mit dem Linux \texttt{time}-Befehl und zwar die \texttt{real}-Zeit.
+Es fällt auf, dass alle Versionen eine Initialisierungszeit haben. Bei der C++-Version beträgt diese jedoch nur knapp \SI{30}{\milli\second}, während die reine Java-Version schon ca. \SI{70}{\milli\second} benötigt.
+Die Nutzung von Scala erhöht dies schon auf \SI{200}{\milli\second} und die Nutzung von Rootbeer führt eine weitere Initialisierungszeit von \SI{430}{\milli\second} ein, sodass für wenig Iterationen die Rootberversion bis zu 20x langsamer sind.
+Erst für 10 Milliarden Iterationen beginnt die Initialisierungszeit im Vergleich zur Rechenzeit vernachlässigbar zu werden, sodass aber da die Lastenskalierung ein lineares Verhalten annimmt.
+Bei der C++-Version ist dies schon bei ca. 100 Millionen Iterationen der Fall.
 \begin{figure}[H]
 	\centering
 	\begin{minipage}{0.5\linewidth}
@@ -127,14 +102,19 @@ In Abb.\ref{fig:montepiworkloadscaling} wurde die Ausführungszeit von Monte-Car
 	\caption{Benötigte Ausführungszeit der Monte-Carlo Pi-Berechnung in Abhängigkeit von der Anzahl an Iterationen. Getestet auf \textbf{links:} System 1 und \textbf{rechts:} System 2 (Taurus), siehe Kapitel~\ref{sct:system1}}
 	\label{fig:montepiworkloadscaling}
 \end{figure}
-Im Programmausdruck~\ref{lst:montemainloop} ist die Hauptschleife, die hauptsächlich die Arbeitslast generiert, zu sehen. Es handelt sich also für jede der zwei Zufallszahlen um eine Multiplikations und zwei Divisionen und dann nochmals zwei Multiplikationen für die Berechnung des Quadrat des Radius, also zusammen acht Operationen pro Iteration und neun Operationen für Iterationen die im Kreis liegen. Dies tritt für $\frac{\pi}{4}=0.785\%$ der Fälle auf, das heißt die Rechenlast, definiert als die Anzahl an arithmetischen Operationen $N_\text{Op}$ sollte sich wie folgt aus der Anzahl an Iterationen $N$ berechnen:
+Im Programmausdruck~\ref{lst:montemainloop} ist die Hauptschleife, die hauptsächlich die Arbeitslast generiert, zu sehen.
+Es handelt sich also für jede der zwei Zufallszahlen um eine Multiplikations und zwei Divisionen und dann nochmals zwei Multiplikationen für die Berechnung des Quadrat des Radius, also zusammen acht Operationen pro Iteration und neun Operationen für Iterationen die im Kreis liegen.
+Dies tritt für $\frac{\pi}{4}=0.785\%$ der Fälle auf, das heißt die Rechenlast, definiert als die Anzahl an arithmetischen Operationen $N_\text{Op}$ sollte sich wie folgt aus der Anzahl an Iterationen $N$ berechnen:
 \begin{align}
 	N_\text{Op}
 	= \left[ \frac{\pi}{4}\cdot 9 + \left( 1-\frac{\pi}{4} \right)\cdot 8 \right] N
 	= 8.8\cdot N
 \end{align}
 
-Zuletzt ist aus dem Plot abzulesen, dass für große Lasten wie z.B. für drei Milliarden Iterationen die Versionen, die von Grafikarten Gebrauch machen, um einen Faktor $140$ (Scala) bis $320$ (C++) schneller sind als die Java Version, die auf einem Prozessor-Kern ausgeführt wird. Dieser große Unterschied zwischen CPU und GPU lässt darauf schließen, dass Java weder AVX noch mehrere Kerne gleichzeitig nutzt. Das heißt für die CPU-Versionen wäre für das Testsystem 1 noch ein Geschwindigkeitsgewinn von $8\,\frac{ \text{Op} }{ \text{AVX-Einheit} } \cdot 2\,\text{Kerne}$ erreichbar. Dies würde den Geschwindigkeitsunterschied von $320$ auf $20$ reduzieren, was in Übereinstimmung mit dem Verhältnis der Peakflops aus Kapitel~\ref{sct:system1} wäre.
+Zuletzt ist aus dem Plot abzulesen, dass für große Lasten wie z.B. für drei Milliarden Iterationen die Versionen, die von Grafikarten Gebrauch machen, um einen Faktor $140$ (Scala) bis $320$ (C++) schneller sind als die Java Version, die auf einem Prozessor-Kern ausgeführt wird.
+Dieser große Unterschied zwischen CPU und GPU lässt darauf schließen, dass Java weder AVX noch mehrere Kerne gleichzeitig nutzt.
+Das heißt für die CPU-Versionen wäre für das Testsystem 1 noch ein Geschwindigkeitsgewinn von $8\,\frac{ \text{Op} }{ \text{AVX-Einheit} } \cdot 2\,\text{Kerne}$ erreichbar.
+Dies würde den Geschwindigkeitsunterschied von $320$ auf $20$ reduzieren, was in Übereinstimmung mit dem Verhältnis der Peakflops aus Kapitel~\ref{sct:system1} wäre.
 
 \begin{lstlisting}[language=Java,caption={Hauptschleife der Monte-Carlo Pi-Berechnung},label=lst:montemainloop]
 for ( int i = 0; i < dnDiceRolls; ++i )
@@ -171,7 +151,7 @@ Zwar nicht in der Abbildung dargestellt, wurde auch für $4N+1$ und $4N+2$ gemes
 	\label{fig:montepistrongscaling}
 \end{figure}
 
-Weiterhin auffällig sind zufällig auftretende Spitzen in sowohl im CPU als auch im GPU-Benchmark. Z.b. für eine Arbeitslast von $2^33$ Iterationen pro Slice auf 24 Knoten also 92 bis 96 Grafikkarten schwankt die Ausführungszeit zwischen \SI{30}{\second}, \SI{45}{\second} und \SI{68}{\second}. Möglicherweise liegt dies an einer ungünstigen Verteilugn der Slices auf die Knoten. Die vorliegende Version nimmt eine lineare Verteilung an, sodass Slice 0 auf Grafikkarte 0 von Knoten 0 rechnet, während Slice 1 auf Grafikkarte 1 von Knoten 0 und Slice 4 auf Grafikkarte 0 von Knoten 1 rechnet. Die Zeit die eine Grafikkarte für diese Last benötigt ist \SI{22}{\second}. Es ist also wahrscheinlich, dass zumindest im Fall der \SI{68}{\second} drei verschiedene Prozesse auf einem Knoten diesselbe Grafikkarte anfordern. Diese Vermutung wurde getestet, indem jeder Slice seinen Hostnamen ausgeben soll. Mit dem Skript aus Listing~\ref{lst:start_spark_slurm.sh} ist dies schnell interaktiv getestet:
+Weiterhin auffällig sind zufällig auftretende Spitzen in sowohl im CPU als auch im GPU-Benchmark. Z.b. für eine Arbeitslast von $2^33$ Iterationen pro Slice auf 24 Knoten also 92 bis 96 Grafikkarten schwankt die Ausführungszeit zwischen \SI{30}{\second}, \SI{45}{\second} und \SI{68}{\second}. Möglicherweise liegt dies an einer ungünstigen Verteilugn der Slices auf die Knoten. Die vorliegende Version nimmt eine lineare Verteilung an, sodass Slice 0 auf Grafikkarte 0 von Knoten 0 rechnet, während Slice 1 auf Grafikkarte 1 von Knoten 0 und Slice 4 auf Grafikkarte 0 von Knoten 1 rechnet. Die Zeit die eine Grafikkarte für diese Last benötigt ist \SI{22}{\second}. Es ist also wahrscheinlich, dass zumindest im Fall der \SI{68}{\second} drei verschiedene Prozesse auf einem Knoten diesselbe Grafikkarte anfordern. Diese Vermutung wurde getestet, indem jeder Slice seinen Hostnamen ausgeben soll. Mit \lstinline!start_spark_slurm.sh! \cite{scaromare} ist dies schnell interaktiv getestet:
 \begin{lstlisting}[language=scala]
 startSpark --time=04:00:00 --nodes=5 --partition=west --gres= --cpus-per-task=12
 spark-shell --master=$MASTER_ADDRESS
