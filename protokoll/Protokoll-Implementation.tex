@@ -135,11 +135,11 @@ Die \lstinline!gpuMethod!-Methode ist jedoch auch normal vom Host aufrufbar.
 
 Die erste Hälfte des Codes ist nur für das Abspeichern von Argumenten über den Konstruktor zuständig, da \lstinline!gpuMethod! keine Argumente nehmen darf, um von Rootbeer erkannt zu werden.
 
-Jeders MonteCarloPiKernel-Objekt sollte mit einem anderen Seed initialisiert werden, bevor gpuMethod aufgerufen wird, sonst rechnen zwei Threads das gleiche und verfälschen damit die Ergebnisse.
+Jedes MonteCarloPiKernel-Objekt muss mit einem anderen Seed initialisiert werden, bevor \lstinline!gpuMethod! aufgerufen wird, sonst rechnen zwei Threads mit denselben Zufallszahlenreihen und verfälschen damit die Ergebnisse.
 
-Als Pseudozufallszahlengenerator wird ein simpler linearer Kongruenzgenerator genommen. Als Faktor wird 950706376 genommen, vgl. \cite{fishman82,fishman86}
+Als Pseudozufallszahlengenerator wird ein simpler linearer Kongruenzgenerator mit 950706376 als Faktor genommen, vgl. \cite{fishman82,fishman86}
 
-Auf \lstinline!java.util.Random! wurde verzichtet, weil es in ersten Tests zu langsameren GPU-Berechnungen als auf dem Host führte. Es ist zu vermuten und in weiteren Tests zu beweisen, dass Zugriffe auf externe Bibliotheken von Rootbeer nicht in CUDA-Code umgesetzt werden können, sodass die Argumente an den Host gesendet werden, die Funktion auf dem host aufgerufen wird, und die Ergebnisse wieder an die Grafikkarte gesendet werden.
+Auf \lstinline!java.util.Random! wurde verzichtet, weil es in ersten Tests zu langsameren GPU-Berechnungen als auf dem Host führte. Es ist zu vermuten und in weiteren Tests zu beweisen, dass Zugriffe auf externe Bibliotheken von Rootbeer nicht in CUDA-Code umgesetzt werden können, sodass die Argumente an den Host gesendet werden, die Funktion auf dem Host aufgerufen wird und die Ergebnisse wieder an die Grafikkarte gesendet werden.
 
 \begin{lstlisting}[language=Java,caption={Implementation der Monte-Carlo-Integration für Pi},label=lst:pikernel]
 import org.trifort.rootbeer.runtime.Kernel;
@@ -148,7 +148,7 @@ import org.trifort.rootbeer.runtime.RootbeerGpu;
 public class MonteCarloPiKernel implements Kernel
 {
     private long[] mnHits;      // speichert Ergebnisse pro Kernelthread
-    private long   mRandomSeed; // die Zufallssaat für diesen Kernelthread
+    private long   mRandomSeed; // die Zufallssaat dieses Kernelthreads
     private long   mnDiceRolls; // Anzahl an Iterationen die zu tun sind
 
     public MonteCarloPiKernel
@@ -183,7 +183,7 @@ public class MonteCarloPiKernel implements Kernel
 }
 \end{lstlisting}
 
-Weiterhin wird auch aus Performancegründen \lstinline!mnDiceRolls! in eine lokale Variable zwischengespeichert. Dies führte auch zu einem signifikanten Geschwindigkeitsgewinn, vermutlich weil die zusätzliche Indirektion über die manuellen Speicherverwaltung von Rootbeer vermieden wird. Aus demselben Grund wird auch nicht direkt in \lstinline!mnHits! der Zähler erhöht, sondern eine temporäre lokale Variable genutzt. Letzteres reduzierte im Test eine laufzeit von \SI{2.25}{\seconds} auf \SI{0.5}{\seconds}.\\
+Weiterhin wird auch aus Performancegründen \lstinline!mnDiceRolls! in eine lokale Variable zwischengespeichert. Dies führte auch zu einem signifikanten Geschwindigkeitsgewinn, vermutlich weil die zusätzliche Indirektion (Pointer Chasing) über die manuellen Speicherverwaltung von Rootbeer vermieden wird. Aus demselben Grund wird auch nicht direkt in \lstinline!mnHits! der Zähler erhöht, sondern eine temporäre lokale Variable \lstinline!nHits! genutzt. Letzteres reduzierte im Test eine Laufzeit von \SI{2.25}{\second} auf \SI{0.5}{\second}.\\
 
 Auch sollte man darauf achten, wenn möglich Fließkommazahlen einfacher statt doppelter Genauigkeit zu nutzen, da Grafikkarten häufig mehr Berechnungseinheiten für einfache Genauigkeit besitzen.\\
 
@@ -195,21 +195,28 @@ Abschließend kann man sagen, dass ein erster Rootbeer-Kernel-Prototyp schnell g
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Um einen Rootbeer-Kernel auf einer Grafikkarte auszuführen, muss zuerst ein Rootbeerkontext angelegt werden.
-Der Konstruktor des Rootbeerkontexts bereitet die Berechnungen vor, indem es die Rootbeerprogrammbibliotheken aus dem JAR-Archiv in ein temporäres Verzeichnis entpackt. In der originalen Version war dies \lstinline!$HOME/.rootbeer/!.
+Der Konstruktor des Rootbeerkontexts bereitet die Berechnungen vor, indem es die Rootbeerprogrammbibliotheken aus dem JAR-Archiv in ein temporäres Verzeichnis entpackt.
+In der originalen Version von Rootbeer war dies \lstinline!$HOME/.rootbeer/!.
 Dies führt jedoch zu Problemen falls wie auf dem Testsystem, vgl. \autoref{sct:taurus}, das Verzeichnis über alle Knoten gemeinsam verfügbar ist, oder aber auch schon falls Rootbeer thread- oder prozessparallel ausgeführt wird.
-Im eigenen Fork \cite{ownrootbeerfork} wird dies mit Commit \lstinline!6196bfd! gelöst, indem die benötigten Programmbibliotheken in ein Unterverzeichnis entpackt wird, welches sich aus Hostname, Prozess-ID, Thread-ID und Nanosekundenzeitstempel zusammensetzt.
+Im eigenen Fork \cite{ownrootbeerfork} wird dies mit Commit \lstinline!6196bfd! gelöst, indem die benötigten Programmbibliotheken in ein Unterverzeichnis entpackt werden, welches sich aus Hostname, Prozess-ID, Thread-ID und Nanosekundenzeit zusammensetzt.\\
+
 Das Rootbeer-Objekt \lstinline!mRootbeerContext! stellt die Methoden \lstinline!getDevices!, \lstinline!createDefaultContext!, \lstinline!getThreadConfig! und \lstinline!run! zur Verfügung.
 
-Die \lstinline!run!-Methode nimmt eine liste von Kernel-Objekten als Argument und für diese auf der Grafikkarte aus. In Multi-GPU-Umgebungen wird die Grafikkarte jedoch autoamtisch gewählt, sodass diese Funktion vermieden werden sollte, stattdessen werden Teile des Quellcodes kopiert und abgeändert, siehe \autoref{lst:runOnDevice}.
+Die \lstinline!run!-Methode nimmt eine Liste von Kernel-Objekten als Argument und führt diese auf der Grafikkarte aus. In Multi-GPU-Umgebungen wird die Grafikkarte jedoch automatisch gewählt, sodass diese Funktion vermieden werden sollte, stattdessen werden Teile des Quellcodes kopiert und abgeändert, um manuell eine der verfügbaren Grafikkarten auszuwählen, siehe \autoref{lst:kernelcall}.
 
-Mit \lstinline!getDevices! erhält man eine Liste von \lstinline!GpuDevice!-Objekten die alle Informationen über die jeweilige Grafikkarte enthalten, wie z.B. der maximale Grafikkartenspeicher oder die Taktfrequenz. Außerdem können diese Objekte benutzt werden um Rootbeer-Kernel auf der ausgewählten Grafikkarte in Multi-GPU-Umgebungen auszuführen. In \lstinline!lst:kernelinit! werden die Grafikkarteninformationen benötigt um die Seeds und die Anzahl an Iterationen pro Kernelthread zu berechnen.
+Mit \lstinline!getDevices! erhält man eine Liste von \lstinline!GpuDevice!-Objekten die alle Informationen über die jeweilige Grafikkarte enthalten, so z.B. den maximalen Grafikkartenspeicher oder die Taktfrequenz.
+Außerdem können diese Objekte benutzt werden um Rootbeer-Kernel auf der ausgewählten Grafikkarte in Multi-GPU-Umgebungen auszuführen. In \autoref{lst:kernelinit} werden die Grafikkarteninformationen benötigt um die Seeds und die Anzahl an Iterationen pro Kernelthread zu berechnen.
 
-Der angelegte Rootbeerfork \cite{ownrootbeerfork} reduziert mit Commit \lstinline!e48b9ae! auf Knoten mit sehr vielen Grafikkarten die Initialisierungszeit von \lstinline!getDevices! um ca. \SI{1}{\seconds} pro verfügbare Grafikkarte, indem es die Aufrufe zu \lstinline!cuCtxCreate! und \lstinline!cuCtxDestroy! für jede Grafikkarte einspart. Der einzige Nachteil ist, dass der freie Speicherplatz auf der Grafikkarte nicht mehr in \lstinline!GpuDevice! verfügbar ist.
+Der angelegte Rootbeerfork \cite{ownrootbeerfork} reduziert mit Commit \lstinline!e48b9ae! auf Knoten mit sehr vielen Grafikkarten die Initialisierungszeit von \lstinline!getDevices! um ca. \SI{1}{\second} pro verfügbarer Grafikkarte, indem es die Aufrufe zu \lstinline!cuCtxCreate! und \lstinline!cuCtxDestroy! für jede Grafikkarte einspart, vgl. \autoref{fig:profilingapi}.
+Der einzige Nachteil ist, dass der freie Speicherplatz auf der Grafikkarte nicht mehr in \lstinline!GpuDevice! verfügbar ist.
 
 Als nächstes werden die Rootbeerkernelobjekte mit jeweiligem Seed initialisiert. Es werden so viele Kernelobjekte erstellt wie die Grafikkarte Threads parallel ausführen kann, um Pipelining voll auszunutzen.
-Die GTX 760 z.B. hat 1152 CUDA-Kerne über 6 Shared-Multiprozessoren (SMX), also 192 CUDA-Kerne pro SMX. Jeder SMX kann aber 2048 Threads parallel ausführen, um Latenzen durch Pipelining zu verbergen. In diesem Fall würden also 12288 Kernelobjekte erstellt werden.
+Die Tesla K20X z.B. hat 2688 CUDA-Kerne in 14 Shared-Multiprozessoren (SMX), also 192 CUDA-Kerne pro SMX, vgl. \autoref{tbl:k20k80} auf Seite~\pageref{tbl:k20k80}.
+Jeder SMX kann aber 2048 Threads parallel ausführen, um Latenzen durch Pipelining zu verbergen. In diesem Fall würden also 28672 Kernelobjekte erstellt werden.
 
-Commit \lstinline!9610c99! im eigenen Fork behebt diesbezüglich ein Problem, wo \lstinline!getThreadConfig! nicht optimate Konfigurationen liefert. Und zwar wurden immer so viele Threads genutzt wie ein SMX parallel ausführen konnte. Das heißt je mehr SMX eine Grafikkarte hat, desto mehr Rechenleistung blieb ungenutzt, weil z.B. bei obigen Beispiel nur 2048 Threads anstatt der 12288 Threads gestartet wurden und damit Zugriffslatenzen nicht ausreichend überdeckt werden konnten.
+Commit \lstinline!9610c99! im eigenen Fork behebt diesbezüglich ein Problem, wo \lstinline!getThreadConfig! nicht optimale Konfigurationen liefert. Und zwar wurden immer so viele Threads genutzt wie ein SMX parallel ausführen konnte. Das heißt je mehr SMX eine Grafikkarte hat, desto mehr Rechenleistung blieb ungenutzt, weil z.B. bei obigen Beispiel nur 2048 Threads anstatt der 28672 möglichen Threads gestartet wurden und damit Zugriffslatenzen nicht ausreichend überdeckt werden konnten.
+
+Falls z.B. eine hohe Primzahl als Anzahl an Kernelobjekten benutzt wird, die also nicht in Blocks und Threads zerlegbar ist, dann kann man die Anzahl an Kernelthreads aufrunden und Rootbeer nimmt achtet darauf die überflüssigen Threads zu ignorieren.
 
 \begin{lstlisting}[language=scala,caption={Initialisierung der Rootbeerkernelobjekte, vgl. auch \lstinline!multiNode/multiGpu/scala/MonteCarloPi.scala! \cite{scaromare}},label=lst:kernelinit]
 class MonteCarloPi( iGpuToUse : Array[Int] = null )
@@ -240,13 +247,15 @@ class MonteCarloPi( iGpuToUse : Array[Int] = null )
 
 
 Die Funktion \lstinline!runOnDevice!, siehe \autoref{lst:kernelcall}, führt eine Liste aus Kernelobjekten auf der ausgewählten Grafikkarte aus.
-Dafür wird auf dem ausgewählten \lstinline!GpuDevice! ein Beschleunigerkontext, also z.B. ein CUDA-Kontext, angelegt. Das Argument an \lstinline!createContext! gibt den voraussichtlich benötigten Grafikkartenspeicher an. Für Rootbeerkernel die dynamisch Speicher alloziieren, z.B. durch einen \lstinline!new!-Operator, ist diese Angabe Pflicht. Leider funktioniert die automatische Speicherberechnung auch von statischen Kernels nicht, sodass man in jedem Fall eine Angabe machen muss. Da man jedoch tiefe Einblicke in die Funktionweise von Rootbeer benötigt, um das abschätzen zu können, sollte so viel Speicher wie möglich als Reserve angefordert werden.
+Dafür wird auf dem ausgewählten \lstinline!GpuDevice! ein Beschleunigerkontext, also z.B. ein CUDA-Kontext, angelegt. Das Argument an \lstinline!createContext! gibt den voraussichtlich benötigten Grafikkartenspeicher an. Für Rootbeerkernel die dynamisch Speicher, z.B. durch einen \lstinline!new!-Operator, alloziieren, ist diese Angabe Pflicht.
+Leider funktioniert aber die automatische Speicherberechnung auch von Kernels ohne dynamische Allokationen nicht, sodass man in jedem Fall den benötigten Speicher angeben muss.
+Man benötigt jedoch tiefe Einblicke in die Funktionweise von Rootbeer, um das abschätzen zu können, weshalb man einfach so viel Speicher wie möglich als Reserve anfordern sollte.
 
-Als nächstes werden die Anzahl für die aus CUDA bekannten Blöcken und Threads festgelegt, die der Kernel umfassen soll. Diese wird berechnet aus der Anzahl an übergebenen Kernelobjekten.
+Als nächstes werden die Anzahl für, die aus CUDA bekannten, Blöcke und Threads, die der Kernel umfassen soll, anhand der Anzahl an übergebenen Kernelobjekten festgelegt.
 
-Mit \lstinline!buildState! werden Thread-Konfiguration zwischengespeichert, benötigte Serialisierungsspeicher auf Grafikkarte und Host angelegt und die CUDA-Binärdateien der vorkompilierten Kernel geladen und an den CUDA-Kontext gesendet.
+Mit der \lstinline!buildState!-Funktion werden die Thread-Konfiguration zwischengespeichert, benötigte Serialisierungsspeicher auf Grafikkarte und Host angelegt und die CUDA-Binärdateien der vorkompilierten Kernel geladen und an den CUDA-Kontext gesendet.
 
-Letztendlich werden mit \lstinline!runAsync! alle benötigten Daten vom Host an die Grafikkarte übertragen und der Kernel in einem eigenen Thread gestartet. Zurückgegeben wird ein \lstinline!GpuFuture!-Objekt mit einer \lstinline!take!-Methode, mit der auf die Vollendung des Threads gewartet werden kann, siehe \autoref{lst:kernelinit}. Dies ermöglicht das Nutzen mehrere Grafikkarten parallel aus einem Thread oder Prozess heraus, ohne dass sich der Rootbeernutzer selbst um Multithreading kümmern muss.
+Letztendlich werden mit \lstinline!runAsync! alle benötigten Daten vom Host an die Grafikkarte übertragen und der Kernel in einem eigenen Hostthread gestartet. Zurückgegeben wird ein \lstinline!GpuFuture!-Objekt mit einer \lstinline!take!-Methode, mit der auf die Vollendung des Threads gewartet werden kann, siehe \autoref{lst:kernelinit}. Dies ermöglicht das Nutzen mehrere Grafikkarten parallel aus einem Thread oder einem Prozess heraus, ohne dass sich der Rootbeernutzer sich selbst um Multithreading kümmern muss.
 
 \begin{lstlisting}[language=scala,caption={Ausführen der Rootbeerkernels auf einer ausgewählten Grafikkarte, vgl. auch \lstinline!multiNode/multiGpu/scala/MonteCarloPi.scala! \cite{scaromare}},label=lst:kernelcall]
     def runOnDevice(
@@ -278,23 +287,63 @@ Letztendlich werden mit \lstinline!runAsync! alle benötigten Daten vom Host an 
 \section{Kombination von Rootbeer mit Spark}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Die Idee ist einfach, man nutzt die Map-Funktion eines RDD, um z.B. eine Liste an Seeds abzubilden auf die Ergebnisse der Rootbeerkernel, indem man die Logik aus \autoref{lst:kernelinit} kopiert.
-Dabei stellen sich jedoch mehrere Probleme.
+Die Idee ist einfach, man nutzt die Map-Funktion eines RDD, um z.B. eine Liste an Seeds auf die Ergebnisse der Rootbeerkernel abzubilden, indem man die Logik aus \autoref{lst:kernelinit} kopiert.
+Dabei stellen sich jedoch mehrere Probleme:
 
-Wenn eine Partition auf eine Grafikkarte abgebildet wird und Workerknoten mehrere Grafikkarten besitzen, dann muss Rootbeer thread-safe sein. Dies wurde erst mit Commit \lstinline!aa3a0bc! und dem schon erwähnten Extraktionspfadproblem in Commit \lstinline!6196bfd! im Fork \cite{ownrootbeerfork} gelöst. Rootbeer war nicht thread-safe, da es an vielen Stellen nicht benötigte Singletons und statische Variablen verwendet. Der Compiler selbst ist immer noch nicht thread-safe, nur die Laufzeitklassen.
+Wenn je eine Spark-Partition auf eine Grafikkarte abgebildet wird und die genutzten Knoten mehrere Grafikkarten besitzen, dann muss Rootbeer threadsicher garantieren.
+Dies wurde erst mit Commit \lstinline!aa3a0bc! und dem schon erwähnten Extraktionspfadproblem in Commit \lstinline!6196bfd! im Fork \cite{ownrootbeerfork} gelöst.
+Rootbeer war nicht thread-safe, da es an vielen Stellen nicht benötigte Singletons und statische Variablen verwendet. Der Compiler selbst ist immer noch nicht thread-safe, nur die Laufzeitklassen wurden bisher angepasst.
 
-Bei Knoten mit mehreren Grafikkarten muss darauf geachtet werden, dass nicht zwei Partitionen derselben Grafikkarte zugeteilt werden.
-Als Voraussetzung ist dafür ein Partitionierer von Nöten, der die Partitionen exakt verteilt.
-Nutzt man den Standardpartitionierer, so kam es in Tests häufig vor, dass bei gleich vielen Kernen wie Elementen jeder Knoten bis auf zwei so viele Elemente zugewiesen bekommt, wie er Knoten hat. Ein Knoten jedoch kriegt ein Element weniger und ein anderer eins mehr. Um dieses Problem zu beheben wird ein benutzerdefinierter Partitionier benutzt.
-\begin{lstlisting}[language=Scala,caption={Exakter Partitionierer},label={lst:exactpart}]
-class ExactPartitioner[V]( partitions: Int, elements: Int) extends Partitioner {
-    def numPartitions() : Int = partitions
-    def getPartition(key: Any): Int = key.asInstanceOf[Int] % partitions
-}
-\end{lstlisting}
-Mit Hilfe dieser Klasse kann nun Informationen über den RDD bzw. die Sparkinstanz gesammelt werden.
-\begin{lstlisting}[language=Scala,caption={Ausschnitt aus \lstinline!getClusterGpuConfiguration!, vgl. \lstinline!multiNode/multiGpu/scala/TestMonteCarloPi.scala!},label=lst:clusterconfig}
-val configuration = sc.
+Bei Knoten mit mehreren Grafikkarten muss darauf geachtet werden, dass nicht zwei Partitionen auf demselben Host derselben Grafikkarte zugeteilt werden, womit die Kernel nacheinander ausgeführt werden würden.
+
+%Als Voraussetzung ist dafür ist ein Partitionierer von Nöten, der die Partitionen exakt verteilt.
+%Nutzt man den Standardpartitionierer, so kam es im folgenden Test reproduzierbar vor, dass bei gleich vielen Kernen wie Elementen jeder Knoten bis auf zwei so viele Elemente zugewiesen bekommt, wie er logische Kerne hat. Ein Knoten jedoch kriegt ein Element weniger und ein anderer eins mehr.
+%\begin{lstlisting}[language=Scala,caption={Test der Verteilung v}
+%sc.parallelize( 0 to 4*12-1, 4*12-1 ).map( x=>(x,x) ).
+%    mapPartitionsWithIndex{ (iPartition, ) => it.map( (x) => {
+%        Thread.sleep(10); x+" : " +
+%        InetAddress.getLocalHost().getHostName() +
+%        " located in "+ip } ) }.
+%    collect().foreach( println )
+%\end{lstlisting}
+%
+%\begin{lstlisting}
+%(0,0)   : taurusi3094 located in 0
+%(1,1)   : taurusi3092 located in 1
+%(2,2)   : taurusi3099 located in 2
+%(3,3)   : taurusi3100 located in 3
+%(4,4)   : taurusi3094 located in 4
+%...
+%(43,43) : taurusi3100 located in 43
+%(44,44) : taurusi3094 located in 44
+%(45,45) : taurusi3092 located in 45
+%(46,46) : taurusi3099 located in 46
+%(47,47) : taurusi3099 located in 46
+%\end{lstlisting}
+%Der Test wurde in einer Spark-Instanz ausgeführt die auf vier Knoten mit gleich viel logischen Kernen lief:
+%
+%
+%Um dieses Problem zu beheben wird ein benutzerdefinierter Partitionier benutzt.
+%\begin{lstlisting}[language=Scala,caption={Exakter Partitionierer},label={lst:exactpart}]
+%class ExactPartitioner[V]( partitions: Int, elements: Int) extends Partitioner {
+%    def numPartitions() : Int = partitions
+%    def getPartition(key: Any): Int = key.asInstanceOf[Int] % partitions
+%}
+%\end{lstlisting}
+%
+%Mit Hilfe dieser Klasse kann nun Informationen über den RDD bzw. die Sparkinstanz gesammelt werden.
+
+Im ersten Schritt werden hierfür so viele Partitionen wie logische Kerne über alle Knoten verfügbar sind bzw. so viele wie Grafikkarten benötigt werden, gestartet.
+Jede Partition sammelt Informationen darüber auf welchem Host er ist, wie viele Grafikkarten der Host besitzt und wie viel Leistung die jeweiligen Grafikkarten haben.
+Letztere Angabe wird benutzt um die Arbeit gleichmäßig proportional der Peak-Flops zu verteilen.
+Hierbei bezeichnet in \autoref{lst:clusterconfig} \lstinline!sc! den Sparkkontext.
+
+Wichtig ist, dass diese Map auch wirklich ausgeführt wird und nicht nur lazy evaluiert wird.
+Außerdem muss darauf geachtet werden, dass bei einer erneuten Ausführung, z.B. für die spätere Verteilung der Grafikkarten, die Partitionen wieder auf demselben Host ausgeführt werden, damit die Zuordnungen der Grafikkarten stimmen.
+Dafür wird das RDD mit \lstinline!cache! in den Arbeitsspeicher auf den jeweiligen Knoten gecachet und somit an den jeweiligen Host gebunden.
+
+\begin{lstlisting}[language=Scala,caption={Ausschnitt aus \lstinline!getClusterGpuConfiguration!, vgl. \lstinline!multiNode/multiGpu/scala/TestMonteCarloPi.scala!},label=lst:clusterconfig]
+val cluster = sc.
     parallelize( (0 until nPartitions).zipWithIndex ).
     partitionBy( new ExactPartitioner( nPartitions, nPartitions ) ).
     map( x => {
@@ -310,28 +359,51 @@ val configuration = sc.
     } ).
     cache /* ! */
 \end{lstlisting}
-In \autoref{lst:clusterconfig} bezeichnet \lstinline!sc! den Sparkkontext. Die \lstinline!partitionBy!-Methode ermöglicht es den RDD mit dem obig beschriebenen benutzerdefinierten Partitionierer
+
+Nachdem Seeds und Grafikkarten aufgeteilt wurden, kann das gecachete RDD erneut auf die Ergebnisse der Monte-Carlo-Pi-Integration gemappt werden, siehe \autoref{lst:pimap}.
+\begin{lstlisting}[language=Scala,label=lst:pimap,caption={Start der Berechnung über Spark und Rootbeer, vgl. \lstinline!TestMonteCarloPi.scala! \cite{scaromare}}]
+val piTripels = cluster.zipWithIndex.map( x => {
+    val host            = x._1._1
+    val nGpusAvailable  = x._1._2._1
+    val iRank           = x._2.toInt
+    val seedStart       = rankToSeedMapping(iRank)._1
+    val seedEnd         = rankToSeedMapping(iRank)._2
+    val iGpuToUse       = rankToGpuMapping(iRank)
+    val nGpusToUse      = rankToNGpusTouse(host)
+    val hostname        = InetAddress.getLocalHost.getHostName
+
+    var pi = -1.0
+    if ( iGpuToUse < nGpusToUse )
+    {
+        var piCalculator = new MonteCarloPi(
+            Array( iGpuToUse ) /* Array of GPU IDs to use */ )
+        pi = piCalculator.calc( nRollsPerPartition( iRank ), seedStart, seedEnd )
+    }
+    /* return */
+    ( pi, ( hostname, iRank, iGpuToUse ) )
+} ).filter( _._1 != -1.0 ).collect
+\end{lstlisting}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Kompilierung}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+Die Kompilation wird aus Performancegründen und weil Rootbeer in manchen Fällen Problemen mit JAR-Archiven hatte, die Scala-Klassen beinhalteten, getrennt in die Kompilation der Rootbeerkernel und die Kompilation des Hostprogrammcodes, siehe \autoref{fig:compilation}.
+
+Alle Rootbeerkernel werden zu einem JAR-Archiv gepackt und mit Rootbeer analysiert bzw. kompiliert.
 
 \begin{figure}[H]
     \centering
     \begin{minipage}{\linewidth}
-        \includegraphics[width=\linewidth]{compile-structure-deu.pdf}
+        \includegraphics[width=\linewidth]{compile-structure-deu-new.pdf}
     \end{minipage}
-    \caption{Kompilationsschema mit Kommadozeilenbefehlen und Zwischenstati.}
+    \caption{Kompilationsschema mit Kommadozeilenbefehlen und Zwischenstatussen.}
     \label{fig:compilation}
 \end{figure}
 
-!!! Problem: Hab mehrere Fehler gefunden deren Kenntnis möglicherweise eine Vereinfachung des Schemas bedeutet. Da bin ich noch am rumspielen, daher ist das halbfertig.
-
-\section{Probleme}
-Implementierung:
-    Was ist bei GPUs zu beachten ( Seeds, 64-Bit )
-    Was ist bei Rootbeer zu beachten?
-      - private Variablen werden wirklich immer per memcpy hin und her transportiert.
-      - muss nicht auf ungerade Kernel-Zahl achten, werden automatisch aussortiert
+Für das fertige JAR-Archiv ist es nicht nötig die Spark-Runtime reinzupacken, da das Archiv über Spark ausgeführt wird und somit alle Klassen vom Spark-Executor zur Verfügung gestellt werden.
+Jedoch müssen die Bibliotheken für Scala und für Rootbeer mit reingepackt werden.
+In \autoref{fig:compilation} wird \lstinline!RootbeerRuntime.jar! anstatt \lstinline!Rootbeer.jar! gepackt.
+Dies ist eine Optimierung, die im Fork \cite{ownrootbeerfork} mit Commit \lstinline!6c7cba4! eingeführt wurde.
+\lstinline!RootbeerRuntime.jar! enthält nur die für die Runtime benötigten Klassen und Abhängigkeiten und ist ca. \SI{400}{\kilo\byte} groß, während \lstinline!Rootbeer.jar! auch den Rootbeercompiler und dessen Abhängigkeiten, also insbesondere auch die Soot-Bibliothek enthält und damit auf \SI{14}{\mega\byte} anwächst.

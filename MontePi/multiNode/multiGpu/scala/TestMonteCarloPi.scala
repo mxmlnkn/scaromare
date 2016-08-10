@@ -214,7 +214,7 @@ object TestMonteCarloPi
          **** to all available GPUs                                        ****/
         val t0 = System.nanoTime()
         val piTripels = cluster.zipWithIndex.map( x => {
-            /* Task not serializable -> try to itnerleave all these values into the cached RDD */
+            /* Task not serializable -> try to interleave all these values into the cached RDD */
             val host            = x._1._1
             val nGpusAvailable  = x._1._2._1
             val iRank           = x._2.toInt

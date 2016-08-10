@@ -64,25 +64,25 @@ Gerechnet wurde auf Insel 2 von Taurus, vgl. Tabelle~\ref{tbl:island2}. Wenn nic
 Zu den Spitzenleistungen in Tabelle~\ref{tbl:k20k80} sei angemerkt, dass jeder CUDA-Kern einfache Fließkommagenaugigkeit berechnet und auf drei CUDA-Kerne eine Doppelpräzisionseinheit kommt, wodurch sich die DFLOPS berechnen.
 Die K80 hat außerdem einen Boost-Modus mit \SI{0.875}{\giga\hertz}, also einer Leistungssteigerung von $1.56$.
 
-%Die Maximalleistung in der Berechnung von Fließkommazahlen einfacher Genauigkeit (SPFLOPS) im Verhältnis einer Multiplikation zu einer Addition beträgt
-%\begin{align}
-%	\SI{3.30}{\giga\hertz} \cdot
-%	2\,\text{Kerne} \left(
-%		1\,\frac{ \text{AVX ADD Einheit} }{ \text{Kern} } +
-%		1\,\frac{ \text{AVX MUL Einheit} }{ \text{Kern} }
-%	\right) \cdot
-%	8\,\frac{ \text{SPFLO} }{ \text{AVX Einheit} } \\
-%	= 105.6\,\text{GSPFLOPS}
-%\end{align}
-%für den Prozessor. Informationen zur Architektur, wie die Anzahl an AVX-Einheiten wurde aus Ref.\cite{cesga} entnommen.
-%
-%Die Maximalleistung der Grafikkarte beträgt:
-%\begin{align}
-%	\SI{1.085}{\giga\hertz} \cdot 1152 \text{CUDA-Kerne} \cdot
-%	1 \frac{ \text{FMA-Einheit} }{ \text{CUDA-Kern} } \cdot
-%	2 \frac{ \text{SPFLO} }{ \text{FMA-Einheit} }
-%	= 2500\,\text{GSPFLOPS}
-%\end{align}
+Die Maximalleistung in der Berechnung von Fließkommazahlen einfacher Genauigkeit (SPFLOPS) im Verhältnis einer Multiplikation zu einer Addition beträgt
+\begin{align}
+	\SI{3.30}{\giga\hertz} \cdot
+	2\,\text{Kerne} \left(
+		1\,\frac{ \text{AVX ADD Einheit} }{ \text{Kern} } +
+		1\,\frac{ \text{AVX MUL Einheit} }{ \text{Kern} }
+	\right) \cdot
+	8\,\frac{ \text{SPFLO} }{ \text{AVX Einheit} } \\
+	= 105.6\,\text{GSPFLOPS}
+\end{align}
+für den Prozessor. Informationen zur Architektur, wie die Anzahl an AVX-Einheiten wurde aus Ref.\cite{cesga} entnommen.
+
+Die Maximalleistung der Grafikkarte beträgt:
+\begin{align}
+	\SI{1.085}{\giga\hertz} \cdot 1152 \text{CUDA-Kerne} \cdot
+	1 \frac{ \text{FMA-Einheit} }{ \text{CUDA-Kern} } \cdot
+	2 \frac{ \text{SPFLO} }{ \text{FMA-Einheit} }
+	= 2500\,\text{GSPFLOPS}
+\end{align}
 
 \section{Monte-Carlo-Simulation verschiedener Implementationen}
 
@@ -99,36 +99,14 @@ Bei der C++-Version ist dies schon bei ca. 100 Millionen Iterationen der Fall.
 	\end{minipage}\begin{minipage}{0.5\linewidth}
 		\includegraphics[width=\linewidth]{benchmarks-workload-scaling-taurus2}
 	\end{minipage}
-	\caption{Benötigte Ausführungszeit der Monte-Carlo Pi-Berechnung in Abhängigkeit von der Anzahl an Iterationen. Getestet auf \textbf{links:} System 1 und \textbf{rechts:} System 2 (Taurus), siehe Kapitel~\ref{sct:system1}}
+	\caption{Benötigte Ausführungszeit der Monte-Carlo Pi-Berechnung in Abhängigkeit von der Anzahl an Iterationen. Getestet auf Taurus, siehe \autoref{sct:taurus}}
 	\label{fig:montepiworkloadscaling}
 \end{figure}
-Im Programmausdruck~\ref{lst:montemainloop} ist die Hauptschleife, die hauptsächlich die Arbeitslast generiert, zu sehen.
-Es handelt sich also für jede der zwei Zufallszahlen um eine Multiplikations und zwei Divisionen und dann nochmals zwei Multiplikationen für die Berechnung des Quadrat des Radius, also zusammen acht Operationen pro Iteration und neun Operationen für Iterationen die im Kreis liegen.
-Dies tritt für $\frac{\pi}{4}=0.785\%$ der Fälle auf, das heißt die Rechenlast, definiert als die Anzahl an arithmetischen Operationen $N_\text{Op}$ sollte sich wie folgt aus der Anzahl an Iterationen $N$ berechnen:
-\begin{align}
-	N_\text{Op}
-	= \left[ \frac{\pi}{4}\cdot 9 + \left( 1-\frac{\pi}{4} \right)\cdot 8 \right] N
-	= 8.8\cdot N
-\end{align}
 
-Zuletzt ist aus dem Plot abzulesen, dass für große Lasten wie z.B. für drei Milliarden Iterationen die Versionen, die von Grafikarten Gebrauch machen, um einen Faktor $140$ (Scala) bis $320$ (C++) schneller sind als die Java Version, die auf einem Prozessor-Kern ausgeführt wird.
+Weiterhin ist aus dem Plot abzulesen, dass für große Lasten wie z.B. für drei Milliarden Iterationen die Versionen, die von Grafikarten Gebrauch machen, um einen Faktor $140$ (Scala) bis $320$ (C++) schneller sind als die Java Version, die auf einem Prozessor-Kern ausgeführt wird.
 Dieser große Unterschied zwischen CPU und GPU lässt darauf schließen, dass Java weder AVX noch mehrere Kerne gleichzeitig nutzt.
 Das heißt für die CPU-Versionen wäre für das Testsystem 1 noch ein Geschwindigkeitsgewinn von $8\,\frac{ \text{Op} }{ \text{AVX-Einheit} } \cdot 2\,\text{Kerne}$ erreichbar.
-Dies würde den Geschwindigkeitsunterschied von $320$ auf $20$ reduzieren, was in Übereinstimmung mit dem Verhältnis der Peakflops aus Kapitel~\ref{sct:system1} wäre.
-
-\begin{lstlisting}[language=Java,caption={Hauptschleife der Monte-Carlo Pi-Berechnung},label=lst:montemainloop]
-for ( int i = 0; i < dnDiceRolls; ++i )
-{
-    dRandomSeed = (int)( (randMagic*dRandomSeed) % randMax );
-    float x = (float) dRandomSeed / randMax;
-    dRandomSeed = (int)( (randMagic*dRandomSeed) % randMax );
-    float y = (float) dRandomSeed / randMax;
-    if ( x*x + y*y < 1.0 )
-        nHits += 1;
-}
-\end{lstlisting}
-Dieses Branching verändert also nicht das Skalierverhalten linear mit $N$, sondern führt nur zu einem veränderten Faktor. Daher ist in Abb.\ref{fig:montepiworkloadscaling} lineares Verhalten zu beobachten.
-
+Dies würde den Geschwindigkeitsunterschied von $320$ auf $20$ reduzieren, was in Übereinstimmung mit dem Verhältnis der Peakflops aus Kapitel~\ref{sct:taurus} wäre.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

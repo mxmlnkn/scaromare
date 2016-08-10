@@ -71,7 +71,7 @@ sc.parallelize( 0 to 4*12-1, 4*12-1 ).map( x=>(x,x) ).
 (44,44) : taurusi3094 located in 44
 (45,45) : taurusi3092 located in 45
 (46,46) : taurusi3099 located in 46
-(47,47) : taurusi3099 located in 46  <- WHY?! Bug?
+(47,47) : taurusi3099 located in 46  <- WHY?! Bug? <- -.- nPartitions = 4*12-1 ... so yeah ... should be 4*12
 
 
 pairs.partitionBy( new ExactPartitioner(4*12,4*12) ).mapPartitionsWithIndex{(ip,it)=> it.map( (x) => { Thread.sleep(10); x+" : "+InetAddress.getLocalHost().getHostName()+" located in "+ip } )}.collect().foreach( println )
@@ -286,7 +286,7 @@ EOF
 
 // In order to test if it works programmatically
 val nGpus = 12
-val gpuHostAssignment = sc.parallelize( 0 to 4*nGpus-1, 4*nGpus-1 ).
+val gpuHostAssignment = sc.parallelize( 0 to 4*nGpus-1, 4*nGpus-1 /* -.- !!! why the -1 ??? */ ).
     map( x=>(x,x) ).
     partitionBy( new GroupPartitioner(4*nGpus,4*nGpus) ).
     map( x => {

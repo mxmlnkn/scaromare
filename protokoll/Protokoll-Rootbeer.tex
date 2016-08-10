@@ -15,7 +15,7 @@ In Kontrast dazu ist es jedoch auch mögliche wiederum sehr nah an der Grafikkar
 
 %\section{Nutzung}
 
-Für die Nutzung von Rootbeer unter Debian-Derivaten ist das \texttt{openjdk-7-jdk}-Pakt und das \texttt{nvidia-cuda-toolkit}-Paket notwendig. Leider funktioniert Rootbeer nicht mit JDK 8. JDK 7 funktioniert vollends in den hier durchgeführten Beispielen, aber volle Unterstützung ist bisher nur für JDK 6 offiziell gegeben\cite{rootbeerjdk6}.
+Für die Nutzung von Rootbeer unter Debian-Derivaten ist das \texttt{openjdk-7-jdk}-Paket und das \texttt{nvidia-cuda-toolkit}-Paket notwendig. Leider funktioniert Rootbeer nicht mit JDK 8. JDK 7 funktioniert vollends in den hier durchgeführten Beispielen, aber volle Unterstützung ist bisher nur für JDK 6 offiziell gegeben\cite{rootbeerjdk6}.
 
 Ein Minimalbeispiel für einen Kernel, dessen Threads nur ihre ID in einen Array schreiben sieht wie folgt aus:
 \lstinputlisting[language=Java]{minimal/ThreadIDsKernel.java}
@@ -53,4 +53,4 @@ Dies resultiert z.B. in diesen Pfad: \lstinline!~/.rootbeer/taurusi2093/7227-311
 
 
 % - private Variablen werden wirklich immer per memcpy hin und her transportiert.
-% - muss nicht auf ungerade Kernel-Zahl achten, werden automatisch aussortiert 
+% - muss nicht auf ungerade Kernel-Zahl achten, werden automatisch aussortiert

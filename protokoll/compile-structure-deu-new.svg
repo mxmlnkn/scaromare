@@ -9,8 +9,8 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    id="svg2"
-   viewBox="0 0 673.48053 528.14647"
-   height="149.05467mm"
+   viewBox="0 0 673.48053 528.91935"
+   height="149.2728mm"
    width="190.07117mm"
    inkscape:version="0.91 r13725"
    sodipodi:docname="compile-structure-deu-new.svg">
@@ -27,9 +27,9 @@
      inkscape:window-height="1042"
      id="namedview3572"
      showgrid="false"
-     inkscape:zoom="0.5549293"
-     inkscape:cx="473.54175"
-     inkscape:cy="92.007224"
+     inkscape:zoom="1.1098586"
+     inkscape:cx="434.14704"
+     inkscape:cy="221.86406"
      inkscape:window-x="2516"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
@@ -686,23 +686,23 @@
       <rect
          style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="rect12744"
-         width="104.25929"
-         height="25.157536"
-         x="-165.00667"
-         y="603.78271" />
+         width="164.62732"
+         height="26.959562"
+         x="-225.37471"
+         y="601.98071" />
       <flowRoot
          xml:space="preserve"
          id="flowRoot12746"
          style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         transform="translate(-270.07406,413.80359)"><flowRegion
+         transform="translate(-332.24414,412.00156)"><flowRegion
            id="flowRegion12748"><rect
              id="rect12750"
-             width="95.064537"
+             width="159.03665"
              height="22.050064"
              x="110.6117"
              y="193.22746"
              style="font-size:15px" /></flowRegion><flowPara
-           id="flowPara12752">Rootbeer.jar</flowPara><flowPara
+           id="flowPara12752">RootbeerRuntime.jar</flowPara><flowPara
            id="flowPara12754" /></flowRoot>    </g>
     <g
        id="g14048"
@@ -725,7 +725,7 @@
              x="110.6117"
              y="193.22746"
              style="font-size:15px" /></flowRegion><flowPara
-           id="flowPara14058">MonteCarloPiSpark.scala</flowPara><flowPara
+           id="flowPara14058">TestMonteCarloPi.scala</flowPara><flowPara
            id="flowPara14060" /></flowRoot>      <flowRoot
          xml:space="preserve"
          id="flowRoot14062"
@@ -796,18 +796,20 @@
              style="font-size:15px"
              y="193.22746"
              x="110.6117"
-             height="66.990074"
-             width="307.18234"
+             height="65.07872"
+             width="306.54523"
              id="rect16395"
              ry="0" /></flowRegion><flowPara
            id="flowPara16399"
-           style="font-size:12.5px">MonteCarloPiSpark$$anonfun$1.class</flowPara><flowPara
+           style="font-size:12.5px">TestMonteCarloPi$$anonfun$1.class</flowPara><flowPara
            id="flowPara16451"
-           style="font-size:12.5px">MonteCarloPiSpark$$anonfun$2.class</flowPara><flowPara
+           style="font-size:12.5px">TestMonteCarloPi$$anonfun$2.class</flowPara><flowPara
            id="flowPara16453"
-           style="font-size:12.5px">MonteCarloPiSpark$$anonfun$main$1.class</flowPara><flowPara
+           style="font-size:12.5px">TestMonteCarloPi$$anonfun$main$1.class</flowPara><flowPara
            style="font-size:12.5px"
-           id="flowPara16461">MonteCarloPiSpark.classTestMonteCarloPi$.class</flowPara><flowPara
+           id="flowPara16461">TestMonteCarloPi$.class</flowPara><flowPara
+           style="font-size:12.5px"
+           id="flowPara4499">...</flowPara><flowPara
            id="flowPara16455"
            style="font-size:12.5px" /><flowPara
            id="flowPara16457"
@@ -827,7 +829,7 @@
              x="102.85714"
              y="558.07648" /></flowRegion><flowPara
            style="font-size:10px"
-           id="flowPara16473">jar -cvfm cpu.jar manifest.txt MonteCarloPiSpark*.class</flowPara></flowRoot>      <g
+           id="flowPara16473">jar -cvfm cpu.jar manifest.txt TestMonteCarloPi*.class</flowPara></flowRoot>      <g
          id="g16475">
         <rect
            ry="15.152288"
@@ -894,17 +896,17 @@
            id="flowRegion4793"><rect
              y="558.07648"
              x="102.85714"
-             height="42.264362"
-             width="196.21323"
+             height="38.660282"
+             width="214.23355"
              id="rect4795" /></flowRegion><flowPara
            id="flowPara4797"
-           style="font-size:10px">zipmerge MontePi.jar /usr/share/java/scala-library.jar gpu/MontePiGPU.jar MonteCarloPiSpark.jar</flowPara></flowRoot>      <g
+           style="font-size:10px">zipmerge MontePi.jar /usr/share/java/scala-library.jar gpu.jar cpu.jar $(ROOTBEER_ROOT)/RootbeerRuntime.jar</flowPara></flowRoot>      <g
          id="g4799">
         <rect
            style="fill:none;stroke:#000000;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
            id="rect4801"
-           width="204.77417"
-           height="44.93911"
+           width="228.20058"
+           height="45.712021"
            x="-5.0507627"
            y="516.98138"
            rx="15.152288"
