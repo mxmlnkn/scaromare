@@ -113,9 +113,23 @@ Die Gesamtlaufzeit im Beispiel wurde so von ca. \SI{8}{\second} auf \SI{5}{\seco
 	\label{fig:apicalls}
 \end{figure}
 
+Die Auswertung der Utilisierung in \autoref{fig:utilization} zeigt, dass der Algorithmus die arithmetischen Einheiten fast voll auslastet.
+Es ist also noch Spielraum für Algorithmen die weniger rechenlastig sind und mehr Speicherzugriffe haben.
+Im Allgemeinen wird es sich aber nicht lohnen Algorithmen zu parallelisieren, die gleich viel Speicherzugriffe wie Berechnungen haben.
+Gut geeignet sind Algorithmen, bei denen die Anzahl an Berechnungen mit dem Quadrat der Anzahl an Speicherzugriffen oder noch schneller steigt.
+
+\begin{figure}
+	\centering
+	\begin{minipage}{0.7\linewidth}
+		\includegraphics[width=\linewidth]{../presentation/kernel-utilization}
+	\end{minipage}
+	\caption{Auswertung der Kernel-Utilisierung mit dem NVIDIA Visual Profiler des mit Rootbeer beschleunigten Monte-Carlo-Algorithmus.}
+	\label{fig:utilization}
+\end{figure}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Monte-Carlo-Simulation verschiedener Implementationen}
+\section{Implementationsunterschiede}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 In Abb.\ref{fig:montepiworkloadscaling} wurde die Ausführungszeit von Monte-Carlo-Simulationen implementiert mit verschiedenen Programmiersprachen über die Anzahl an Monte-Carlo-Iterationen gemessen.
@@ -142,24 +156,19 @@ Die theoretische Maximalleistung eines Kerns auf dem Intel Xeon E5-2680v3-Knoten
 Das heißt man würde einen Speedup von ca. $140\,\text{GSPFLOPS}$ erwarten.
 Dass der Speedup höher ist liegt wahrscheinlich daran, dass Java keinen oder nur schlecht optimierten Gebrauch von AVX für die Monte-Carlo-Berechnung macht.
 
-\begin{figure}[H]
-	\centering
-	\begin{minipage}{0.7\linewidth}
-		\includegraphics[width=\linewidth]{../presentation/kernel-utilization}
-	\end{minipage}
-	\caption{Auswertung der Kernel-Utilisierung mit dem NVIDIA Visual Profiler des mit Rootbeer beschleunigten Monte-Carlo-Algorithmus.}
-	\label{fig:utilization}
-\end{figure}
+Bei ungefähr \SI{2}{\second} Ausführungszeit sind GPU- und CPU-Version gleich schnell.
+Das heißt schon ab einer Problemgröße, die mehrere Sekunden rechnen würde, lohnt sich eine Portierung auf Grafikkarten.
+Wenn auf dem Host AVX und alle Kerne benutzt werden, wie in der Messung hier nicht der Fall war, dann muss das Problem jedoch noch größer sein. Aber eine solche Portierung auf multithreaded AVX wäre womöglich noch komplizierter als das Schreiben eines Rootbeer-Kernels.
 
+Wenn die Probleme aber genügend groß sind, dann rentieren sich Grafikkartenbeschleuniger sehr.
+Bei ungefähr vergleichbaren Prozessoren zu Grafikkarten und beiderseits sehr gut optimierten Programmen ist, wie in \autoref{tbl:k20k80} an den theoretischen Peak-FLOPS zu sehen, ein 10-facher Geschwindigkeitsgewinn realistisch.
+Dies gilt jedoch nur für einfache Genauigkeit.
+Für Fließkommaberechnungen doppelter Genauigkeit sind Grafikkarten je nach Modell ungeeignet.
 
-Die Auswertung der Utilisierung in \autoref{fig:utilization} zeigt, dass der Algorithmus die arithmetischen Einheiten fast voll auslastet.
-Es ist also noch Spielraum für Algorithmen die weniger rechenlastig sind und mehr Speicherzugriffe haben.
-Im Allgemeinen wird es sich aber nicht lohnen Algorithmen zu parallelisieren, die gleich viel Speicherzugriffe wie Berechnungen haben.
-Gut geeignet sind Algorithmen, bei denen die Anzahl an Berechnungen mit dem Quadrat der Anzahl an Speicherzugriffen oder noch schneller steigt.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Monte-Carlo-Simulation mit Spark und Rootbeer}
+\section{Spark mit Rootbeer}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 In Abbildung~\ref{fig:montepiweakscaling} ist die Laufzeit über die Anzahl an Grafikkarten dargestellt. jeder Knoten hat zwei Tesla K20X-Grafikkarten.
@@ -190,13 +199,6 @@ Wie man in \autoref{fig:montepistrongscaling} sieht nimmt also mit Erhöhung der
 Für $2^37=137\cdot 10^9$ Gesamtiterationen ist der Speedup bei ungefähr vier gesättigt.
 Es ist also nicht sinnvoll dieses dieses Problem mit signifikant mehr als vier Grafikkarten zu parallelisieren.
 Wie aus \autoref{fig:montepiworkloadscaling} entnehmbar würde die CPU-Version ungefähr \SI{500}{\second} benötigen.
-Es ist also erst bei sehr großen Problemen, die auf dem Host mehr als eine Minute benötigen würden, überhaupt sinnvoll Grafikkarten einzusetzen.
-
-Wenn auf dem Host AVX und alle Kerne benutzt werden, dann muss das Problem noch größer sein, damit sich Grafikkarten lohnen.
-Wenn die Probleme aber genügend groß sind, dann rentieren sich Grafikkartenbeschleuniger sehr.
-Bei ungefähr vergleichbaren Prozessoren zu Grafikkarten und beiderseits sehr gut optimierten Programmen ist, wie in \autoref{tbl:k20k80} an den theoretischen Peak-FLOPS zu sehen, ein 10-facher Geschwindigkeitsgewinn realistisch.
-Dies gilt jedoch nur für einfache Genauigkeit.
-Für Fließkommaberechnungen doppelter Genauigkeit sind Grafikkarten je nach Modell ungeeignet.
 
 \begin{figure}[H]
 	\centering

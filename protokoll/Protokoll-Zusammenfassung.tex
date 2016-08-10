@@ -1,6 +1,23 @@
+
 \chapter{Zusammenfassung}
 
- - Ausblick(Nutzbarkeit, Anwendungsfälle, Deep Learning)
- - deep learning - Ähnlichkeit (assembling)
+% um was gehts (Kontext) -> ist doch schon in der Einleitung :S? Außerdem wird das indirekt bei dem nächsten Punkt erwähnt
 
- - mehr cores
+% Was habe ich gemacht
+Im Rahmen dieser Belegarbeit wurde erfolgreich ein simpler rechenlastiger Monte-Carlo-Algorithmus mit Spark und Rootbeer auf einem Grafikkartencluster parallelisiert und gebenchmarkt.
+Die Benchmarkresultaten zeigen, dass es sich schon lohnen kann Probleme, die mehrere Sekunden auf einem x86-Prozessor benötigen würden, auf Grafikkarten zu parallelisieren.
+Die gemessenen Geschwindigkeitsgewinne sind für den Algorithmus vergleichbar mit den theoretischen Speedups, welche sich aus den theoretischen Peak-Flops berechnen.
+Dafür war jedoch zeitintensive Einarbeitung in den Rootbeerquellcode nötig, um mehrere Bugs zu lösen.
+Ein angepasster Fork von Rootbeer befindet sich in \cite{ownrootbeerfork} und die Beispielquellcodes zu Spark in Verbindung mit Rootbeer befinden sich in \cite{scaromare}.\\
+
+% Was haben wir gelernt -> schon mit in obigem Absatz mehr oder minder enthalten
+
+% Ausblick
+
+Ausgehend von dieser Arbeit wäre es interessant einen komplexeren Algorithmus mit mehr Speicherzugriffen und mehr Kommunikation innerhalb von Spark zu testen.
+Falls zwischen iterativen Rootbeerkernelaufrufen Daten auf der Grafikkarte wiederbenutzt werden können, dann wäre es sinnvoll Rootbeer so zu erweitern, dass man Speicher in der Grafikkarte behalten und für den nächsten Kernelaufruf wiederverwenden kann.
+Eine interessante Anwendung wäre z.B. das maschinelle Lernen auf einem Grafikkartencluster.
+
+Weiterhin könnte man Straggler besser ausgleichen wenn man wie in Spark gewohnt ungefähr vier mal so viele Partitionen, d.h. Teilaufgaben, schedulen könnte als es Grafikkarten zur Verfügung gibt.
+Mit der hier vorliegenden Version ist dies nicht einfach möglich, da die Verteilung der Partitionen an die Grafikkarten statisch vor der Ausführung geschieht.
+Das Problem hierbei ist jedoch, dass mit CUDA nicht dynamisch festgestellt werden kann, welche Grafikkarten in Benutzung sind und welche nicht.
