@@ -127,6 +127,7 @@ Wenn $f_i$ in einem beschränkten Intervall liegt, dann ist auch die Standardabw
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Implementation des Kernels}
+\label{sct:kernelimplementation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 In \autoref{lst:pikernel} ist die Implementation der Pi-Berechnung zu sehen.
@@ -208,7 +209,7 @@ Mit \lstinline!getDevices! erhält man eine Liste von \lstinline!GpuDevice!-Obje
 Außerdem können diese Objekte benutzt werden um Rootbeer-Kernel auf der ausgewählten Grafikkarte in Multi-GPU-Umgebungen auszuführen. In \autoref{lst:kernelinit} werden die Grafikkarteninformationen benötigt um die Seeds und die Anzahl an Iterationen pro Kernelthread zu berechnen.
 
 \label{pg:cuCtxCreate}
-Der angelegte Rootbeerfork \cite{ownrootbeerfork} reduziert mit Commit \lstinline!e48b9ae! auf Knoten mit sehr vielen Grafikkarten die Initialisierungszeit von \lstinline!getDevices! um ca. \SI{1}{\second} pro verfügbarer Grafikkarte, indem es die Aufrufe zu \lstinline!cuCtxCreate! und \lstinline!cuCtxDestroy! für jede Grafikkarte einspart, vgl. \autoref{fig:profilingapi}.
+Der angelegte Rootbeerfork \cite{ownrootbeerfork} reduziert mit Commit \lstinline!e48b9ae! auf Knoten mit sehr vielen Grafikkarten die Initialisierungszeit von \lstinline!getDevices! um ca. \SI{1}{\second} pro verfügbarer Grafikkarte, indem es die Aufrufe zu \lstinline!cuCtxCreate! und \lstinline!cuCtxDestroy! für jede Grafikkarte einspart, vgl. \autoref{fig:apicalls}.
 Der einzige Nachteil ist, dass der freie Speicherplatz auf der Grafikkarte nicht mehr in \lstinline!GpuDevice! verfügbar ist.
 
 Als nächstes werden die Rootbeerkernelobjekte mit jeweiligem Seed initialisiert. Es werden so viele Kernelobjekte erstellt wie die Grafikkarte Threads parallel ausführen kann, um Pipelining voll auszunutzen.
@@ -388,6 +389,7 @@ val piTripels = cluster.zipWithIndex.map( x => {
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Kompilierung}
+\label{sct:compilation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Die Kompilation wird aus Performancegründen und weil Rootbeer in manchen Fällen Problemen mit JAR-Archiven hatte, die Scala-Klassen beinhalteten, getrennt in die Kompilation der Rootbeerkernel und die Kompilation des Hostprogrammcodes, siehe \autoref{fig:compilation}.
