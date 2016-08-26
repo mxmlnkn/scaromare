@@ -388,13 +388,19 @@ val piTripels = cluster.zipWithIndex.map( x => {
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Kompilierung}
+\section{Kompilierung und Ausführung}
 \label{sct:compilation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Die Kompilation wird aus Performancegründen und weil Rootbeer in manchen Fällen Problemen mit JAR-Archiven hatte, die Scala-Klassen beinhalteten, getrennt in die Kompilation der Rootbeerkernel und die Kompilation des Hostprogrammcodes, siehe \autoref{fig:compilation}.
 
 Alle Rootbeerkernel werden zu einem JAR-Archiv gepackt und mit Rootbeer analysiert bzw. kompiliert.
+
+Für das fertige JAR-Archiv ist es nicht nötig die Spark-Runtime reinzupacken, da das Archiv über Spark ausgeführt wird und somit alle Klassen vom Spark-Executor zur Verfügung gestellt werden.
+Jedoch müssen die Bibliotheken für Scala und für Rootbeer mit reingepackt werden.
+In \autoref{fig:compilation} wird \lstinline!RootbeerRuntime.jar! anstatt \lstinline!Rootbeer.jar! gepackt.
+Dies ist eine Optimierung, die im Fork \cite{ownrootbeerfork} mit Commit \lstinline!6c7cba4! eingeführt wurde.
+\lstinline!RootbeerRuntime.jar! enthält nur die für die Runtime benötigten Klassen und Abhängigkeiten und ist ca. \SI{400}{\kilo\byte} groß, während \lstinline!Rootbeer.jar! auch den Rootbeercompiler und dessen Abhängigkeiten, also insbesondere auch die Soot-Bibliothek enthält und damit auf \SI{14}{\mega\byte} anwächst.\\
 
 \begin{figure}[H]
     \centering
@@ -405,8 +411,65 @@ Alle Rootbeerkernel werden zu einem JAR-Archiv gepackt und mit Rootbeer analysie
     \label{fig:compilation}
 \end{figure}
 
-Für das fertige JAR-Archiv ist es nicht nötig die Spark-Runtime reinzupacken, da das Archiv über Spark ausgeführt wird und somit alle Klassen vom Spark-Executor zur Verfügung gestellt werden.
-Jedoch müssen die Bibliotheken für Scala und für Rootbeer mit reingepackt werden.
-In \autoref{fig:compilation} wird \lstinline!RootbeerRuntime.jar! anstatt \lstinline!Rootbeer.jar! gepackt.
-Dies ist eine Optimierung, die im Fork \cite{ownrootbeerfork} mit Commit \lstinline!6c7cba4! eingeführt wurde.
-\lstinline!RootbeerRuntime.jar! enthält nur die für die Runtime benötigten Klassen und Abhängigkeiten und ist ca. \SI{400}{\kilo\byte} groß, während \lstinline!Rootbeer.jar! auch den Rootbeercompiler und dessen Abhängigkeiten, also insbesondere auch die Soot-Bibliothek enthält und damit auf \SI{14}{\mega\byte} anwächst.
+Alle diese Schritte wurden in dem eigenen Programmbeispiel\cite{scaromare} mit Hilfe von Makefiles automatisiert.
+Der Ablauf um das Beispielprogramm zu kompilieren und auf mehreren Knoten und mehreren Grafikkarten eines Hochleistungsrechners, welcher mit SLURM Jobs verteilt, zu starten ist dann wie folgt:
+\begin{lstlisting}[language=Bash, caption={Arbeitsfluss von der Kompilation zur ersten Ausführung}, escapechar=? ]
+?\label{ln:download0}?mkdir -p ~/programs/{bin,etc,include,lib,manual,share}
+wget https://nih.at/libzip/libzip-1.1.3.tar.xz
+tar -xf libzip-1.1.3.tar.xz
+( cd libzip-1.1.3 && ./configure --prefix=$HOME/programs && make -j && make install )
+
+wget http://mirrors.ae-online.de/apache/ant/binaries/apache-ant-1.9.7-bin.tar.bz2
+tar -xf apache-ant-1.9.7-bin.tar.bz2
+cp -r apache-ant-1.9.7/* $HOME/programs/
+export PATH=$HOME/programs/bin:$PATH
+
+# Die exakte URL aendert sich moeglicherweise, in diesem Fall, siehe
+# https://spark.apache.org/downloads.html
+wget http://d3kbcqa49mib13.cloudfront.net/spark-1.5.2-bin-hadoop2.6.tgz
+tar -xf spark-1.5.2-bin-hadoop2.6.tgz
+export SPARK_ROOT=$(pwd)/spark-1.5.2-bin-hadoop2.6
+
+git clone https://github.com/mxmlnkn/scaromare.git
+cd scaromare
+?\label{ln:download1}?git submodule update --init
+?\label{ln:compilerootbeer}?( cd rootbeer1 && ( cd csrc && ./compile_linux_x64 ) && ant jar && ./pack-rootbeer )
+
+cd MontePi
+?\label{ln:configure}?. configure
+make -C multiNode/multiGpu/scala/
+
+?\label{ln:startSpark.sh}?. ../startSpark.sh
+?\label{ln:startSpark}?startSpark --time=08:00:00 --nodes=2 --partition=gpu2 --cpus-per-task=4 --gres='gpu:4'
+?\label{ln:sparkSubmit}?sparkSubmit "multiNode/multiGpu/scala/MontePi.jar" 26832154321 4 2>&1 | sed '/ INFO /d'
+\end{lstlisting}
+Mit Zeilen~\ref{ln:download0}-\ref{ln:download1} werden Spark, ant und zipmerge installiert und der Quellcode vom Beispielprogramm sowie der Quellcode des angepassten Rootbeer-Forks gedownloadet.
+In Zeile~\ref{ln:compilerootbeer} wird Rootbeer für ein 64-Bit Linux-Systeme kompiliert.
+Diese Schritte sind nur einmalig notwendig.
+Wird ein anderer Installationspfad für Spark als \lstinline!$HOME/spark-1.5.2-bin-hadoop2.6/!, so ist es in der aktuellen Version nötig den fest einprogrammierten Pfad in \lstinline!scaromare/common/start_spark_slurm.sh! anzupassen.
+
+In Zeile~\ref{ln:configure} wird das \lstinline!configure!-Skript gesourcet, nicht ausgeführt!
+Bei erfolgreichem Durchlauf setzt und exportiert das Skript die Umgebungsvariablen \lstinline!SCALA_JAR!, der Pfad zum JAR-Archiv der Scala-Bibliothek, \lstinline!ROOTBEER_COMPILER!, der Pfad zum Rootbeer-Compiler, welcher in Zeile~\ref{ln:compilerootbeer} kompiliert wurde, \lstinline!ROOTBEER_JAR!, der Pfad zur Rootbeer-Laufzeitbibliothek, welche in das eigene Programm beigefügt werden muss und \lstinline!SPARK_JAR!, der Pfad zum Haupt-JAR-Archiv von Spark.
+Falls das Skript die Pfade nicht automatisch finden kann, müssen diese Umgebungsvariablen manuell gesetzt werden, damit der \lstinline!make!-Befehl funktioniert. Z.B. mit:
+\begin{lstlisting}
+export SPARK_JAR=$HOME/spark-1.5.2-bin-hadoop2.6/lib/spark-assembly-1.5.2-hadoop2.6.0.jar
+\end{lstlisting}\vspace{-1.5\baselineskip}
+
+Das \lstinline!startSpark.sh!-Skript in Zeile~\ref{ln:startSpark.sh} exportiert eine Shell-Funktion \lstinline!startSpark! mit der eine Spark-Instanz gemäß \autoref{sct:sparkconfig} gestartet werden kann.
+Die Argumente an \lstinline!startSpark! sind diesselben, die auch an \lstinline!sbatch! gegeben werden können.
+Das Skript ist nur einer Überbau über \lstinline!sbatch!. Es ist jedoch in der aktuellen Version des Beispielprogramms darauf zu achten, dass gleich viele CPU-Kerne (\lstinline!--cpus-per-task <n>!) wie Grafikarten (\lstinline!--gres=gpu:<n>! gewählt werden.
+Das Skript setzt außerdem die Umgebungsvariablen \lstinline!MASTER_WEBUI! und \lstinline!MASTER_ADDRESS! und die Shell-Funktion \lstinline!sparkSubmit!.
+Erstere kann benutzt werden, um die Ausgaben und den Ablauf von Jobs zu verfolgen, z.B. mit \lstinline!firefox $MASTER_WEBUI!.
+
+In Zeile~\ref{ln:sparkSubmit} wird das fertig kompilierte Multi-GPU-Spark-Programm an die Sparkinstanz geschickt und ausgeführt.
+Das erste Argument (26832154321) gibt die Anzahl an Monte-Carlo-Iterationen, die insgesamt ausgeführt werden sollen, an.
+Das zweite Argument gibt die Anzahl der zu nutzenden Grafikkarten an, welche kleiner oder gleich der verfügbaren, also mit \lstinline!startSpark! angegebenen, sein muss.
+Der \lstinline!sed!-Befehl filtert die vielen Hinweise von Spark aus.
+
+Werden nun Änderungen am Beispielprogramm durchgeführt und falls die Sparkinstanz noch aktiv ist, dann reichen folgende Befehle um das geänderte Programm zu kompilieren und zu testen:
+\begin{lstlisting}[language=Bash]
+make -C multiNode/multiGpu/scala/
+sparkSubmit "multiNode/multiGpu/scala/MontePi.jar" 26832154321 4 2>&1 | sed '/ INFO /d'
+\end{lstlisting}\vspace{-1.5\baselineskip}
+
+Hierbei ersetzt \lstinline!sparkSubmit! also die Funktionalität von \lstinline!sbatch!.
